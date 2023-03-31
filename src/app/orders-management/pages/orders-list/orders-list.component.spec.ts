@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OrdersListComponent } from './orders-list.component';
+import { provideHttpClient } from '@angular/common/http';
+import { ClarityModule, ClrDatagrid } from '@clr/angular';
 
 describe('OrdersListComponent', () => {
   let component: OrdersListComponent;
@@ -8,7 +10,9 @@ describe('OrdersListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OrdersListComponent ]
+      declarations: [ OrdersListComponent ],
+      imports: [ClarityModule],
+      providers: [provideHttpClient(), ClrDatagrid]
     })
     .compileComponents();
 

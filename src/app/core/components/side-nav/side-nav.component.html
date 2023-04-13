@@ -1,0 +1,29 @@
+<clr-vertical-nav [clrVerticalNavCollapsible]="true" class="nav-trigger--bottom sideNav">
+  <clr-vertical-nav-group routerLinkActive="active">
+    <cds-icon clrVerticalNavIcon shape="organization"></cds-icon>
+    Gestión de Projectos
+    <clr-vertical-nav-group-children>
+      <a clrVerticalNavLink routerLink="#" routerLinkActive="active">
+      Projectos
+      </a>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+  <clr-vertical-nav-group>
+    <cds-icon clrVerticalNavIcon shape="tasks"></cds-icon>
+    Gestión de Procesos
+    <clr-vertical-nav-group-children>
+      <a clrVerticalNavLink routerLink="#" routerLinkActive="active">
+      Procesos
+    </a>
+  </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+  <clr-vertical-nav-group>
+    <cds-icon clrVerticalNavIcon shape="users"></cds-icon>
+    Gestión de Usuarios
+    <clr-vertical-nav-group-children>
+      <a clrVerticalNavLink routerLink="#" routerLinkActive="active">
+      Usuarios
+    </a>
+  </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+</clr-vertical-nav>

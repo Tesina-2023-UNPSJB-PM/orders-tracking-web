@@ -1,0 +1,13 @@
+<clr-datalist-container>
+  <label>{{label}}</label>
+  <input
+    clrDatalistInput
+    [(ngModel)]="inputValue"
+    [placeholder]="placeholder"
+    name="Option"
+    (ngModelChange)="onValueSelected($event)"
+  />
+  <datalist>
+    <option *ngFor="let item of items" [value]="item.value"></option>
+  </datalist>
+</clr-datalist-container>

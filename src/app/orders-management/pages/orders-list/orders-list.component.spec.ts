@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OrdersListComponent } from './orders-list.component';
 import { provideHttpClient } from '@angular/common/http';
 import { ClarityModule, ClrDatagrid } from '@clr/angular';
+import { OrdersListComponent } from './orders-list.component';
 
 describe('OrdersListComponent', () => {
   let component: OrdersListComponent;

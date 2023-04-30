@@ -1,21 +1,55 @@
-
 <div class="content">
-    <clr-datagrid>
-        <clr-dg-column>User ID</clr-dg-column>
-        <clr-dg-column>Name</clr-dg-column>
-        <clr-dg-column>Creation date</clr-dg-column>
-        <clr-dg-column>Favorite color</clr-dg-column>
-    
-        <clr-dg-row *ngFor="let user of users">
-            <clr-dg-cell>{{user.id}}</clr-dg-cell>
-            <clr-dg-cell>{{user.name}}</clr-dg-cell>
-            <clr-dg-cell>{{user.creation | date}}</clr-dg-cell>
-            <clr-dg-cell>{{user.color}}</clr-dg-cell>
-        </clr-dg-row>
-    
-        <clr-dg-footer>{{users.length}} users</clr-dg-footer>
-    </clr-datagrid>
+  <form class="filters-container" [formGroup]="filtersFormGroup">
+    <app-reviewer-filter
+      label="Operario"
+      placeholder=""
+      formControlName="reviewer"
+    ></app-reviewer-filter>
+
+    <app-customer-filter
+      label="Cliente"
+      placeholder=""
+      formControlName="customer"
+    ></app-customer-filter>
+
+    <app-status-filter
+      label="Estado"
+      placeholder=""
+      formControlName="state"
+    ></app-status-filter>
+
+    <shd-datepicker
+      label="Fecha de creación"
+      formControlName="creationDate"
+    ></shd-datepicker>
+  </form>
+
+  <clr-datagrid>
+    <clr-dg-column>Nro de Órden</clr-dg-column>
+    <clr-dg-column>Tipo</clr-dg-column>
+    <clr-dg-column>Fecha de Creación</clr-dg-column>
+    <clr-dg-column>Descripción</clr-dg-column>
+    <clr-dg-column>Estado</clr-dg-column>
+    <clr-dg-column>Operario</clr-dg-column>
+    <clr-dg-column>Cliente</clr-dg-column>
+    <clr-dg-column>Sector*</clr-dg-column>
+
+    <clr-dg-row *ngFor="let serviceOrder of serviceOrders">
+      <clr-dg-cell>{{ serviceOrder.number }}</clr-dg-cell>
+      <clr-dg-cell>{{ serviceOrder?.type?.description }}</clr-dg-cell>
+      <clr-dg-cell>{{ serviceOrder.creationTime | date }}</clr-dg-cell>
+      <clr-dg-cell>{{ serviceOrder.description }}</clr-dg-cell>
+      <clr-dg-cell>
+        {{ serviceOrder?.assignedUser?.firstName + ' ' +
+        serviceOrder?.assignedUser?.lastName }}
+      </clr-dg-cell>
+      <clr-dg-cell>
+        {{ serviceOrder?.customer?.firstName + ' ' +
+        serviceOrder?.customer?.lastName }}
+      </clr-dg-cell>
+      <clr-dg-cell>N/A</clr-dg-cell>
+    </clr-dg-row>
+
+    <clr-dg-footer>{{ serviceOrders.length }} órdenes</clr-dg-footer>
+  </clr-datagrid>
 </div>
-
-
-

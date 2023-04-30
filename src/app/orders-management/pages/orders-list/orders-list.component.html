@@ -35,6 +35,10 @@
     <clr-dg-column>Sector*</clr-dg-column>
 
     <clr-dg-row *ngFor="let serviceOrder of serviceOrders">
+      <clr-dg-action-overflow>
+        <button class="action-item" (click)="onViewDetail(serviceOrder)">Editar</button>
+      </clr-dg-action-overflow>
+
       <clr-dg-cell>{{ serviceOrder.number }}</clr-dg-cell>
       <clr-dg-cell>{{ serviceOrder?.type?.description }}</clr-dg-cell>
       <clr-dg-cell>{{ serviceOrder.creationTime | date }}</clr-dg-cell>

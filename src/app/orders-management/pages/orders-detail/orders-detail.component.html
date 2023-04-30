@@ -1,0 +1,62 @@
+<div class="content">
+  <p>Detalle de Orden de Servicio</p>
+
+  <form clrForm clrLayout="vertical">
+    <clr-input-container>
+      <label class="clr-required-mark">Número de orden</label>
+      <input
+        clrInput
+        name="number"
+        type="text"
+        [disabled]="true"
+        [(ngModel)]="number"
+      />
+    </clr-input-container>
+
+    <clr-textarea-container>
+      <label class="clr-required-mark">Descripción</label>
+      <textarea
+        clrTextarea
+        [(ngModel)]="description"
+        name="description"
+        required
+      ></textarea>
+    </clr-textarea-container>
+
+    <clr-textarea-container>
+      <label class="clr-required-mark">Observaciones</label>
+      <textarea
+        clrTextarea
+        [(ngModel)]="observations"
+        name="observations"
+        required
+      ></textarea>
+    </clr-textarea-container>
+    <!-- <clr-input-container>
+      <label class="clr-required-mark">Observaciones</label>
+      <input clrInput type="text" [(ngModel)]="model" name="example" />
+    </clr-input-container>
+    <clr-input-container>
+      <label class="clr-required-mark">Tipo</label>
+      <input clrInput type="text" [(ngModel)]="model" name="example" />
+    </clr-input-container>
+    <clr-input-container>
+      <label class="clr-required-mark">Estado</label>
+      <input clrInput type="text" [(ngModel)]="model" name="example" />
+    </clr-input-container>
+    <clr-input-container>
+      <label class="clr-required-mark">Operario</label>
+      <input clrInput type="text" [(ngModel)]="model" name="example" />
+    </clr-input-container>
+
+    <clr-input-container>
+      <label class="clr-required-mark">Cliente</label>
+      <input clrInput type="text" [(ngModel)]="model" name="example" />
+    </clr-input-container>
+
+    <clr-input-container>
+      <label class="clr-required-mark">Sector</label>
+      <input clrInput type="text" [(ngModel)]="model" name="example" />
+    </clr-input-container> -->
+  </form>
+</div>

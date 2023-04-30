@@ -7,6 +7,8 @@ import { ServiceOrderStateDTO } from 'src/app/dtos/service-order-state.dto';
 import { ServiceOrderDTO } from 'src/app/dtos/service-order.dto';
 import { ServiceOrderApiService } from 'src/app/orders-management/services/apis/service-order.api.service';
 import { ServiceOrderFilters } from '../../interfaces/service-order-filters.interface';
+import { NavigationExtras, Router } from '@angular/router';
+import { ORDERS_MANAGEMENT_ROUTES } from '../../constants/routes.constant';
 
 @Component({
   templateUrl: './orders-list.component.html',
@@ -24,7 +26,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly serviceOrderApiSrv: ServiceOrderApiService,
-    private readonly formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router
   ) {
     this.filtersFormGroup = this.formBuilder.group({
       reviewer: new FormControl<ReviewerDTO | null>(null),
@@ -47,8 +50,14 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     this.findServiceOrders();
   }
 
+  public onViewDetail(serviceOrder: ServiceOrderDTO): void {
+    /** @todo add loader */
+    const { ORDERS_DETAIL } = ORDERS_MANAGEMENT_ROUTES;
+
+    this.router.navigate([ORDERS_DETAIL], { queryParams: { serviceOrder: JSON.stringify(serviceOrder) } });
+  }
+
   private findServiceOrders(serviceOrderFilters?: ServiceOrderFilters): void {
-    console.log('finding', serviceOrderFilters);
     this.serviceOrderApiSrv
       .get(serviceOrderFilters)
       .pipe(takeUntil(this._destroy))

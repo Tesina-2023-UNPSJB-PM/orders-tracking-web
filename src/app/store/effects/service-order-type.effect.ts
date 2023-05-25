@@ -13,7 +13,6 @@ export class ServiceOrderTypeEffects {
     private actions$: Actions<LoadServiceOrderTypeAction>,
     private serviceOrderApiService: ServiceOrderApiService
   ) {
-    console.log("ServiceOrderTypeEffects init")
     this.serviceOrderType$ = createEffect(() =>
       this.actions$.pipe(
         ofType(ServiceOrderTypeActionType.FECH_ITEMS),

@@ -29,7 +29,7 @@ export class StatusDatalistComponent
   constructor(private readonly store: Store<AppState>) {
     super();
     this.serviceOrderState$ = this.store.select<ServiceOrderStateDTO[]>(
-      (store) => store.serviceOrderStates
+      ({ serviceOrderStates }) => serviceOrderStates
     );
   }
 

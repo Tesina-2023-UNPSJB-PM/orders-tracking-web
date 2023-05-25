@@ -1,15 +1,16 @@
 import { Component, OnInit, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ReplaySubject, map, takeUntil, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { EmployeeDTO } from 'src/app/dtos/employee.dto';
-import { EmployeeApiService } from 'src/app/orders-management/services/apis/employee.api.service';
 import { DatalistComponent } from 'src/app/shared/components/atoms/datalist/datalist.component';
 import { DatalistItem } from 'src/app/shared/components/atoms/datalist/datalist.interfaces';
+import { AppState } from 'src/app/store/state.model';
 
 @Component({
   selector: 'app-employee-datalist',
   template:
-    '<shd-datalist [inputValue]="inputValue" [label]="label"  [placeholder]="placeholder" [items]="datalistItems" (inputValueChange)="onInputValueChanges($event)"/>',
+    '<shd-datalist [inputValue]="inputValue" [label]="label"  [placeholder]="placeholder" [items]="employees | employeeToDataListItem" (inputValueChange)="onInputValueChanges($event)"/>',
   styleUrls: ['./employee-datalist.component.css'],
   providers: [
     {
@@ -24,40 +25,26 @@ export class EmployeeDatalistComponent
   implements OnInit
 {
   private readonly _destroy: ReplaySubject<boolean> = new ReplaySubject();
-  private _employees: EmployeeDTO[] = [];
-  protected datalistItems: DatalistItem[] = [];
+  protected employees: EmployeeDTO[] = [];
+  protected employee$: Observable<EmployeeDTO[]>;
 
-  constructor(private readonly _employeeApiSrv: EmployeeApiService) {
+  constructor(private readonly store: Store<AppState>) {
     super();
+    this.employee$ = this.store.select<EmployeeDTO[]>(
+      ({ employees }) => employees
+    );
   }
 
   ngOnInit(): void {
-    this._employeeApiSrv
-      .get()
-      .pipe(
-        takeUntil(this._destroy),
-        tap((employees: EmployeeDTO[]) => (this._employees = employees)),
-        map((employees: EmployeeDTO[]) =>
-          employees.map(
-            (employee: EmployeeDTO) =>
-              ({
-                id: `${employee.userId}`,
-                value: `${employee.firstName} ${employee.lastName}`,
-              } as DatalistItem)
-          )
-        )
-      )
-      .subscribe({
-        next: (datalistItems: DatalistItem[]) =>
-          (this.datalistItems = datalistItems),
-        error: (error) => console.error(error),
-      });
+    this.employee$
+      .pipe(takeUntil(this.$destroy))
+      .subscribe((employees) => (this.employees = employees));
   }
 
   protected override getEntityValue(
     dataListItem: DatalistItem
   ): EmployeeDTO | undefined {
-    return this._employees.find(
+    return this.employees.find(
       (employee: EmployeeDTO) => employee.userId == +dataListItem.id
     );
   }

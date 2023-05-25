@@ -10,8 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { InitializeAppService } from './services/initialize.app.service';
-import { effects } from './store/effects/effects';
-import { reducers } from './store/reducers/reducers';
+import { effects } from './store/effects/_effects';
+import { reducers } from './store/reducers/_reducers';
 
 const useFactory = (init: InitializeAppService) => {
   return () => init.initializeApp();

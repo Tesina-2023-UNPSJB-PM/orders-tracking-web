@@ -29,7 +29,7 @@ export class ServiceOrderTypesDatalistComponent
   constructor(private readonly store: Store<AppState>) {
     super();
     this.serviceOrderTypes$ = this.store.select<ServiceOrderTypeDTO[]>(
-      (store) => store.serviceOrderTypes
+      ({ serviceOrderTypes }) => serviceOrderTypes
     );
   }
 
@@ -37,7 +37,7 @@ export class ServiceOrderTypesDatalistComponent
     this.serviceOrderTypes$
       .pipe(takeUntil(this.$destroy))
       .subscribe((serviceOrderTypes) => {
-        console.log(serviceOrderTypes)
+        console.log(serviceOrderTypes);
         this.serviceOrderTypes = serviceOrderTypes;
       });
   }

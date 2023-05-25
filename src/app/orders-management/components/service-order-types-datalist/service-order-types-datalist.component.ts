@@ -37,7 +37,6 @@ export class ServiceOrderTypesDatalistComponent
     this.serviceOrderTypes$
       .pipe(takeUntil(this.$destroy))
       .subscribe((serviceOrderTypes) => {
-        console.log(serviceOrderTypes);
         this.serviceOrderTypes = serviceOrderTypes;
       });
   }

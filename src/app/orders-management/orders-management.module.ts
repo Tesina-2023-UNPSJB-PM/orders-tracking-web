@@ -15,9 +15,10 @@ import { OrdersManagementRoutingModule } from './orders-management-routing.modul
 import { OrdersDetailComponent } from './pages/orders-detail/orders-detail.component';
 import { OrdersListComponent } from './pages/orders-list/orders-list.component';
 import { OrdersManagementPipesModule } from './pipes/orders-management.pipes.module';
+import { OrdersCreationComponent } from './pages/orders-creation/orders-creation.component';
 
 @NgModule({
-  declarations: [OrdersListComponent, OrdersDetailComponent],
+  declarations: [OrdersListComponent, OrdersDetailComponent, OrdersCreationComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

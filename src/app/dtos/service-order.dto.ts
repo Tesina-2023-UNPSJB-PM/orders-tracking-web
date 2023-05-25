@@ -1,3 +1,5 @@
+import { ServiceOrderStateDTO } from "./service-order-state.dto";
+
 export interface Type {
   id: number;
   name: string;
@@ -57,7 +59,7 @@ export interface ServiceOrderDTO {
   description: string;
   observations: string;
   type: Type;
-  status: string;
+  status: ServiceOrderStateDTO;
   priority: string;
   assignedUser: AssignedUser;
   destination: Destination;

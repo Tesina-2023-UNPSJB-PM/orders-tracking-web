@@ -4,6 +4,7 @@ import {
   Input,
   OnDestroy,
   Output,
+  ViewEncapsulation,
   forwardRef,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -21,6 +22,7 @@ import { DatalistItem } from './datalist.interfaces';
       multi: true,
     },
   ],
+  encapsulation: ViewEncapsulation.None,
 })
 export class DatalistComponent<T> implements OnDestroy, ControlValueAccessor {
   @Input() placeholder: string = '';
@@ -28,7 +30,7 @@ export class DatalistComponent<T> implements OnDestroy, ControlValueAccessor {
   @Input() items: DatalistItem[] = [];
   @Output() protected inputValueChange: EventEmitter<DatalistItem> =
     new EventEmitter<DatalistItem>();
-  public inputValue = '';
+  @Input() public inputValue = '';
   protected onChange: any = () => {};
   protected onTouch: any = () => {};
   protected $destroy: ReplaySubject<boolean> = new ReplaySubject();
@@ -57,8 +59,13 @@ export class DatalistComponent<T> implements OnDestroy, ControlValueAccessor {
     this.onTouch = onTouch;
   }
 
-  public writeValue(value: T): void {
+  public writeValue(datalistItem: T | DatalistItem): void {
     /** @todo implement if an initial value is needed  */
+    if (!datalistItem) {
+      return;
+    }
+    const { value = '' } = datalistItem as DatalistItem;
+    this.inputValue = value;
   }
 
   ngOnDestroy(): void {

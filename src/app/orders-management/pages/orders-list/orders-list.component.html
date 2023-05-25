@@ -1,22 +1,22 @@
 <div class="content">
   <form class="filters-container" [formGroup]="filtersFormGroup">
-    <app-reviewer-filter
+    <app-employee-datalist
       label="Operario"
       placeholder=""
-      formControlName="reviewer"
-    ></app-reviewer-filter>
+      formControlName="employee"
+    ></app-employee-datalist>
 
-    <app-customer-filter
+    <app-customer-datalist
       label="Cliente"
       placeholder=""
       formControlName="customer"
-    ></app-customer-filter>
+    ></app-customer-datalist>
 
-    <app-status-filter
+    <app-status-datalist
       label="Estado"
       placeholder=""
       formControlName="state"
-    ></app-status-filter>
+    ></app-status-datalist>
 
     <shd-datepicker
       label="Fecha de creación"
@@ -36,7 +36,9 @@
 
     <clr-dg-row *ngFor="let serviceOrder of serviceOrders">
       <clr-dg-action-overflow>
-        <button class="action-item" (click)="onViewDetail(serviceOrder)">Editar</button>
+        <button class="action-item" (click)="onViewDetail(serviceOrder)">
+          Editar
+        </button>
       </clr-dg-action-overflow>
 
       <clr-dg-cell>{{ serviceOrder.number }}</clr-dg-cell>

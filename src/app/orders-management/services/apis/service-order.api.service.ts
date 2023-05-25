@@ -6,6 +6,7 @@ import { ServiceOrderDTO } from 'src/app/dtos/service-order.dto';
 import { CommonApi } from 'src/app/interfaces/common-api.interface';
 import { environment } from 'src/environments/environment';
 import { ServiceOrderFilters } from '../../interfaces/service-order-filters.interface';
+import { ServiceOrderTypeDTO } from 'src/app/dtos/service-order-type.dto';
 @Injectable({
   providedIn: 'root',
 })
@@ -24,6 +25,13 @@ export class ServiceOrderApiService implements CommonApi<ServiceOrderDTO> {
     const { serviceOrders } = environment.endpoints;
     return this._httpClient.get<ServiceOrderStateDTO[]>(
       `${serviceOrders}/states`
+    );
+  }
+
+  public getServiceOrderTypes(): Observable<ServiceOrderTypeDTO[]> {
+    const { serviceOrders } = environment.endpoints;
+    return this._httpClient.get<ServiceOrderTypeDTO[]>(
+      `${serviceOrders}/types`
     );
   }
 }

@@ -1,62 +1,62 @@
 <div class="content">
   <p>Detalle de Orden de Servicio</p>
 
-  <form clrForm clrLayout="vertical">
-    <clr-input-container>
-      <label class="clr-required-mark">Número de orden</label>
-      <input
-        clrInput
-        name="number"
-        type="text"
-        [disabled]="true"
-        [(ngModel)]="number"
-      />
-    </clr-input-container>
+  <form
+    class="form-container"
+    clrForm
+    clrLayout="vertical"
+    [formGroup]="serviceOrderEditionFormGroup"
+    (ngSubmit)="onSaveChanges()"
+  >
+    <shd-input
+      label="Número de orden"
+      [disabled]="true"
+      [value]="number"
+      name="number"
+    ></shd-input>
 
-    <clr-textarea-container>
-      <label class="clr-required-mark">Descripción</label>
-      <textarea
-        clrTextarea
-        [(ngModel)]="description"
-        name="description"
-        required
-      ></textarea>
-    </clr-textarea-container>
+    <shd-textarea
+      label="Descripción"
+      [value]="description"
+      name="description"
+    ></shd-textarea>
 
-    <clr-textarea-container>
-      <label class="clr-required-mark">Observaciones</label>
-      <textarea
-        clrTextarea
-        [(ngModel)]="observations"
-        name="observations"
-        required
-      ></textarea>
-    </clr-textarea-container>
-    <!-- <clr-input-container>
-      <label class="clr-required-mark">Observaciones</label>
-      <input clrInput type="text" [(ngModel)]="model" name="example" />
-    </clr-input-container>
-    <clr-input-container>
-      <label class="clr-required-mark">Tipo</label>
-      <input clrInput type="text" [(ngModel)]="model" name="example" />
-    </clr-input-container>
-    <clr-input-container>
-      <label class="clr-required-mark">Estado</label>
-      <input clrInput type="text" [(ngModel)]="model" name="example" />
-    </clr-input-container>
-    <clr-input-container>
-      <label class="clr-required-mark">Operario</label>
-      <input clrInput type="text" [(ngModel)]="model" name="example" />
-    </clr-input-container>
+    <shd-textarea
+      label="Observaciones"
+      [value]="observations"
+      name="observations"
+    ></shd-textarea>
 
-    <clr-input-container>
-      <label class="clr-required-mark">Cliente</label>
-      <input clrInput type="text" [(ngModel)]="model" name="example" />
-    </clr-input-container>
+    <service-order-types-datalist
+      label="Tipo"
+      placeholder=""
+      formControlName="type"
+    ></service-order-types-datalist>
 
-    <clr-input-container>
-      <label class="clr-required-mark">Sector</label>
-      <input clrInput type="text" [(ngModel)]="model" name="example" />
-    </clr-input-container> -->
+    <app-status-datalist
+      label="Estado"
+      placeholder=""
+      formControlName="state"
+    ></app-status-datalist>
+
+    <app-employee-datalist
+      label="Operario"
+      placeholder=""
+      formControlName="employee"
+    ></app-employee-datalist>
+
+    <app-customer-datalist
+      label="Cliente"
+      placeholder=""
+      formControlName="customer"
+    ></app-customer-datalist>
+
+    <button
+      [disabled]="serviceOrderEditionFormGroup.invalid"
+      type="submit"
+      class="btn btn-primary"
+    >
+      Guardar Cambios
+    </button>
   </form>
 </div>

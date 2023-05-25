@@ -1,4 +1,4 @@
-export interface ReviewerDTO {
+export interface EmployeeDTO {
   userId: number;
   firstName: string;
   lastName: string;

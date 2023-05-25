@@ -1,13 +1,20 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ClarityModule, ClrDatagridModule, ClrFormsModule, ClrInputModule, ClrTextareaModule } from '@clr/angular';
+import {
+  ClarityModule,
+  ClrDatagridModule,
+  ClrFormsModule,
+  ClrInputModule,
+  ClrTextareaModule,
+} from '@clr/angular';
 import { SharedComponentsModule } from '../shared/components/shared.components.module';
 import { OrdersManagementComponentsModule } from './components/orders-management-components.module';
 import { OrdersManagementRoutingModule } from './orders-management-routing.module';
-import { OrdersListComponent } from './pages/orders-list/orders-list.component';
 import { OrdersDetailComponent } from './pages/orders-detail/orders-detail.component';
+import { OrdersListComponent } from './pages/orders-list/orders-list.component';
+import { OrdersManagementPipesModule } from './pipes/orders-management.pipes.module';
 
 @NgModule({
   declarations: [OrdersListComponent, OrdersDetailComponent],
@@ -23,6 +30,8 @@ import { OrdersDetailComponent } from './pages/orders-detail/orders-detail.compo
     FormsModule,
     OrdersManagementComponentsModule,
     SharedComponentsModule,
+    OrdersManagementPipesModule,
   ],
+  providers: [AsyncPipe]
 })
 export class OrdersManagementModule {}

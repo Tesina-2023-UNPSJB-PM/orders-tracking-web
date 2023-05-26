@@ -1,9 +1,9 @@
 import { CustomerDTO } from 'src/app/dtos/customer.dto';
-import { ReviewerDTO } from 'src/app/dtos/reviewer.dto';
+import { EmployeeDTO } from 'src/app/dtos/employee.dto';
 import { ServiceOrderStateDTO } from 'src/app/dtos/service-order-state.dto';
 
 export interface ServiceOrderFilters {
-  reviewer?: ReviewerDTO;
+  employee?: EmployeeDTO;
   customer?: CustomerDTO;
   state?: ServiceOrderStateDTO;
   creationDate?: Date;

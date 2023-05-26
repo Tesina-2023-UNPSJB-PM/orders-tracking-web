@@ -1,0 +1,62 @@
+<div class="content">
+  <p>Detalle de Orden de Servicio</p>
+
+  <form
+    class="form-container"
+    clrForm
+    clrLayout="vertical"
+    [formGroup]="serviceOrderEditionFormGroup"
+    (ngSubmit)="onSaveChanges()"
+  >
+    <shd-input
+      label="Número de orden"
+      [disabled]="true"
+      [value]="number"
+      name="number"
+    ></shd-input>
+
+    <shd-textarea
+      label="Descripción"
+      [value]="description"
+      name="description"
+    ></shd-textarea>
+
+    <shd-textarea
+      label="Observaciones"
+      [value]="observations"
+      name="observations"
+    ></shd-textarea>
+
+    <service-order-types-datalist
+      label="Tipo"
+      placeholder=""
+      formControlName="type"
+    ></service-order-types-datalist>
+
+    <app-status-datalist
+      label="Estado"
+      placeholder=""
+      formControlName="state"
+    ></app-status-datalist>
+
+    <app-employee-datalist
+      label="Operario"
+      placeholder=""
+      formControlName="employee"
+    ></app-employee-datalist>
+
+    <app-customer-datalist
+      label="Cliente"
+      placeholder=""
+      formControlName="customer"
+    ></app-customer-datalist>
+
+    <button
+      [disabled]="serviceOrderEditionFormGroup.invalid"
+      type="submit"
+      class="btn btn-primary"
+    >
+      Guardar Cambios
+    </button>
+  </form>
+</div>

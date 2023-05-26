@@ -1,11 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ReplaySubject, map, takeUntil } from 'rxjs';
 import { CustomerDTO } from 'src/app/dtos/customer.dto';
-import { ReviewerDTO } from 'src/app/dtos/reviewer.dto';
+import { EmployeeDTO } from 'src/app/dtos/employee.dto';
 import { ServiceOrderStateDTO } from 'src/app/dtos/service-order-state.dto';
 import { ServiceOrderDTO } from 'src/app/dtos/service-order.dto';
 import { ServiceOrderApiService } from 'src/app/orders-management/services/apis/service-order.api.service';
+import { ORDERS_MANAGEMENT_ROUTES } from '../../constants/routes.constant';
 import { ServiceOrderFilters } from '../../interfaces/service-order-filters.interface';
 
 @Component({
@@ -16,7 +18,7 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   private readonly _destroy: ReplaySubject<boolean> = new ReplaySubject();
   public serviceOrders: ServiceOrderDTO[] = [];
   public filtersFormGroup: FormGroup<{
-    reviewer: FormControl<ReviewerDTO | null>;
+    employee: FormControl<EmployeeDTO | null>;
     customer: FormControl<CustomerDTO | null>;
     state: FormControl<ServiceOrderStateDTO | null>;
     creationDate: FormControl<Date | null>;
@@ -24,10 +26,11 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
   constructor(
     private readonly serviceOrderApiSrv: ServiceOrderApiService,
-    private readonly formBuilder: FormBuilder
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router
   ) {
     this.filtersFormGroup = this.formBuilder.group({
-      reviewer: new FormControl<ReviewerDTO | null>(null),
+      employee: new FormControl<EmployeeDTO | null>(null),
       customer: new FormControl<CustomerDTO | null>(null),
       state: new FormControl<ServiceOrderStateDTO | null>(null),
       creationDate: new FormControl<Date | null>(null),
@@ -47,8 +50,15 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     this.findServiceOrders();
   }
 
+  public onViewDetail(serviceOrder: ServiceOrderDTO): void {
+    /** @todo add loader */
+    const { ORDERS_DETAIL } = ORDERS_MANAGEMENT_ROUTES;
+
+    this.router.navigate([ORDERS_DETAIL], { queryParams: { serviceOrder: JSON.stringify(serviceOrder) } });
+  }
+
   private findServiceOrders(serviceOrderFilters?: ServiceOrderFilters): void {
-    console.log('finding', serviceOrderFilters);
+    console.log(serviceOrderFilters)
     this.serviceOrderApiSrv
       .get(serviceOrderFilters)
       .pipe(takeUntil(this._destroy))

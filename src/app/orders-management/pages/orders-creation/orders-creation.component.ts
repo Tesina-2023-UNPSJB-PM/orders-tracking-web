@@ -1,24 +1,22 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup
 } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { ReplaySubject, map } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { CustomerDTO } from 'src/app/dtos/customer.dto';
 import { EmployeeDTO } from 'src/app/dtos/employee.dto';
 import { ServiceOrderStateDTO } from 'src/app/dtos/service-order-state.dto';
 import { ServiceOrderTypeDTO } from 'src/app/dtos/service-order-type.dto';
 import { ServiceOrderDTO } from 'src/app/dtos/service-order.dto';
-
 @Component({
-  templateUrl: './orders-detail.component.html',
-  styleUrls: ['./orders-detail.component.css'],
+  templateUrl: './orders-creation.component.html',
+  styleUrls: ['./orders-creation.component.css']
 })
-export class OrdersDetailComponent implements OnInit, OnDestroy {
+export class OrdersCreationComponent {
+
   private _serviceOrder: ServiceOrderDTO | undefined = undefined;
-  private _destroy$: ReplaySubject<boolean> = new ReplaySubject();
 
   public serviceOrderEditionFormGroup: FormGroup<{
     type: FormControl<ServiceOrderTypeDTO | null>;
@@ -27,22 +25,13 @@ export class OrdersDetailComponent implements OnInit, OnDestroy {
     customer: FormControl<CustomerDTO | null>;
   }>;
 
-  constructor(private route: ActivatedRoute, private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder) {
     this.serviceOrderEditionFormGroup = this.formBuilder.group({
       type: new FormControl<ServiceOrderTypeDTO | null>(null),
       state: new FormControl<ServiceOrderStateDTO | null>(null),
       employee: new FormControl<EmployeeDTO | null>(null),
       customer: new FormControl<CustomerDTO | null>(null),
     });
-  }
-
-  ngOnInit(): void {
-    this.route.queryParams
-      .pipe(map(({ serviceOrder }) => JSON.parse(serviceOrder)))
-      .subscribe((serviceOrder) => {
-        this._serviceOrder = serviceOrder;
-        this.initializeFormData();
-      });
   }
 
   protected get number(): string {
@@ -88,21 +77,8 @@ export class OrdersDetailComponent implements OnInit, OnDestroy {
     return this._serviceOrder?.type as ServiceOrderTypeDTO;
   }
 
-  protected onUpdateServiceOrder(): void {
+  protected onCreateServiceOrder(): void {
     /** @todo send changes to the backend. */
   }
 
-  private initializeFormData(): void {
-    this.serviceOrderEditionFormGroup.setValue({
-      customer: this.customer,
-      state: this.state,
-      employee: this.employee,
-      type: this.type,
-    });
-  }
-
-  ngOnDestroy(): void {
-    this._destroy$.next(true);
-    this._destroy$.unsubscribe();
-  }
 }

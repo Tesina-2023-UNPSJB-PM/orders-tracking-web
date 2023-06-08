@@ -50,15 +50,22 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     this.findServiceOrders();
   }
 
+  public onCreateServiceOrder(): void {
+    const { ORDERS_CREATION } = ORDERS_MANAGEMENT_ROUTES;
+
+    this.router.navigate([ORDERS_CREATION]);
+  }
+
   public onViewDetail(serviceOrder: ServiceOrderDTO): void {
-    /** @todo add loader */
     const { ORDERS_DETAIL } = ORDERS_MANAGEMENT_ROUTES;
 
-    this.router.navigate([ORDERS_DETAIL], { queryParams: { serviceOrder: JSON.stringify(serviceOrder) } });
+    this.router.navigate([ORDERS_DETAIL], {
+      queryParams: { serviceOrder: JSON.stringify(serviceOrder) },
+    });
   }
 
   private findServiceOrders(serviceOrderFilters?: ServiceOrderFilters): void {
-    console.log(serviceOrderFilters)
+    console.log(serviceOrderFilters);
     this.serviceOrderApiSrv
       .get(serviceOrderFilters)
       .pipe(takeUntil(this._destroy))

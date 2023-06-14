@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
 export class EmployeeApiService implements CommonApi<EmployeeDTO> {
   constructor(private readonly _httpClient: HttpClient) {}
 
-  public get(): Observable<EmployeeDTO[]> {
+  public getAll(): Observable<EmployeeDTO[]> {
     const { employees } = environment.endpoints;
     return this._httpClient.get<EmployeeDTO[]>(employees);
   }

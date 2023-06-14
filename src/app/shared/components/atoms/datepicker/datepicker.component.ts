@@ -23,7 +23,6 @@ export class DatepickerComponent implements OnDestroy, ControlValueAccessor {
   protected $destroy: ReplaySubject<boolean> = new ReplaySubject();
 
   protected onValueChanges(date: string) {
-    console.log('onValueChanges', date, this.value);
     this.onChange(new Date(date));
   }
 

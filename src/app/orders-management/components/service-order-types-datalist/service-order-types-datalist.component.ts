@@ -2,7 +2,7 @@ import { Component, OnInit, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, takeUntil } from 'rxjs';
-import { ServiceOrderTypeDTO } from 'src/app/dtos/service-order-type.dto';
+import { MasterDataOrderTypeDTO } from 'src/app/dtos/master-data/master-data-order-type.dto';
 import { DatalistComponent } from 'src/app/shared/components/atoms/datalist/datalist.component';
 import { DatalistItem } from 'src/app/shared/components/atoms/datalist/datalist.interfaces';
 import { AppState } from 'src/app/store/state.model';
@@ -21,14 +21,14 @@ import { AppState } from 'src/app/store/state.model';
   ],
 })
 export class ServiceOrderTypesDatalistComponent
-  extends DatalistComponent<ServiceOrderTypeDTO>
+  extends DatalistComponent<MasterDataOrderTypeDTO>
   implements OnInit
 {
-  protected serviceOrderTypes: ServiceOrderTypeDTO[] = [];
-  protected serviceOrderTypes$: Observable<ServiceOrderTypeDTO[]>;
+  protected serviceOrderTypes: MasterDataOrderTypeDTO[] = [];
+  protected serviceOrderTypes$: Observable<MasterDataOrderTypeDTO[]>;
   constructor(private readonly store: Store<AppState>) {
     super();
-    this.serviceOrderTypes$ = this.store.select<ServiceOrderTypeDTO[]>(
+    this.serviceOrderTypes$ = this.store.select<MasterDataOrderTypeDTO[]>(
       ({ serviceOrderTypes }) => serviceOrderTypes
     );
   }
@@ -43,13 +43,13 @@ export class ServiceOrderTypesDatalistComponent
 
   protected override getEntityValue(
     dataListItem: DatalistItem
-  ): ServiceOrderTypeDTO | undefined {
+  ): MasterDataOrderTypeDTO | undefined {
     return this.serviceOrderTypes?.find(
-      (state: ServiceOrderTypeDTO) => state.id === +dataListItem.id
+      (state: MasterDataOrderTypeDTO) => state.id === +dataListItem.id
     );
   }
 
-  public override writeValue(state: ServiceOrderTypeDTO): void {
+  public override writeValue(state: MasterDataOrderTypeDTO): void {
     if (state) this.inputValue = state?.name ?? '';
   }
 }

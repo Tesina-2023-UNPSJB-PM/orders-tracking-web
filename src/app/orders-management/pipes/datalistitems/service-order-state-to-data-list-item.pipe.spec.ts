@@ -1,6 +1,6 @@
-import { ServiceOrderStateDTO } from 'src/app/dtos/service-order-state.dto';
-import { ServiceOrderStateToDataListItemPipe } from './service-order-state-to-data-list-item.pipe';
+import { MasterDataOrderStatusDTO } from 'src/app/dtos/master-data/master-data-order-status.dto';
 import { DatalistItem } from 'src/app/shared/components/atoms/datalist/datalist.interfaces';
+import { ServiceOrderStateToDataListItemPipe } from './service-order-state-to-data-list-item.pipe';
 
 describe('ServiceOrderStateToDataListItemPipe', () => {
   it('create an instance', () => {
@@ -9,7 +9,7 @@ describe('ServiceOrderStateToDataListItemPipe', () => {
   });
 
   it('should transform data successfuly', () => {
-    const initialState: ServiceOrderStateDTO[] = [
+    const initialState: MasterDataOrderStatusDTO[] = [
       {
         code: 'PENDING',
         description: '',

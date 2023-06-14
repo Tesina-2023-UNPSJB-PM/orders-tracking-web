@@ -2,7 +2,7 @@ import { Component, OnInit, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, takeUntil } from 'rxjs';
-import { ServiceOrderStateDTO } from 'src/app/dtos/service-order-state.dto';
+import { MasterDataOrderStatusDTO } from 'src/app/dtos/master-data/master-data-order-status.dto';
 import { DatalistComponent } from 'src/app/shared/components/atoms/datalist/datalist.component';
 import { DatalistItem } from 'src/app/shared/components/atoms/datalist/datalist.interfaces';
 import { AppState } from 'src/app/store/state.model';
@@ -21,14 +21,14 @@ import { AppState } from 'src/app/store/state.model';
   ],
 })
 export class StatusDatalistComponent
-  extends DatalistComponent<ServiceOrderStateDTO>
+  extends DatalistComponent<MasterDataOrderStatusDTO>
   implements OnInit
 {
-  protected serviceOrderStates: ServiceOrderStateDTO[] = [];
-  protected serviceOrderState$: Observable<ServiceOrderStateDTO[]>;
+  protected serviceOrderStates: MasterDataOrderStatusDTO[] = [];
+  protected serviceOrderState$: Observable<MasterDataOrderStatusDTO[]>;
   constructor(private readonly store: Store<AppState>) {
     super();
-    this.serviceOrderState$ = this.store.select<ServiceOrderStateDTO[]>(
+    this.serviceOrderState$ = this.store.select<MasterDataOrderStatusDTO[]>(
       ({ serviceOrderStates }) => serviceOrderStates
     );
   }
@@ -43,13 +43,13 @@ export class StatusDatalistComponent
 
   protected override getEntityValue(
     dataListItem: DatalistItem
-  ): ServiceOrderStateDTO | undefined {
+  ): MasterDataOrderStatusDTO | undefined {
     return this.serviceOrderStates?.find(
-      (state: ServiceOrderStateDTO) => state.code === dataListItem.id
+      (state: MasterDataOrderStatusDTO) => state.code === dataListItem.id
     );
   }
 
-  public override writeValue(state: ServiceOrderStateDTO): void {
+  public override writeValue(state: MasterDataOrderStatusDTO): void {
     if (state) this.inputValue = state?.name ?? '';
   }
 }

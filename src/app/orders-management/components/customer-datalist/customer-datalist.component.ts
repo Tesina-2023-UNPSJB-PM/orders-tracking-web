@@ -2,7 +2,7 @@ import { Component, OnInit, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
-import { CustomerDTO } from 'src/app/dtos/customer.dto';
+import { MasterDataCustomerDTO } from 'src/app/dtos/master-data/master-data-customer.dto';
 import { DatalistComponent } from 'src/app/shared/components/atoms/datalist/datalist.component';
 import { DatalistItem } from 'src/app/shared/components/atoms/datalist/datalist.interfaces';
 import { AppState } from 'src/app/store/state.model';
@@ -21,15 +21,15 @@ import { AppState } from 'src/app/store/state.model';
   ],
 })
 export class CustomerDatalistComponent
-  extends DatalistComponent<CustomerDTO>
+  extends DatalistComponent<MasterDataCustomerDTO>
   implements OnInit
 {
   private readonly _destroy: ReplaySubject<boolean> = new ReplaySubject();
-  protected customers: CustomerDTO[] = [];
-  protected customer$: Observable<CustomerDTO[]>;
+  protected customers: MasterDataCustomerDTO[] = [];
+  protected customer$: Observable<MasterDataCustomerDTO[]>;
   constructor(private readonly store: Store<AppState>) {
     super();
-    this.customer$ = this.store.select<CustomerDTO[]>(
+    this.customer$ = this.store.select<MasterDataCustomerDTO[]>(
       ({ customers }) => customers
     );
   }
@@ -42,13 +42,13 @@ export class CustomerDatalistComponent
 
   protected override getEntityValue(
     dataListItem: DatalistItem
-  ): CustomerDTO | undefined {
+  ): MasterDataCustomerDTO | undefined {
     return this.customers.find(
-      (customer: CustomerDTO) => customer.id == +dataListItem.id
+      (customer: MasterDataCustomerDTO) => customer.id == +dataListItem.id
     );
   }
 
-  public override writeValue(customer: CustomerDTO): void {
+  public override writeValue(customer: MasterDataCustomerDTO): void {
     if (customer)
       this.inputValue = `${customer?.firstName} ${customer?.lastName}` ?? '';
   }

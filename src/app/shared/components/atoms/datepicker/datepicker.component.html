@@ -1,0 +1,11 @@
+<clr-date-container>
+  <label>{{label}}</label>
+  <input
+    type="date"
+    autocomplete="off"
+    clrDate
+    name="minMaxDemo"
+    [(ngModel)]="value"
+    (ngModelChange)="onValueChanges($event)"
+  />
+</clr-date-container>

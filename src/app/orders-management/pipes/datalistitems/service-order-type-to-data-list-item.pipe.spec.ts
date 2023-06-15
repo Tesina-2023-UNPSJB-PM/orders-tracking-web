@@ -1,6 +1,6 @@
-import { ServiceOrderTypeDTO } from 'src/app/dtos/service-order-type.dto';
-import { ServiceOrderTypeToDataListItemPipe } from './service-order-type-to-data-list-item.pipe';
+import { MasterDataOrderTypeDTO } from 'src/app/dtos/master-data/master-data-order-type.dto';
 import { DatalistItem } from 'src/app/shared/components/atoms/datalist/datalist.interfaces';
+import { ServiceOrderTypeToDataListItemPipe } from './service-order-type-to-data-list-item.pipe';
 
 describe('ServiceOrderTypeToDataListItemPipe', () => {
   it('create an instance', () => {
@@ -9,7 +9,7 @@ describe('ServiceOrderTypeToDataListItemPipe', () => {
   });
 
   it('should transform data successfuly', () => {
-    const initialState: ServiceOrderTypeDTO[] = [
+    const initialState: MasterDataOrderTypeDTO[] = [
       {
         id: 1,
         name: 'Reparación',

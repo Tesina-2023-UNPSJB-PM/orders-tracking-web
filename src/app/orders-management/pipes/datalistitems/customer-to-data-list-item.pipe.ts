@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { CustomerDTO } from 'src/app/dtos/customer.dto';
+import { MasterDataCustomerDTO } from 'src/app/dtos/master-data/master-data-customer.dto';
 import { DatalistItem } from 'src/app/shared/components/atoms/datalist/datalist.interfaces';
 
 @Pipe({
@@ -7,7 +7,7 @@ import { DatalistItem } from 'src/app/shared/components/atoms/datalist/datalist.
 })
 export class CustomerToDataListItemPipe implements PipeTransform {
 
-  transform(value: CustomerDTO[]): DatalistItem[] {
+  transform(value: MasterDataCustomerDTO[]): DatalistItem[] {
     return value.map(({id, firstName, lastName}) => ({id: `${id}` , value: `${firstName} ${lastName}`}));
   }
 

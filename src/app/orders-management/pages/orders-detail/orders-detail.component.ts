@@ -1,13 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject, map } from 'rxjs';
-import { CustomerDTO } from 'src/app/dtos/customer.dto';
-import { EmployeeDTO } from 'src/app/dtos/employee.dto';
+import { MasterDataCustomerDTO } from 'src/app/dtos/master-data/master-data-customer.dto';
+import { MasterDataEmployeeDTO } from 'src/app/dtos/master-data/master-data-employee.dto';
 import { ServiceOrderStateDTO } from 'src/app/dtos/service-order-state.dto';
 import { ServiceOrderTypeDTO } from 'src/app/dtos/service-order-type.dto';
 import { ServiceOrderDTO } from 'src/app/dtos/service-order.dto';
@@ -23,16 +19,16 @@ export class OrdersDetailComponent implements OnInit, OnDestroy {
   public serviceOrderEditionFormGroup: FormGroup<{
     type: FormControl<ServiceOrderTypeDTO | null>;
     state: FormControl<ServiceOrderStateDTO | null>;
-    employee: FormControl<EmployeeDTO | null>;
-    customer: FormControl<CustomerDTO | null>;
+    employee: FormControl<MasterDataEmployeeDTO | null>;
+    customer: FormControl<MasterDataCustomerDTO | null>;
   }>;
 
   constructor(private route: ActivatedRoute, private formBuilder: FormBuilder) {
     this.serviceOrderEditionFormGroup = this.formBuilder.group({
       type: new FormControl<ServiceOrderTypeDTO | null>(null),
       state: new FormControl<ServiceOrderStateDTO | null>(null),
-      employee: new FormControl<EmployeeDTO | null>(null),
-      customer: new FormControl<CustomerDTO | null>(null),
+      employee: new FormControl<MasterDataEmployeeDTO | null>(null),
+      customer: new FormControl<MasterDataCustomerDTO | null>(null),
     });
   }
 
@@ -72,12 +68,12 @@ export class OrdersDetailComponent implements OnInit, OnDestroy {
     this._serviceOrder.observations = observations;
   }
 
-  protected get employee(): EmployeeDTO {
-    return this._serviceOrder?.assignedUser as EmployeeDTO;
+  protected get employee(): MasterDataEmployeeDTO {
+    return { firstName: 'Fake', lastName: 'Fake' } as MasterDataEmployeeDTO;
   }
 
-  protected get customer(): CustomerDTO {
-    return this._serviceOrder?.customer as CustomerDTO;
+  protected get customer(): MasterDataCustomerDTO {
+    return { firstName: 'Fake', lastName: 'Fake' } as MasterDataCustomerDTO;
   }
 
   protected get state(): ServiceOrderStateDTO {

@@ -1,24 +1,33 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { ServiceOrderItem } from 'src/app/dtos/service-order-item.dto';
 import { ServiceOrderStateDTO } from 'src/app/dtos/service-order-state.dto';
-import { ServiceOrderDTO } from 'src/app/dtos/service-order.dto';
+import { ServiceOrderTypeDTO } from 'src/app/dtos/service-order-type.dto';
 import { CommonApi } from 'src/app/interfaces/common-api.interface';
 import { environment } from 'src/environments/environment';
-import { ServiceOrderFilters } from '../../interfaces/service-order-filters.interface';
-import { ServiceOrderTypeDTO } from 'src/app/dtos/service-order-type.dto';
+import { GetAllServiceOrderQueryParams } from './query-params/service-order.query-params';
 @Injectable({
   providedIn: 'root',
 })
-export class ServiceOrderApiService implements CommonApi<ServiceOrderDTO> {
+export class ServiceOrderApiService implements CommonApi<ServiceOrderItem> {
   constructor(private readonly _httpClient: HttpClient) {}
 
-  public get(
-    serviceOrderFilters?: ServiceOrderFilters
-  ): Observable<ServiceOrderDTO[]> {
+  public getAll(
+    serviceOrderFilters: GetAllServiceOrderQueryParams = {}
+  ): Observable<ServiceOrderItem[]> {
     const { serviceOrders } = environment.endpoints;
-    /** @todo send filters to the backend */
-    return this._httpClient.get<ServiceOrderDTO[]>(serviceOrders);
+    const fromObject: any = serviceOrderFilters;
+    
+    Object.keys(serviceOrderFilters).forEach(
+      (key) => fromObject[key] === undefined && delete fromObject[key]
+    );
+
+    const params = new HttpParams({
+      fromObject,
+    });
+
+    return this._httpClient.get<ServiceOrderItem[]>(serviceOrders, { params });
   }
 
   public getServiceOrderStates(): Observable<ServiceOrderStateDTO[]> {

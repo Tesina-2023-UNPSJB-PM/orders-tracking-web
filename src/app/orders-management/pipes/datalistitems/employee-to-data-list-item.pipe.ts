@@ -1,14 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { EmployeeDTO } from 'src/app/dtos/employee.dto';
+import { MasterDataEmployeeDTO } from 'src/app/dtos/master-data/master-data-employee.dto';
 import { DatalistItem } from 'src/app/shared/components/atoms/datalist/datalist.interfaces';
 
 @Pipe({
   name: 'employeeToDataListItem',
 })
 export class EmployeeToDataListItemPipe implements PipeTransform {
-  transform(value: EmployeeDTO[]): DatalistItem[] {
-    return value.map(({ userId, firstName, lastName }) => ({
-      id: `${userId}`,
+  transform(value: MasterDataEmployeeDTO[]): DatalistItem[] {
+    return value.map(({ id = -1, firstName, lastName }) => ({
+      id: `${id}`,
       value: `${firstName} ${lastName}`,
     }));
   }

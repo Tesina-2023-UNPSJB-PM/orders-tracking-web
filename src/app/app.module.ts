@@ -27,13 +27,10 @@ const useFactory = (init: InitializeAppService) => {
     AppRoutingModule,
     OrdersManagementModule,
     ClarityModule,
-<<<<<<< HEAD
-    CoreModule
-=======
+    CoreModule,
     HttpClientModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot(effects),
->>>>>>> main
   ],
   providers: [
     InitializeAppService,

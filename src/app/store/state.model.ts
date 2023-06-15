@@ -1,11 +1,11 @@
-import { CustomerDTO } from '../dtos/customer.dto';
-import { EmployeeDTO } from '../dtos/employee.dto';
-import { ServiceOrderStateDTO } from '../dtos/service-order-state.dto';
-import { ServiceOrderTypeDTO } from '../dtos/service-order-type.dto';
+import { MasterDataCustomerDTO } from '../dtos/master-data/master-data-customer.dto';
+import { MasterDataEmployeeDTO } from '../dtos/master-data/master-data-employee.dto';
+import { MasterDataOrderStatusDTO } from '../dtos/master-data/master-data-order-status.dto';
+import { MasterDataOrderTypeDTO } from '../dtos/master-data/master-data-order-type.dto';
 
 export interface AppState {
-  readonly serviceOrderStates: ServiceOrderStateDTO[];
-  readonly serviceOrderTypes: ServiceOrderTypeDTO[];
-  readonly customers: CustomerDTO[];
-  readonly employees: EmployeeDTO[];
+  readonly serviceOrderStates: MasterDataOrderStatusDTO[];
+  readonly serviceOrderTypes: MasterDataOrderTypeDTO[];
+  readonly customers: MasterDataCustomerDTO[];
+  readonly employees: MasterDataEmployeeDTO[];
 }

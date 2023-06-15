@@ -1,10 +1,10 @@
-import { ServiceOrderTypeDTO } from 'src/app/dtos/service-order-type.dto';
+import { MasterDataOrderTypeDTO } from 'src/app/dtos/master-data/master-data-order-type.dto';
 import { ServiceOrderTypeActions, ServiceOrderTypeActionType } from '../actions/service-order-type.action';
 
-const initialState: ServiceOrderTypeDTO[] = [];
+const initialState: MasterDataOrderTypeDTO[] = [];
 
 export function ServiceOrderTypeReducer(
-  state: ServiceOrderTypeDTO[] = initialState,
+  state: MasterDataOrderTypeDTO[] = initialState,
   action: ServiceOrderTypeActions
 ) {
   switch (action.type) {

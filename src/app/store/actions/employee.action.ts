@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { EmployeeDTO } from 'src/app/dtos/employee.dto';
+import { MasterDataEmployeeDTO } from 'src/app/dtos/master-data/master-data-employee.dto';
 
 export enum EmployeeActionType {
   LOAD_ITEMS = '[EmployeeActionType] Load EMPLOYEES',
@@ -13,7 +13,7 @@ export class FetchEmployeeAction implements Action {
   export class LoadEmployeeAction implements Action {
     readonly type = EmployeeActionType.LOAD_ITEMS;
   
-    constructor(public payload: EmployeeDTO[]) {}
+    constructor(public payload: MasterDataEmployeeDTO[]) {}
   }
   
   export type EmployeeAction = LoadEmployeeAction | FetchEmployeeAction;

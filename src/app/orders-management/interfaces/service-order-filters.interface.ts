@@ -1,10 +1,10 @@
-import { CustomerDTO } from 'src/app/dtos/customer.dto';
-import { EmployeeDTO } from 'src/app/dtos/employee.dto';
-import { ServiceOrderStateDTO } from 'src/app/dtos/service-order-state.dto';
+import { MasterDataCustomerDTO } from 'src/app/dtos/master-data/master-data-customer.dto';
+import { MasterDataEmployeeDTO } from 'src/app/dtos/master-data/master-data-employee.dto';
+import { MasterDataOrderStatusDTO } from 'src/app/dtos/master-data/master-data-order-status.dto';
 
 export interface ServiceOrderFilters {
-  employee?: EmployeeDTO;
-  customer?: CustomerDTO;
-  state?: ServiceOrderStateDTO;
+  employee?: MasterDataEmployeeDTO;
+  customer?: MasterDataCustomerDTO;
+  state?: MasterDataOrderStatusDTO;
   creationDate?: Date;
 }

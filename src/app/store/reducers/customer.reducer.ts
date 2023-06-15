@@ -1,11 +1,11 @@
-import { CustomerDTO } from 'src/app/dtos/customer.dto';
+import { MasterDataCustomerDTO } from 'src/app/dtos/master-data/master-data-customer.dto';
 import { CustomerAction, CustomerActionType } from '../actions/customer.action';
 
-const initialState: CustomerDTO[] = [];
+const initialState: MasterDataCustomerDTO[] = [];
 
 
 export function CustomerReducer(
-  state: CustomerDTO[] = initialState,
+  state: MasterDataCustomerDTO[] = initialState,
   action: CustomerAction
 ) {
   switch (action.type) {

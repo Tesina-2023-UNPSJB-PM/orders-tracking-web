@@ -1,11 +1,11 @@
-import { EmployeeDTO } from 'src/app/dtos/employee.dto';
+import { MasterDataEmployeeDTO } from 'src/app/dtos/master-data/master-data-employee.dto';
 import { EmployeeAction, EmployeeActionType } from '../actions/employee.action';
 
-const initialState: EmployeeDTO[] = [];
+const initialState: MasterDataEmployeeDTO[] = [];
 
 
 export function EmployeeReducer(
-  state: EmployeeDTO[] = initialState,
+  state: MasterDataEmployeeDTO[] = initialState,
   action: EmployeeAction
 ) {
   switch (action.type) {

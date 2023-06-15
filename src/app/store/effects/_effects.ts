@@ -1,11 +1,3 @@
-import { CustomerEffects } from './customer.effect';
-import { EmployeeEffects } from './employee.effect';
-import { ServiceOrderStateEffects } from './service-order-state.effect';
-import { ServiceOrderTypeEffects } from './service-order-type.effect';
+import { MasterDataEffects } from './master-data.effect';
 
-export const effects = [
-  ServiceOrderStateEffects,
-  ServiceOrderTypeEffects,
-  CustomerEffects,
-  EmployeeEffects
-];
+export const effects = [MasterDataEffects];

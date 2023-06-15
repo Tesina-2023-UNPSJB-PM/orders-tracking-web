@@ -2,7 +2,7 @@ import { Component, OnInit, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
-import { EmployeeDTO } from 'src/app/dtos/employee.dto';
+import { MasterDataEmployeeDTO } from 'src/app/dtos/master-data/master-data-employee.dto';
 import { DatalistComponent } from 'src/app/shared/components/atoms/datalist/datalist.component';
 import { DatalistItem } from 'src/app/shared/components/atoms/datalist/datalist.interfaces';
 import { AppState } from 'src/app/store/state.model';
@@ -21,16 +21,16 @@ import { AppState } from 'src/app/store/state.model';
   ],
 })
 export class EmployeeDatalistComponent
-  extends DatalistComponent<EmployeeDTO>
+  extends DatalistComponent<MasterDataEmployeeDTO>
   implements OnInit
 {
   private readonly _destroy: ReplaySubject<boolean> = new ReplaySubject();
-  protected employees: EmployeeDTO[] = [];
-  protected employee$: Observable<EmployeeDTO[]>;
+  protected employees: MasterDataEmployeeDTO[] = [];
+  protected employee$: Observable<MasterDataEmployeeDTO[]>;
 
   constructor(private readonly store: Store<AppState>) {
     super();
-    this.employee$ = this.store.select<EmployeeDTO[]>(
+    this.employee$ = this.store.select<MasterDataEmployeeDTO[]>(
       ({ employees }) => employees
     );
   }
@@ -43,13 +43,13 @@ export class EmployeeDatalistComponent
 
   protected override getEntityValue(
     dataListItem: DatalistItem
-  ): EmployeeDTO | undefined {
+  ): MasterDataEmployeeDTO | undefined {
     return this.employees.find(
-      (employee: EmployeeDTO) => employee.userId == +dataListItem.id
+      (employee: MasterDataEmployeeDTO) => employee.id == +dataListItem.id
     );
   }
 
-  public override writeValue(employee: EmployeeDTO): void {
+  public override writeValue(employee: MasterDataEmployeeDTO): void {
     if (employee)
       this.inputValue = `${employee?.firstName} ${employee?.lastName}` ?? '';
   }

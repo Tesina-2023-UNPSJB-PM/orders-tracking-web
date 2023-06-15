@@ -1,6 +1,5 @@
 import { Action } from '@ngrx/store';
-import { ServiceOrderTypeDTO } from 'src/app/dtos/service-order-type.dto';
-
+import { MasterDataOrderTypeDTO } from 'src/app/dtos/master-data/master-data-order-type.dto';
 export enum ServiceOrderTypeActionType {
   LOAD_ITEMS = '[ServiceOrderType] Load SERVICE_ORDER_TYPES',
   FECH_ITEMS = '[ServiceOrderType] Fech SERVICE_ORDER_TYPES'
@@ -13,7 +12,7 @@ export class FetchServiceOrderTypeAction implements Action {
 export class LoadServiceOrderTypeAction implements Action {
   readonly type = ServiceOrderTypeActionType.LOAD_ITEMS;
 
-  constructor(public payload: ServiceOrderTypeDTO[]) {}
+  constructor(public payload: MasterDataOrderTypeDTO[]) {}
 }
 
 export type ServiceOrderTypeActions = LoadServiceOrderTypeAction | FetchServiceOrderTypeAction;

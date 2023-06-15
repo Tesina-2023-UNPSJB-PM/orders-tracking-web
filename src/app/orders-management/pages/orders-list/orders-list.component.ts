@@ -71,6 +71,15 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     });
   }
 
+  public onClearFilters(): void {
+    this.filtersFormGroup.setValue({
+      employee: null,
+      customer: null,
+      state: null,
+      creationDate: null,
+    });
+  }
+
   private findServiceOrders(
     serviceOrderFilters?: GetAllServiceOrderQueryParams
   ): void {

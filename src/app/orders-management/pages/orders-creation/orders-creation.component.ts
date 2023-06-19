@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MasterDataCustomerDTO } from 'src/app/dtos/master-data/master-data-customer.dto';
 import { MasterDataEmployeeDTO } from 'src/app/dtos/master-data/master-data-employee.dto';
 import { MasterDataOrderStatusDTO } from 'src/app/dtos/master-data/master-data-order-status.dto';
@@ -12,13 +8,14 @@ import { MasterDataOrderTypeDTO } from 'src/app/dtos/master-data/master-data-ord
 import { ServiceOrderDTO } from 'src/app/dtos/service-order.dto';
 @Component({
   templateUrl: './orders-creation.component.html',
-  styleUrls: ['./orders-creation.component.css']
+  styleUrls: ['./orders-creation.component.css'],
 })
 export class OrdersCreationComponent {
-
   private _serviceOrder: ServiceOrderDTO | undefined = undefined;
 
   public serviceOrderEditionFormGroup: FormGroup<{
+    number: FormControl<string | null>;
+    description: FormControl<string | null>;
     type: FormControl<MasterDataOrderTypeDTO | null>;
     state: FormControl<MasterDataOrderStatusDTO | null>;
     employee: FormControl<MasterDataEmployeeDTO | null>;
@@ -27,11 +24,20 @@ export class OrdersCreationComponent {
 
   constructor(private formBuilder: FormBuilder) {
     this.serviceOrderEditionFormGroup = this.formBuilder.group({
+      number: new FormControl<string | null>(''),
+      description: new FormControl<string | null>(''),
       type: new FormControl<MasterDataOrderTypeDTO | null>(null),
       state: new FormControl<MasterDataOrderStatusDTO | null>(null),
       employee: new FormControl<MasterDataEmployeeDTO | null>(null),
       customer: new FormControl<MasterDataCustomerDTO | null>(null),
     });
+
+    this.serviceOrderEditionFormGroup.valueChanges.subscribe((values) =>
+      console.log(
+        '🚀 ~ file: orders-creation.component.ts:37 ~ OrdersCreationComponent ~ constructor ~ values:',
+        values
+      )
+    );
   }
 
   protected get number(): string {
@@ -80,5 +86,4 @@ export class OrdersCreationComponent {
   protected onCreateServiceOrder(): void {
     /** @todo send changes to the backend. */
   }
-
 }

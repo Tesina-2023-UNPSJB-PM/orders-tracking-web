@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ReplaySubject, map, takeUntil } from 'rxjs';
+import { ReplaySubject, lastValueFrom, map, takeUntil } from 'rxjs';
 import { MasterDataCustomerDTO } from 'src/app/dtos/master-data/master-data-customer.dto';
 import { MasterDataEmployeeDTO } from 'src/app/dtos/master-data/master-data-employee.dto';
 import { MasterDataOrderStatusDTO } from 'src/app/dtos/master-data/master-data-order-status.dto';
@@ -66,8 +66,12 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   public async onViewDetail(serviceOrder: ServiceOrderItemDTO): Promise<void> {
     const { ORDERS_DETAIL } = ORDERS_MANAGEMENT_ROUTES;
 
+    const { id } = serviceOrder;
+
+    
+
     await this.router.navigate([ORDERS_DETAIL], {
-      queryParams: { serviceOrder: JSON.stringify(serviceOrder) },
+      queryParams: { id },
     });
   }
 

@@ -2,8 +2,9 @@
   <label class="clr-required-mark">{{label}}</label>
   <textarea
     clrTextarea
-    [(ngModel)]="value"
     [name]="name"
     [disabled]="disabled"
+    [(ngModel)]="value"
+    (ngModelChange)="onChange($event)"
   ></textarea>
 </clr-textarea-container>

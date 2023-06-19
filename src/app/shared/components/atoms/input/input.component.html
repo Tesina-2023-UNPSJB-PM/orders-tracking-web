@@ -6,5 +6,6 @@
     type="text"
     [disabled]="disabled"
     [(ngModel)]="value"
+    (ngModelChange)="onChange($event)"
   />
 </clr-input-container>

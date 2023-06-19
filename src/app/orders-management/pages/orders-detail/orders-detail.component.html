@@ -10,22 +10,21 @@
   >
     <shd-input
       label="Número de orden"
-      [disabled]="true"
-      [value]="number"
+      formControlName="number"
       name="number"
     ></shd-input>
 
     <shd-textarea
       label="Descripción"
-      [value]="description"
+      formControlName="description"
       name="description"
     ></shd-textarea>
 
-    <shd-textarea
+    <!-- <shd-textarea
       label="Observaciones"
       [value]="observations"
       name="observations"
-    ></shd-textarea>
+    ></shd-textarea> -->
 
     <service-order-types-datalist
       label="Tipo"

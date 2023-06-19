@@ -7,6 +7,7 @@ import { ServiceOrderTypeDTO } from 'src/app/dtos/service-order-type.dto';
 import { CommonApi } from 'src/app/interfaces/common-api.interface';
 import { environment } from 'src/environments/environment';
 import { GetAllServiceOrderQueryParams } from './query-params/service-order.query-params';
+import { ServiceOrderDetailResponse } from 'src/app/dtos/service-order-detail.dto';
 @Injectable({
   providedIn: 'root',
 })
@@ -18,7 +19,7 @@ export class ServiceOrderApiService implements CommonApi<ServiceOrderItem> {
   ): Observable<ServiceOrderItem[]> {
     const { serviceOrders } = environment.endpoints;
     const fromObject: any = serviceOrderFilters;
-    
+
     Object.keys(serviceOrderFilters).forEach(
       (key) => fromObject[key] === undefined && delete fromObject[key]
     );
@@ -41,6 +42,13 @@ export class ServiceOrderApiService implements CommonApi<ServiceOrderItem> {
     const { serviceOrders } = environment.endpoints;
     return this._httpClient.get<ServiceOrderTypeDTO[]>(
       `${serviceOrders}/types`
+    );
+  }
+
+  public getById(id: number): Observable<ServiceOrderDetailResponse> {
+    const { serviceOrders } = environment.endpoints;
+    return this._httpClient.get<ServiceOrderDetailResponse>(
+      `${serviceOrders}/${id}`
     );
   }
 }

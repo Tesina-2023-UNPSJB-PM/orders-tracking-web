@@ -14,6 +14,7 @@ import { StoreModule } from '@ngrx/store';
 import { InitializeAppService } from './services/initialize.app.service';
 import { effects } from './store/effects/_effects';
 import { reducers } from './store/reducers/_reducers';
+import { SharedModule } from './shared/shared.module';
 
 const useFactory = (init: InitializeAppService) => {
   return () => init.initializeApp();
@@ -26,6 +27,7 @@ const useFactory = (init: InitializeAppService) => {
     BrowserAnimationsModule,
     AppRoutingModule,
     OrdersManagementModule,
+    SharedModule,
     ClarityModule,
     CoreModule,
     HttpClientModule,

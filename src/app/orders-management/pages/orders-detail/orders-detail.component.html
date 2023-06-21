@@ -51,9 +51,10 @@
     ></app-customer-datalist>
 
     <button
-      [disabled]="serviceOrderEditionFormGroup.invalid"
       type="submit"
       class="btn btn-primary"
+      [disabled]="serviceOrderEditionFormGroup.invalid"
+      [clrLoading]="submitBtnState"
     >
       Guardar Cambios
     </button>

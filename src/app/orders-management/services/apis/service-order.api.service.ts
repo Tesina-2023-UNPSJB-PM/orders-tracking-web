@@ -8,6 +8,7 @@ import { CommonApi } from 'src/app/interfaces/common-api.interface';
 import { environment } from 'src/environments/environment';
 import { GetAllServiceOrderQueryParams } from './query-params/service-order.query-params';
 import { ServiceOrderDetailResponse } from 'src/app/dtos/service-order-detail.dto';
+import { ServiceOrderUpdateRequestDTO } from 'src/app/dtos/service-order-update.dto';
 @Injectable({
   providedIn: 'root',
 })
@@ -49,6 +50,14 @@ export class ServiceOrderApiService implements CommonApi<ServiceOrderItem> {
     const { serviceOrders } = environment.endpoints;
     return this._httpClient.get<ServiceOrderDetailResponse>(
       `${serviceOrders}/${id}`
+    );
+  }
+
+  public updateById(body: ServiceOrderUpdateRequestDTO) {
+    const { serviceOrders } = environment.endpoints;
+    return this._httpClient.patch<ServiceOrderDetailResponse>(
+      `${serviceOrders}`,
+      body
     );
   }
 }

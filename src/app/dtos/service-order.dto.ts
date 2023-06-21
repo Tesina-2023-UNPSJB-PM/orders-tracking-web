@@ -17,14 +17,14 @@ export interface AssignedUser {
 }
 
 export interface Addresses {
-  streetName: string;
-  streetNumber: string;
-  floor: string;
-  departamentNumber: string;
-  city: string;
-  zipCode: string;
-  state: string;
-  country: string;
+  streetName?: string;
+  streetNumber?: string;
+  floo?: string;
+  departamentNumber?: string;
+  city?: string;
+  zipCode?: string;
+  state?: string;
+  country?: string;
 }
 
 export interface Coordinate {
@@ -33,7 +33,7 @@ export interface Coordinate {
 }
 
 export interface Destination {
-  addresses: Addresses;
+  address: Addresses;
   coordinate: Coordinate;
   referenceInfo: string;
 }

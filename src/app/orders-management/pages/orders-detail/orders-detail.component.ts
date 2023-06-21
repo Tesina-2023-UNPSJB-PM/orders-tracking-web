@@ -9,6 +9,9 @@ import { ServiceOrderTypeDTO } from 'src/app/dtos/service-order-type.dto';
 import { ServiceOrderDTO } from 'src/app/dtos/service-order.dto';
 import { ServiceOrderApiService } from '../../services/apis/service-order.api.service';
 import { ServiceOrderDetailResponse } from 'src/app/dtos/service-order-detail.dto';
+import { ServiceOrderUpdateRequestDTO } from 'src/app/dtos/service-order-update.dto';
+import { ServiceOrderDetailToUpdateDtoPipe } from '../../pipes/dtos/service-order-detail-to-update-dto.pipe';
+import { ClrLoadingState } from '@clr/angular';
 
 @Component({
   templateUrl: './orders-detail.component.html',
@@ -17,6 +20,8 @@ import { ServiceOrderDetailResponse } from 'src/app/dtos/service-order-detail.dt
 export class OrdersDetailComponent implements OnInit, OnDestroy {
   private _serviceOrder: ServiceOrderDetailResponse | undefined = undefined;
   private _destroy$: ReplaySubject<boolean> = new ReplaySubject();
+
+  protected submitBtnState: ClrLoadingState = ClrLoadingState.DEFAULT;
 
   public serviceOrderEditionFormGroup: FormGroup<{
     number: FormControl<string | null>;
@@ -28,9 +33,10 @@ export class OrdersDetailComponent implements OnInit, OnDestroy {
   }>;
 
   constructor(
-    private route: ActivatedRoute,
-    private formBuilder: FormBuilder,
-    private readonly serviceOrderApiSrv: ServiceOrderApiService
+    private readonly route: ActivatedRoute,
+    private readonly formBuilder: FormBuilder,
+    private readonly serviceOrderApiSrv: ServiceOrderApiService,
+    private readonly serviceOrderDetailToUpdateDtoPipe: ServiceOrderDetailToUpdateDtoPipe
   ) {
     this.serviceOrderEditionFormGroup = this.formBuilder.group({
       number: new FormControl<string | null>({ value: '', disabled: true }),
@@ -98,7 +104,30 @@ export class OrdersDetailComponent implements OnInit, OnDestroy {
   }
 
   protected onUpdateServiceOrder(): void {
-    /** @todo send changes to the backend. */
+    if (!this._serviceOrder) return;
+
+    this.submitBtnState = ClrLoadingState.LOADING;
+
+    const { description, customer, state, employee, type } =
+      this.serviceOrderEditionFormGroup.value;
+
+    this._serviceOrder.execution.executorEmployee = employee;
+
+    const serviceOrderDetail: ServiceOrderDetailResponse = {
+      ...this._serviceOrder,
+      description: description ?? undefined,
+      customer: customer ?? undefined,
+      status: state ?? undefined,
+      type: type ?? undefined,
+    };
+
+    const updateBody: ServiceOrderUpdateRequestDTO =
+      this.serviceOrderDetailToUpdateDtoPipe.transform(serviceOrderDetail);
+
+    this.serviceOrderApiSrv.updateById(updateBody).subscribe({
+      next: () => (this.submitBtnState = ClrLoadingState.SUCCESS),
+      error: () => (this.submitBtnState = ClrLoadingState.ERROR),
+    });
   }
 
   private initializeFormData(): void {

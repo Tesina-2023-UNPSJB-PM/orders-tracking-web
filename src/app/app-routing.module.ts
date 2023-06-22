@@ -11,6 +11,13 @@ const routes: Routes = [
         (m) => m.OrdersManagementModule
       ),
   },
+  {
+    path: MAIN_ROUTES.ORDERS_TRACKING,
+    loadChildren: () =>
+      import('./orders-tracking/orders-tracking.module').then(
+        (m) => m.OrdersTrackingModule
+      ),
+  },
 ];
 
 @NgModule({

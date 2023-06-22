@@ -15,6 +15,8 @@ import { InitializeAppService } from './services/initialize.app.service';
 import { effects } from './store/effects/_effects';
 import { reducers } from './store/reducers/_reducers';
 import { SharedModule } from './shared/shared.module';
+import { OrdersTrackingModule } from './orders-tracking/orders-tracking.module';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 const useFactory = (init: InitializeAppService) => {
   return () => init.initializeApp();
@@ -27,10 +29,12 @@ const useFactory = (init: InitializeAppService) => {
     BrowserAnimationsModule,
     AppRoutingModule,
     OrdersManagementModule,
+    OrdersTrackingModule,
     SharedModule,
     ClarityModule,
     CoreModule,
     HttpClientModule,
+    GoogleMapsModule,
     StoreModule.forRoot(reducers),
     EffectsModule.forRoot(effects),
   ],

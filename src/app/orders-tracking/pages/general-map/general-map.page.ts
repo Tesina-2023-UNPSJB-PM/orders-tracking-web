@@ -1,12 +1,20 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
+import { filter } from 'rxjs';
+import { CheckboxConfig } from 'src/app/shared/components/atoms/checkbox/checkbox.component';
+import {
+  EMPLOYEES_MARKERS,
+  ORDERS_MARKERS,
+} from 'src/assets/mocks/service-order/employees-tracking.mock';
 
 @Component({
   templateUrl: './general-map.page.html',
   styleUrls: ['./general-map.page.css'],
+  encapsulation: ViewEncapsulation.None,
 })
-export class GeneralMapPage {
-  @ViewChild(GoogleMap, { static: false }) map: GoogleMap | undefined;
+export class GeneralMapPage implements OnInit {
+  @ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
   @ViewChild(MapInfoWindow, { static: false }) info: MapInfoWindow | undefined;
   private myStyles = [
     {
@@ -26,7 +34,7 @@ export class GeneralMapPage {
   public options: google.maps.MapOptions = {
     disableDefaultUI: true,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
-    zoomControl: false,
+    zoomControl: true,
     scrollwheel: false,
     disableDoubleClickZoom: true,
     mapTypeControl: false,
@@ -37,61 +45,83 @@ export class GeneralMapPage {
     styles: this.myStyles,
   };
 
-  public markers = [
-    {
-      position: {
-        lat: -42.777981,
-        lng: -65.041811,
-      },
-      label: {
-        text: 'Manolo García',
-      },
-      title: 'Manolo García',
-      info: 'Marker info 1',
-      icon: {
-        url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-        anchor: new google.maps.Point(32, 80),
-        labelOrigin: new google.maps.Point(30, 30),
-      },
-    },
-    {
-      position: {
-        lat: -42.760307, //-42.760307, -65.053484
-        lng: -65.053484,
-      },
-      label: {
-        text: 'Maria Celeste Gonzalez',
-      },
-      title: 'Marker title 2',
-      info: 'Marker info 2',
-      icon: {
-        url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-        anchor: new google.maps.Point(32, 80),
-        labelOrigin: new google.maps.Point(30, 30),
-      },
-    },
-    {
-      position: {
-        lat: -42.785005, //-42.785005, -65.012929
-        lng: -65.012929,
-      },
-      label: {
-        text: 'Sandra Noemi Fernandez',
-      },
-      title: 'Marker title 2',
-      info: 'Marker info 2',
-      icon: {
-        url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-        anchor: new google.maps.Point(32, 80),
-        labelOrigin: new google.maps.Point(30, 30),
-      },
-    },
-  ];
+  private _markers = EMPLOYEES_MARKERS;
+
+  private _ordersMarkers = [];
 
   public infoContent = '';
+
+  public selectedEmployeeFormControl = new FormControl('');
+
+  public checkboxFormControl = new FormControl<CheckboxConfig[]>([
+    { label: 'OS Pendientes', value: 'pending', selected: false },
+  ]);
+
+  ngOnInit(): void {
+    this.selectedEmployeeFormControl.valueChanges.subscribe((value) => {
+      if (!value) this.markers = EMPLOYEES_MARKERS;
+      else if(this.selectedOrdersPendingCheckbox) this.markers = [EMPLOYEES_MARKERS[0], ...this.ordersMarkers]
+           else this.markers = [EMPLOYEES_MARKERS[0]]
+    });
+
+    this.checkboxFormControl.valueChanges.subscribe(() => {
+      if (this.selectedOrdersPendingCheckbox)
+        this.markers = [...this.markers, ...ORDERS_MARKERS];
+      else this.markers = [EMPLOYEES_MARKERS[0]];
+    });
+  }
+
+  ngAfterViewInit() {
+    const bounds = this.getBounds(this.markers);
+    console.log(
+      '🚀 ~ file: general-map.page.ts:95 ~ GeneralMapPage ~ ngAfterViewInit ~ bounds:',
+      bounds
+    );
+    this.map?.googleMap?.fitBounds(bounds);
+  }
+
+  public get selectedEmployee(): string {
+    return this.selectedEmployeeFormControl.value ?? '';
+  }
+
+  public get markers() {
+    return this._markers;
+  }
+
+  public set markers(markers: any[]) {
+    this._markers = markers;
+  }
+
+  public get ordersMarkers() {
+    return this.selectedOrdersPendingCheckbox ? ORDERS_MARKERS : [];
+  }
+
+  // public set ordersMarkers(ordersMarkers) {
+  //   this._ordersMarkers = ordersMarkers;
+  // }
+
+  public get selectedOrdersPendingCheckbox(): boolean {
+    const { value } = this.checkboxFormControl;
+    if (!value) return false;
+    const [checkboxConfig] = value;
+    const { selected = false } = checkboxConfig;
+    return selected;
+  }
 
   public openInfo(marker: any, content: string): void {
     this.infoContent = content;
     this.info?.open(marker);
+  }
+
+  private getBounds(markers: any[]) {
+    let bounds = new google.maps.LatLngBounds();
+
+    markers.forEach((marker: any) => {
+      bounds.extend(
+        new google.maps.LatLng(marker.position.lat, marker.position.lng)
+      );
+    });
+
+    return bounds;
   }
 }

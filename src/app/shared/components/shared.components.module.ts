@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   ClarityModule,
+  ClrCheckboxModule,
   ClrDatalistModule,
   ClrDatepickerModule,
   ClrInputModule,
@@ -13,6 +14,7 @@ import { DatepickerComponent } from './atoms/datepicker/datepicker.component';
 import { InputComponent } from './atoms/input/input.component';
 import { TextareaComponent } from './atoms/textarea/textarea.component';
 import { NotifierComponent } from './atoms/notifier/notifier.component';
+import { CheckboxComponent } from './atoms/checkbox/checkbox.component';
 
 const COMPONENTS = [
   DatalistComponent,
@@ -20,6 +22,7 @@ const COMPONENTS = [
   InputComponent,
   TextareaComponent,
   NotifierComponent,
+  CheckboxComponent,
 ];
 
 @NgModule({
@@ -32,6 +35,7 @@ const COMPONENTS = [
     ClrDatepickerModule,
     ClrInputModule,
     ClrTextareaModule,
+    ClrCheckboxModule
   ],
   exports: [...COMPONENTS],
 })

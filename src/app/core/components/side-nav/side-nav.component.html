@@ -1,19 +1,22 @@
 <clr-vertical-nav [clrVerticalNavCollapsible]="true" class="nav-trigger--bottom sideNav">
   <clr-vertical-nav-group routerLinkActive="active">
     <cds-icon clrVerticalNavIcon shape="organization"></cds-icon>
-    Gestión de Projectos
+    Gestión de Ordenes de Servicio
     <clr-vertical-nav-group-children>
       <a clrVerticalNavLink routerLink="#" routerLinkActive="active">
-      Projectos
+        Listado
+      </a>
+      <a clrVerticalNavLink routerLink="#" routerLinkActive="active">
+        Crear Orden
       </a>
     </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>
   <clr-vertical-nav-group>
     <cds-icon clrVerticalNavIcon shape="tasks"></cds-icon>
-    Gestión de Procesos
+    Seguimiento
     <clr-vertical-nav-group-children>
-      <a clrVerticalNavLink routerLink="#" routerLinkActive="active">
-      Procesos
+      <a clrVerticalNavLink [routerLink]="employeesTrackingRoute" routerLinkActive="active">
+      Operarios
     </a>
   </clr-vertical-nav-group-children>
   </clr-vertical-nav-group>

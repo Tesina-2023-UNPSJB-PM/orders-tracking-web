@@ -1,0 +1,6 @@
+.controls {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8vw;
+    padding-bottom: 4vh;
+}

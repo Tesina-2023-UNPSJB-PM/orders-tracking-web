@@ -1,0 +1,40 @@
+<ng-container class="container">
+  <div class="controls">
+    <shd-input
+      placeholder="Seleccione sector"
+      label="Filtro por sector"
+    ></shd-input>
+
+    <shd-input
+      placeholder="Seleccione estado"
+      label="Filtro por Estado de Operarios"
+    ></shd-input>
+
+    <shd-input
+      [formControl]="selectedEmployeeFormControl"
+      placeholder="Seleccione operario"
+      label="Filtro por Operario"
+    ></shd-input>
+
+    <shd-checkbox
+      [hidden]="!selectedEmployee"
+      label="Mostrar"
+      [formControl]="checkboxFormControl"
+    ></shd-checkbox>
+  </div>
+
+  <google-map width="100%" height="80%" [options]="options">
+    <map-marker
+      #somemarker="mapMarker"
+      *ngFor="let marker of markers"
+      [position]="marker.position"
+      [label]="marker.label"
+      [title]="marker.title"
+      [icon]="marker.icon"
+      (mapClick)="openInfo(somemarker, marker.info)"
+    >
+    </map-marker>
+
+    <map-info-window [innerHTML]="infoContent"></map-info-window>
+  </google-map>
+</ng-container>

@@ -45,6 +45,7 @@
           label="Cliente"
           placeholder=""
           formControlName="customer"
+          (ngModelChange)="onModelChanged($event)"
         ></app-customer-datalist>
         <div class="btn-group" style="margin-top: 30px">
           <button clrStepButton="next">next</button>
@@ -82,10 +83,11 @@
         </shd-datepicker>
         <clr-input-container>
           <label>Hora estimada resoluci&oacute;n</label>
-          <input type="time"
-              clrInput
-              formControlName="estimatedResolutionTime"
-            />
+          <input
+            type="time"
+            clrInput
+            formControlName="estimatedResolutionTime"
+          />
         </clr-input-container>
         <shd-textarea
           label="Observaciones"
@@ -110,11 +112,48 @@
         >Datos sobre ubicación de la orden</clr-step-description
       >
       <clr-step-content>
-        <shd-textarea
+        <!--<shd-textarea
           label="Dirección"
           formControlName="address"
           [disabled]="true"
-        ></shd-textarea>
+        ></shd-textarea>-->
+        <shd-input
+          label="Descripción (Calle, altura, etc.)"
+          formControlName="descriptionAddress"
+          [disabled]="true"
+        >
+        </shd-input>
+        <shd-input
+          label="Ciudad"
+          formControlName="cityAddress"
+          [disabled]="true"
+        >
+        </shd-input>
+        <shd-input
+          label="Código Postal"
+          formControlName="zipCodeAddress"
+          [disabled]="true"
+        ></shd-input>
+        <shd-input
+          label="Provincia"
+          formControlName="stateAddress"
+          [disabled]="true"
+        ></shd-input>
+        <shd-input
+          label="Pais"
+          formControlName="countryAddress"
+          [disabled]="true"
+        ></shd-input>
+        <shd-input
+          label="Latitude (Coordenada)"
+          formControlName="latitudeAddress"
+          [disabled]="true"
+        ></shd-input>
+        <shd-input
+          label="Longitud (Coordenada)"
+          formControlName="longitudeAddress"
+          [disabled]="true"
+        ></shd-input>
         <shd-input
           label="Información de referencia"
           formControlName="referenceInfo"

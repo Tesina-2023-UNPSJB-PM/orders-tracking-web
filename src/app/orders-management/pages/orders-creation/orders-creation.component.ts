@@ -15,6 +15,8 @@ import { ServiceOrderApiService } from '../../services/apis/service-order.api.se
 import { NotifierService } from 'src/app/shared/services/notifier.service';
 import { MasterDataOrderPriorityDTO } from 'src/app/dtos/master-data/master-data-order-priority.dto';
 import { SectorDTO } from 'src/app/dtos/sector.dto';
+import { CustomerApiService } from '../../services/apis/customer.api.service';
+import { AddressDTO } from 'src/app/dtos/address.dto';
 @Component({
   templateUrl: './orders-creation.component.html',
   styleUrls: ['./orders-creation.component.css'],
@@ -36,17 +38,24 @@ export class OrdersCreationComponent {
       sector: FormControl<SectorDTO | null>;
       employee: FormControl<MasterDataEmployeeDTO | null>;
       estimatedResolutionDate: FormControl<Date | null>;
-      estimatedResolutionTime: FormControl<Date | null>;
+      estimatedResolutionTime: FormControl<string | null>;
       observationsExecution: FormControl<string | null>;
     }>;
     formLocation: FormGroup<{
-      address: FormControl<string | null>;
+      descriptionAddress: FormControl<string | null>;
+      cityAddress: FormControl<string | null>;
+      zipCodeAddress: FormControl<string | null>;
+      stateAddress: FormControl<string | null>;
+      countryAddress: FormControl<string | null>;
+      latitudeAddress: FormControl<string | null>;
+      longitudeAddress: FormControl<string | null>;
       referenceInfo: FormControl<string | null>;
     }>
   }>;
 
   constructor(
     private readonly serviceOrderApi: ServiceOrderApiService,
+    private readonly customerApi: CustomerApiService,
     private readonly notifier: NotifierService,
     private formBuilder: FormBuilder,
     private readonly router: Router
@@ -66,11 +75,17 @@ export class OrdersCreationComponent {
         sector: new FormControl<SectorDTO | null > (null),
         employee: new FormControl<MasterDataEmployeeDTO | null>(null),
         estimatedResolutionDate: new FormControl<Date | null>(null),
-        estimatedResolutionTime: new FormControl<Date | null>(null),
+        estimatedResolutionTime: new FormControl<string | null>(null),
         observationsExecution: new FormControl<string | null>(null),
       }),
       formLocation: this.formBuilder.group({
-        address: new FormControl<string | null> (null),
+        descriptionAddress: new FormControl<string | null> (null),
+        cityAddress: new FormControl<string | null>(null),
+        zipCodeAddress: new FormControl<string | null>(null),
+        stateAddress: new FormControl<string | null>(null),
+        countryAddress: new FormControl<string | null>(null),
+        latitudeAddress: new FormControl<string | null>(null),
+        longitudeAddress: new FormControl<string | null>(null),
         referenceInfo: new FormControl<string | null>(null),
       }),
     });
@@ -121,8 +136,10 @@ export class OrdersCreationComponent {
 
   protected onCreateServiceOrder(): void {
     const request = this.getCreateRequest();
+    console.log(request);
 
-    this.serviceOrderApi.save(request).subscribe({
+
+    /*this.serviceOrderApi.save(request).subscribe({
       next: (_) => {
         this.notifier.pushSuccess('Orden de servicio creada');
         this.goBack();
@@ -130,6 +147,32 @@ export class OrdersCreationComponent {
       error: (err) => {
         this.notifier.pushError(err.message);
       },
+    });*/
+  }
+
+  public onModelChanged(value: MasterDataCustomerDTO): void {
+    if (value?.id) {
+      this.customerApi.getById(value.id)
+        .subscribe({
+          next: (value) => this.setValuesAddressFormControls(value.address)
+        });
+    }
+  }
+
+  private setValuesAddressFormControls(address?: AddressDTO): void {
+    if (!address) return;
+
+    const formLocation = this.formMain.get('formLocation');
+
+    formLocation?.patchValue({
+      descriptionAddress: address.description ?? null,
+      cityAddress: address.city ?? null,
+      countryAddress: address.country ?? null,
+      stateAddress: address.state ?? null,
+      zipCodeAddress: address.zipCode ?? null,
+      latitudeAddress: address.latitude?.toString() ?? null,
+      longitudeAddress: address.longitude?.toString() ?? null,
+      referenceInfo: ''
     });
   }
 
@@ -145,6 +188,7 @@ export class OrdersCreationComponent {
 
   private getCreateRequest(): CreateServiceOrderDTO {
     const data = this.formMain.getRawValue();
+
     return {
       number: data.formBasic.number ?? undefined,
       description: data.formBasic.description ?? undefined,
@@ -154,18 +198,27 @@ export class OrdersCreationComponent {
       customerId: data.formBasic.customer ? data.formBasic.customer.id : undefined,
       destination: {
         address: null,
-        referenceInfo: 'La casa pintada de azul y oro',
+        referenceInfo: data.formLocation?.referenceInfo ?? undefined,
       },
       execution: {
-        assignedSectorId: 1,
+        assignedSectorId: data.formExecution.sector?.id,
         executorEmployeId: data.formExecution.employee ? data.formExecution.employee.id : undefined,
         assignedTime: new Date(),
-        estimatedResolutionTime: new Date('2023-06-25'),
-        observations: 'Probando creación de nueva orden',
+        estimatedResolutionTime:
+          this.getEstimatedResolutionDatetime(data.formExecution.estimatedResolutionDate ?? undefined,
+                                              data.formExecution.estimatedResolutionTime ?? undefined),
+        observations: data.formExecution.observationsExecution ?? undefined,
       },
-      detail: {
-        numero_medidor: '012454',
-      },
+      detail: undefined,
     };
+  }
+
+  private getEstimatedResolutionDatetime(date?: Date, time?: string): Date {
+    if (!date) {
+      return new Date();
+    }
+    const theTime = time ? `${time}:00` : '00:00:00'
+    const theDate = `${date.getFullYear()}-${date.getMonth() + 1 }-${date.getDate()}`;
+    return new Date(`${theDate} ${theTime}`);
   }
 }

@@ -1,9 +1,12 @@
+import { AddressDTO } from "./service-order.dto";
+
 export interface CustomerDTO {
-  id: number;
-  customerNumber: string;
-  documentNumer: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
+  id?: number | null;
+  customerNumber?: string | null;
+  documentNumer?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  email?: string | null;
+  phones?: string | null;
+  address? : AddressDTO;
 }

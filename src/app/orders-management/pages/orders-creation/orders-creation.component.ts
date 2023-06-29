@@ -75,17 +75,17 @@ export class OrdersCreationComponent {
         sector: new FormControl<SectorDTO | null > (null),
         employee: new FormControl<MasterDataEmployeeDTO | null>(null),
         estimatedResolutionDate: new FormControl<Date | null>(null),
-        estimatedResolutionTime: new FormControl<string | null>(null),
+        estimatedResolutionTime: new FormControl<string | null>('12:00'),
         observationsExecution: new FormControl<string | null>(null),
       }),
       formLocation: this.formBuilder.group({
-        descriptionAddress: new FormControl<string | null> (null),
-        cityAddress: new FormControl<string | null>(null),
-        zipCodeAddress: new FormControl<string | null>(null),
-        stateAddress: new FormControl<string | null>(null),
-        countryAddress: new FormControl<string | null>(null),
-        latitudeAddress: new FormControl<string | null>(null),
-        longitudeAddress: new FormControl<string | null>(null),
+        descriptionAddress: new FormControl<string | null> ({ value: null, disabled: true }),
+        cityAddress: new FormControl<string | null>({ value: null, disabled: true }),
+        zipCodeAddress: new FormControl<string | null>({ value: null, disabled: true }),
+        stateAddress: new FormControl<string | null>({ value: null, disabled: true }),
+        countryAddress: new FormControl<string | null>({ value: null, disabled: true }),
+        latitudeAddress: new FormControl<string | null>({ value: null, disabled: true }),
+        longitudeAddress: new FormControl<string | null>({ value: null, disabled: true }),
         referenceInfo: new FormControl<string | null>(null),
       }),
     });
@@ -136,10 +136,8 @@ export class OrdersCreationComponent {
 
   protected onCreateServiceOrder(): void {
     const request = this.getCreateRequest();
-    console.log(request);
 
-
-    /*this.serviceOrderApi.save(request).subscribe({
+    this.serviceOrderApi.save(request).subscribe({
       next: (_) => {
         this.notifier.pushSuccess('Orden de servicio creada');
         this.goBack();
@@ -147,7 +145,7 @@ export class OrdersCreationComponent {
       error: (err) => {
         this.notifier.pushError(err.message);
       },
-    });*/
+    });
   }
 
   public onModelChanged(value: MasterDataCustomerDTO): void {
@@ -203,7 +201,6 @@ export class OrdersCreationComponent {
       execution: {
         assignedSectorId: data.formExecution.sector?.id,
         executorEmployeId: data.formExecution.employee ? data.formExecution.employee.id : undefined,
-        assignedTime: new Date(),
         estimatedResolutionTime:
           this.getEstimatedResolutionDatetime(data.formExecution.estimatedResolutionDate ?? undefined,
                                               data.formExecution.estimatedResolutionTime ?? undefined),

@@ -5,6 +5,7 @@ import { ServiceOrderTypeToDataListItemPipe } from './datalistitems/service-orde
 import { CustomerToDataListItemPipe } from './datalistitems/customer-to-data-list-item.pipe';
 import { EmployeeToDataListItemPipe } from './datalistitems/employee-to-data-list-item.pipe';
 import { SectorToDataListItemPipe } from './datalistitems/sector-to-data-list-item.pipe';
+import { ServiceOrderDetailToUpdateDtoPipe } from './dtos/service-order-detail-to-update-dto.pipe';
 
 const PIPES = [
   ServiceOrderStateToDataListItemPipe,
@@ -12,11 +13,13 @@ const PIPES = [
   CustomerToDataListItemPipe,
   EmployeeToDataListItemPipe,
   SectorToDataListItemPipe,
+  ServiceOrderDetailToUpdateDtoPipe,
 ];
 
 @NgModule({
   declarations: [...PIPES],
   exports: [...PIPES],
   imports: [CommonModule],
+  providers: [...PIPES]
 })
 export class OrdersManagementPipesModule {}

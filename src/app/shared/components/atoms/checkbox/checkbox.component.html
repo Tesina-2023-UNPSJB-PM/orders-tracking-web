@@ -1,0 +1,15 @@
+<clr-checkbox-container>
+  <label>{{label}}</label>
+  <clr-checkbox-wrapper *ngFor="let checkbox of checkboxes">
+    <input
+      type="checkbox"
+      clrCheckbox
+      name="options1"
+      required
+      [value]="checkbox.value"
+      [(ngModel)]="checkbox.selected"
+      (ngModelChange)="onSelectionChange()"
+    />
+    <label>{{checkbox.label}}</label>
+  </clr-checkbox-wrapper>
+</clr-checkbox-container>

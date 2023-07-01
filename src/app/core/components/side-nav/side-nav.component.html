@@ -3,10 +3,10 @@
     <cds-icon clrVerticalNavIcon shape="organization"></cds-icon>
     Gestión de Ordenes de Servicio
     <clr-vertical-nav-group-children>
-      <a clrVerticalNavLink routerLink="#" routerLinkActive="active">
+      <a clrVerticalNavLink [routerLink]="ordersListRoute" routerLinkActive="active">
         Listado
       </a>
-      <a clrVerticalNavLink routerLink="#" routerLinkActive="active">
+      <a clrVerticalNavLink [routerLink]="orderCreateRoute" routerLinkActive="active">
         Crear Orden
       </a>
     </clr-vertical-nav-group-children>

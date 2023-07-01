@@ -28,6 +28,7 @@ export class DatalistComponent<T> implements OnDestroy, ControlValueAccessor {
   @Input() placeholder: string = '';
   @Input() label: string = '';
   @Input() items: DatalistItem[] = [];
+  @Input() disabled: boolean = false;
   @Output() protected inputValueChange: EventEmitter<DatalistItem> =
     new EventEmitter<DatalistItem>();
   @Input() public inputValue = '';

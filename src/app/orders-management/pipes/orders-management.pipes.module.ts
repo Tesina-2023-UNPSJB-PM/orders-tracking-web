@@ -4,6 +4,7 @@ import { ServiceOrderStateToDataListItemPipe } from './datalistitems/service-ord
 import { ServiceOrderTypeToDataListItemPipe } from './datalistitems/service-order-type-to-data-list-item.pipe';
 import { CustomerToDataListItemPipe } from './datalistitems/customer-to-data-list-item.pipe';
 import { EmployeeToDataListItemPipe } from './datalistitems/employee-to-data-list-item.pipe';
+import { SectorToDataListItemPipe } from './datalistitems/sector-to-data-list-item.pipe';
 import { ServiceOrderDetailToUpdateDtoPipe } from './dtos/service-order-detail-to-update-dto.pipe';
 
 const PIPES = [
@@ -11,6 +12,7 @@ const PIPES = [
   ServiceOrderTypeToDataListItemPipe,
   CustomerToDataListItemPipe,
   EmployeeToDataListItemPipe,
+  SectorToDataListItemPipe,
   ServiceOrderDetailToUpdateDtoPipe,
 ];
 

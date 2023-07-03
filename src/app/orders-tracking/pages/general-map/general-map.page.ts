@@ -7,6 +7,8 @@ import {
   EMPLOYEES_MARKERS,
   ORDERS_MARKERS,
 } from 'src/assets/mocks/service-order/employees-tracking.mock';
+import { OrdersTrackingService } from '../../services/orders-tracking.service';
+import { CHANNEL } from '../../constants/tracking.constants';
 
 @Component({
   templateUrl: './general-map.page.html',
@@ -16,6 +18,8 @@ import {
 export class GeneralMapPage implements OnInit {
   @ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
   @ViewChild(MapInfoWindow, { static: false }) info: MapInfoWindow | undefined;
+
+  private readonly channedId = CHANNEL;
   private myStyles = [
     {
       featureType: 'poi',
@@ -57,11 +61,30 @@ export class GeneralMapPage implements OnInit {
     { label: 'OS Pendientes', value: 'pending', selected: false },
   ]);
 
+  constructor(private readonly ordersTrackingService: OrdersTrackingService) {}
+
   ngOnInit(): void {
+    this.ordersTrackingService
+      .subscribeToChannel(this.channedId)
+      .subscribe(({ currentLocation }) => {
+        const { latitude: lat, longitude: lng } = currentLocation;
+        
+        const firstEmployee = this.markers[0];
+
+        firstEmployee.position = {
+          lat,
+          lng,
+        };
+
+        const markers = [firstEmployee, ...this.markers.slice(1)];
+        this.markers = markers;
+      });
+
     this.selectedEmployeeFormControl.valueChanges.subscribe((value) => {
       if (!value) this.markers = EMPLOYEES_MARKERS;
-      else if(this.selectedOrdersPendingCheckbox) this.markers = [EMPLOYEES_MARKERS[0], ...this.ordersMarkers]
-           else this.markers = [EMPLOYEES_MARKERS[0]]
+      else if (this.selectedOrdersPendingCheckbox)
+        this.markers = [EMPLOYEES_MARKERS[0], ...this.ordersMarkers];
+      else this.markers = [EMPLOYEES_MARKERS[0]];
     });
 
     this.checkboxFormControl.valueChanges.subscribe(() => {
@@ -73,10 +96,6 @@ export class GeneralMapPage implements OnInit {
 
   ngAfterViewInit() {
     const bounds = this.getBounds(this.markers);
-    console.log(
-      '🚀 ~ file: general-map.page.ts:95 ~ GeneralMapPage ~ ngAfterViewInit ~ bounds:',
-      bounds
-    );
     this.map?.googleMap?.fitBounds(bounds);
   }
 

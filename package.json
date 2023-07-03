@@ -24,6 +24,7 @@
     "@clr/ui": "^15.0.2",
     "@ngrx/effects": "^15.4.0",
     "@ngrx/store": "^15.4.0",
+    "pubnub": "^7.2.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
@@ -34,6 +35,8 @@
     "@angular/compiler-cli": "^15.2.0",
     "@componizer/schematics": "^0.0.7",
     "@types/jasmine": "~4.3.0",
+    "@types/node": "^20.3.3",
+    "@types/pubnub": "^7.2.1",
     "jasmine-core": "~4.5.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",

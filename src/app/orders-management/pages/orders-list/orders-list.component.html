@@ -22,6 +22,9 @@
       label="Fecha de creación"
       formControlName="creationDate"
     ></shd-datepicker>
+
+    <button class="btn btn-primary" (click)="onClearFilters()">Limpiar Filtros</button>
+
   </form>
 
   <clr-datagrid>
@@ -38,6 +41,9 @@
       <clr-dg-action-overflow>
         <button class="action-item" (click)="onViewDetail(serviceOrder)">
           Editar
+        </button>
+        <button class="action-item" (click)="onDelete(serviceOrder)">
+            Eliminar
         </button>
       </clr-dg-action-overflow>
 
@@ -60,5 +66,15 @@
     <clr-dg-footer>{{ serviceOrders.length }} órdenes</clr-dg-footer>
   </clr-datagrid>
 
-  <button class="btn btn-primary" (click)="onCreateServiceOrder()">Crear Orden de Servicio</button>
+  <button class="btn btn-primary" (click)="onCreateServiceOrder()">Crear Orden</button>
 </div>
+<clr-modal [(clrModalOpen)]="openModalDelete">
+    <h3 class="modal-title">Eliminando Orden de Servicio</h3>
+  <div class="modal-body">
+    <p>¿ Desea realmente eliminar la orden de servicio <strong>{{selectedOrder?.number}}</strong> ?</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="openModalDelete = false">Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="deleteOrderSelected()">Ok</button>
+  </div>
+</clr-modal>

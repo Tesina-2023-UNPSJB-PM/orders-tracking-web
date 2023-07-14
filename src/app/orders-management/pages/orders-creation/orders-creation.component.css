@@ -1,0 +1,16 @@
+.form-container {
+    width: 100%;
+  
+      .clr-control-container {
+        display: block;
+        width: 480px;
+  
+        .clr-input-wrapper > .clr-input, .clr-input-group, input {
+          width: 480px;
+        }
+  
+        .clr-textarea-wrapper > .clr-textarea {
+          width: 480px;
+        }
+      }
+  }

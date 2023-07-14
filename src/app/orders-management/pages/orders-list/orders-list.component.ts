@@ -10,6 +10,7 @@ import { ServiceOrderApiService } from 'src/app/orders-management/services/apis/
 import { ORDERS_MANAGEMENT_ROUTES } from '../../constants/routes.constant';
 import { ServiceOrderFilters } from '../../interfaces/service-order-filters.interface';
 import { GetAllServiceOrderQueryParams } from '../../services/apis/query-params/service-order.query-params';
+import { NotifierService } from 'src/app/shared/services/notifier.service';
 
 @Component({
   templateUrl: './orders-list.component.html',
@@ -24,9 +25,12 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     state: FormControl<MasterDataOrderStatusDTO | null>;
     creationDate: FormControl<Date | null>;
   }>;
+  openModalDelete = false;
+  selectedOrder?: ServiceOrderItemDTO;
 
   constructor(
     private readonly serviceOrderApiSrv: ServiceOrderApiService,
+    private readonly notifierService: NotifierService,
     private readonly formBuilder: FormBuilder,
     private readonly router: Router
   ) {
@@ -66,22 +70,53 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   public async onViewDetail(serviceOrder: ServiceOrderItemDTO): Promise<void> {
     const { ORDERS_DETAIL } = ORDERS_MANAGEMENT_ROUTES;
 
+    const { id } = serviceOrder;
+
+
+
     await this.router.navigate([ORDERS_DETAIL], {
-      queryParams: { serviceOrder: JSON.stringify(serviceOrder) },
+      queryParams: { id },
+    });
+  }
+
+  public onDelete(serviceOrder: ServiceOrderItemDTO): void {
+    this.openModalDelete = true;
+    this.selectedOrder = serviceOrder;
+  }
+
+  public deleteOrderSelected(): void {
+    if (this.selectedOrder) {
+        this.serviceOrderApiSrv.delete(this.selectedOrder)
+        .subscribe( {
+            next: () => {
+                this.notifierService.pushSuccess('Orden de Servicio eliminada.');
+                this.findServiceOrders();
+            },
+            error: (err) => this.notifierService.pushError(err.message),
+        });
+    }
+    this.openModalDelete = false;
+  }
+
+  public onClearFilters(): void {
+    this.filtersFormGroup.setValue({
+      employee: null,
+      customer: null,
+      state: null,
+      creationDate: null,
     });
   }
 
   private findServiceOrders(
     serviceOrderFilters?: GetAllServiceOrderQueryParams
   ): void {
-    console.log(serviceOrderFilters);
     this.serviceOrderApiSrv
       .getAll(serviceOrderFilters)
       .pipe(takeUntil(this._destroy))
       .subscribe({
         next: (serviceOrders: ServiceOrderItemDTO[]) =>
           (this.serviceOrders = serviceOrders),
-        error: (error) => console.error(error),
+        error: (error) => this.notifierService.pushError(error.message),
       });
   }
 

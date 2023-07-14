@@ -1,6 +1,6 @@
 name: NodeJS with Webpack
 
-on: workflow_dispatch 
+on: workflow_dispatch
 
 jobs:
   build:

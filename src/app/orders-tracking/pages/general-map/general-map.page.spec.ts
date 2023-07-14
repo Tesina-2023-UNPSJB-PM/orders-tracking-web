@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OrdersCreationComponent } from './orders-creation.component';
+import { GeneralMapPage } from './general-map.page';
 
-describe('OrdersCreationComponent', () => {
-  let component: OrdersCreationComponent;
-  let fixture: ComponentFixture<OrdersCreationComponent>;
+describe('GeneralMapComponent', () => {
+  let component: GeneralMapPage;
+  let fixture: ComponentFixture<GeneralMapPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OrdersCreationComponent ]
+      declarations: [ GeneralMapPage ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(OrdersCreationComponent);
+    fixture = TestBed.createComponent(GeneralMapPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

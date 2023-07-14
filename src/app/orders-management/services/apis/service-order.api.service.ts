@@ -7,18 +7,24 @@ import { ServiceOrderTypeDTO } from 'src/app/dtos/service-order-type.dto';
 import { CommonApi } from 'src/app/interfaces/common-api.interface';
 import { environment } from 'src/environments/environment';
 import { GetAllServiceOrderQueryParams } from './query-params/service-order.query-params';
+import { ServiceOrderDetailResponse } from 'src/app/dtos/service-order-detail.dto';
+import { CreateServiceOrderDTO } from 'src/app/dtos/service-order.dto';
+import { ServiceOrderUpdateRequestDTO } from 'src/app/dtos/service-order-update.dto';
 @Injectable({
   providedIn: 'root',
 })
 export class ServiceOrderApiService implements CommonApi<ServiceOrderItem> {
-  constructor(private readonly _httpClient: HttpClient) {}
+  readonly uriServiceOrders;
+
+  constructor(private readonly _httpClient: HttpClient) {
+    this.uriServiceOrders = environment.endpoints.serviceOrders;
+  }
 
   public getAll(
     serviceOrderFilters: GetAllServiceOrderQueryParams = {}
   ): Observable<ServiceOrderItem[]> {
-    const { serviceOrders } = environment.endpoints;
     const fromObject: any = serviceOrderFilters;
-    
+
     Object.keys(serviceOrderFilters).forEach(
       (key) => fromObject[key] === undefined && delete fromObject[key]
     );
@@ -27,20 +33,41 @@ export class ServiceOrderApiService implements CommonApi<ServiceOrderItem> {
       fromObject,
     });
 
-    return this._httpClient.get<ServiceOrderItem[]>(serviceOrders, { params });
+    return this._httpClient.get<ServiceOrderItem[]>(this.uriServiceOrders, {
+      params,
+    });
   }
 
   public getServiceOrderStates(): Observable<ServiceOrderStateDTO[]> {
-    const { serviceOrders } = environment.endpoints;
     return this._httpClient.get<ServiceOrderStateDTO[]>(
-      `${serviceOrders}/states`
+      `${this.uriServiceOrders}/states`
     );
   }
 
   public getServiceOrderTypes(): Observable<ServiceOrderTypeDTO[]> {
-    const { serviceOrders } = environment.endpoints;
     return this._httpClient.get<ServiceOrderTypeDTO[]>(
-      `${serviceOrders}/types`
+      `${this.uriServiceOrders}/types`
     );
+  }
+
+  public getById(id: number): Observable<ServiceOrderDetailResponse> {
+    return this._httpClient.get<ServiceOrderDetailResponse>(
+      `${this.uriServiceOrders}/${id}`
+    );
+  }
+
+  public updateById(body: ServiceOrderUpdateRequestDTO) {
+    const { serviceOrders } = environment.endpoints;
+    return this._httpClient.patch<ServiceOrderDetailResponse>(
+      `${serviceOrders}`,
+      body
+    );
+  }
+  public delete(item: ServiceOrderItem): Observable<void> {
+    return this._httpClient.delete<void>(`${this.uriServiceOrders}/${item.id}`);
+  }
+
+  public save(item: CreateServiceOrderDTO): Observable<number> {
+    return this._httpClient.post<number>(this.uriServiceOrders, item);
   }
 }

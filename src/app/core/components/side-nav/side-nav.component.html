@@ -1,0 +1,32 @@
+<clr-vertical-nav [clrVerticalNavCollapsible]="true" class="nav-trigger--bottom sideNav">
+  <clr-vertical-nav-group routerLinkActive="active">
+    <cds-icon clrVerticalNavIcon shape="organization"></cds-icon>
+    Gestión de Ordenes de Servicio
+    <clr-vertical-nav-group-children>
+      <a clrVerticalNavLink [routerLink]="ordersListRoute" routerLinkActive="active">
+        Listado
+      </a>
+      <a clrVerticalNavLink [routerLink]="orderCreateRoute" routerLinkActive="active">
+        Crear Orden
+      </a>
+    </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+  <clr-vertical-nav-group>
+    <cds-icon clrVerticalNavIcon shape="tasks"></cds-icon>
+    Seguimiento
+    <clr-vertical-nav-group-children>
+      <a clrVerticalNavLink [routerLink]="employeesTrackingRoute" routerLinkActive="active">
+      Operarios
+    </a>
+  </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+  <clr-vertical-nav-group>
+    <cds-icon clrVerticalNavIcon shape="users"></cds-icon>
+    Gestión de Usuarios
+    <clr-vertical-nav-group-children>
+      <a clrVerticalNavLink routerLink="#" routerLinkActive="active">
+      Usuarios
+    </a>
+  </clr-vertical-nav-group-children>
+  </clr-vertical-nav-group>
+</clr-vertical-nav>

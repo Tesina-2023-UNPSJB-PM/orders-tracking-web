@@ -1,63 +1,164 @@
 <div class="content">
-    <p>Nueva Orden de Servicio</p>
-  
-    <form
-      class="form-container"
-      clrForm
-      clrLayout="vertical"
-      [formGroup]="serviceOrderEditionFormGroup"
-      (ngSubmit)="onCreateServiceOrder()"
-    >
-      <shd-input
-        label="Número de orden"
-        [disabled]="true"
-        [value]="number"
-        name="number"
-      ></shd-input>
-  
-      <shd-textarea
-        label="Descripción"
-        [value]="description"
-        name="description"
-      ></shd-textarea>
-  
-      <shd-textarea
-        label="Observaciones"
-        [value]="observations"
-        name="observations"
-      ></shd-textarea>
-  
-      <service-order-types-datalist
-        label="Tipo"
-        placeholder=""
-        formControlName="type"
-      ></service-order-types-datalist>
-  
-      <app-status-datalist
-        label="Estado"
-        placeholder=""
-        formControlName="state"
-      ></app-status-datalist>
-  
-      <app-employee-datalist
-        label="Operario"
-        placeholder=""
-        formControlName="employee"
-      ></app-employee-datalist>
-  
-      <app-customer-datalist
-        label="Cliente"
-        placeholder=""
-        formControlName="customer"
-      ></app-customer-datalist>
-  
-      <button
-        [disabled]="serviceOrderEditionFormGroup.invalid"
-        type="submit"
-        class="btn btn-primary"
+  <h2>Nueva Orden de Servicio</h2>
+
+  <form
+    clrForm
+    clrStepper
+    class="form-container"
+    [formGroup]="formMain"
+    (ngSubmit)="onCreateServiceOrder()"
+  >
+    <clr-stepper-panel formGroupName="formBasic">
+      <clr-step-title>B&aacute;sico</clr-step-title>
+      <clr-step-description
+        >Datos b&aacute;sicos de la orden</clr-step-description
       >
-        Crear Orden de Servicio
-      </button>
-    </form>
-  </div>
-  
+      <clr-step-content *clrIfExpanded>
+        <shd-input
+          label="Número de orden"
+          [disabled]="true"
+          formControlName="number"
+          name="number"
+        ></shd-input>
+        <shd-textarea
+          label="Descripción"
+          formControlName="description"
+          name="description"
+        ></shd-textarea>
+        <service-order-types-datalist
+          label="Tipo"
+          placeholder=""
+          formControlName="type"
+        ></service-order-types-datalist>
+        <app-status-datalist
+          label="Estado"
+          placeholder=""
+          formControlName="state"
+          [disabled]="true"
+        ></app-status-datalist>
+        <app-priority-datalist
+          label="Prioridad"
+          placeholder=""
+          formControlName="priority"
+        ></app-priority-datalist>
+        <app-customer-datalist
+          label="Cliente"
+          placeholder=""
+          formControlName="customer"
+          (ngModelChange)="onModelChanged($event)"
+        ></app-customer-datalist>
+        <div class="btn-group" style="margin-top: 30px">
+          <button clrStepButton="next">next</button>
+          <button
+            type="button"
+            class="clr-step-button btn"
+            (click)="onCancel()"
+          >
+            Cancelar
+          </button>
+        </div>
+      </clr-step-content>
+    </clr-stepper-panel>
+    <clr-stepper-panel formGroupName="formExecution">
+      <clr-step-title>Ejecuci&oacute;n</clr-step-title>
+      <clr-step-description
+        >Datos sobre la ejecuci&oacute;n de la orden</clr-step-description
+      >
+      <clr-step-content *clrIfExpanded>
+        <app-sector-datalist
+          label="Sector asignado"
+          placeholder=""
+          formControlName="sector"
+        >
+        </app-sector-datalist>
+        <app-employee-datalist
+          label="Operario asignado"
+          placeholder=""
+          formControlName="employee"
+        ></app-employee-datalist>
+        <shd-datepicker
+          label="Fecha estimada resolución"
+          formControlName="estimatedResolutionDate"
+        >
+        </shd-datepicker>
+        <clr-input-container>
+          <label>Hora estimada resoluci&oacute;n</label>
+          <input
+            type="time"
+            clrInput
+            formControlName="estimatedResolutionTime"
+          />
+        </clr-input-container>
+        <shd-textarea
+          label="Observaciones"
+          formControlName="observationsExecution"
+        >
+        </shd-textarea>
+        <div class="btn-group" style="margin-top: 30px">
+          <button clrStepButton="next">next</button>
+          <button
+            type="button"
+            class="clr-step-button btn"
+            (click)="onCancel()"
+          >
+            Cancelar
+          </button>
+        </div>
+      </clr-step-content>
+    </clr-stepper-panel>
+    <clr-stepper-panel formGroupName="formLocation">
+      <clr-step-title>Localización</clr-step-title>
+      <clr-step-description
+        >Datos sobre ubicación de la orden</clr-step-description
+      >
+      <clr-step-content>
+        <shd-input
+          label="Descripción (Calle, altura, etc.)"
+          formControlName="descriptionAddress"
+        >
+        </shd-input>
+        <shd-input
+          label="Ciudad"
+          formControlName="cityAddress"
+        >
+        </shd-input>
+        <shd-input
+          label="Código Postal"
+          formControlName="zipCodeAddress"
+        ></shd-input>
+        <shd-input
+          label="Provincia"
+          formControlName="stateAddress"
+        ></shd-input>
+        <shd-input
+          label="Pais"
+          formControlName="countryAddress"
+        ></shd-input>
+        <shd-input
+          label="Latitude (Coordenada)"
+          formControlName="latitudeAddress"
+        ></shd-input>
+        <shd-input
+          label="Longitud (Coordenada)"
+          formControlName="longitudeAddress"
+        ></shd-input>
+        <shd-input
+          label="Información de referencia"
+          formControlName="referenceInfo"
+        ></shd-input>
+        <div class="btn-group" style="margin-top: 30px">
+          <button clrStepButton="submit" [disabled]="formMain.invalid">
+            Crear
+          </button>
+          <button
+            type="button"
+            class="clr-step-button btn"
+            (click)="onCancel()"
+          >
+            Cancelar
+          </button>
+        </div>
+      </clr-step-content>
+    </clr-stepper-panel>
+  </form>
+</div>

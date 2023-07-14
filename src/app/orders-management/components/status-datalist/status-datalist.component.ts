@@ -10,7 +10,10 @@ import { AppState } from 'src/app/store/state.model';
 @Component({
   selector: 'app-status-datalist',
   template:
-    '<shd-datalist [inputValue]="inputValue" [label]="label" [placeholder]="placeholder" [items]="serviceOrderStates | serviceOrderStateToDataListItem" (inputValueChange)="onInputValueChanges($event)"/>',
+    `<shd-datalist [inputValue]="inputValue" [label]="label" [placeholder]="placeholder"
+        [items]="serviceOrderStates | serviceOrderStateToDataListItem"
+        (inputValueChange)="onInputValueChanges($event)"
+        [disabled]="disabled"/>`,
   styleUrls: ['./status-datalist.component.css'],
   providers: [
     {

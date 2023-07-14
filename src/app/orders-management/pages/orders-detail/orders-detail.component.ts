@@ -1,21 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ReplaySubject, lastValueFrom, map, switchMap } from 'rxjs';
+import { ClrLoadingState } from '@clr/angular';
+import { ReplaySubject, switchMap } from 'rxjs';
 import { MasterDataCustomerDTO } from 'src/app/dtos/master-data/master-data-customer.dto';
 import { MasterDataEmployeeDTO } from 'src/app/dtos/master-data/master-data-employee.dto';
+import { ServiceOrderDetailResponse } from 'src/app/dtos/service-order-detail.dto';
 import { ServiceOrderStateDTO } from 'src/app/dtos/service-order-state.dto';
 import { ServiceOrderTypeDTO } from 'src/app/dtos/service-order-type.dto';
-import { ServiceOrderDTO } from 'src/app/dtos/service-order.dto';
-import { ServiceOrderApiService } from '../../services/apis/service-order.api.service';
-import { ServiceOrderDetailResponse } from 'src/app/dtos/service-order-detail.dto';
 import { ServiceOrderUpdateRequestDTO } from 'src/app/dtos/service-order-update.dto';
 import { ServiceOrderDetailToUpdateDtoPipe } from '../../pipes/dtos/service-order-detail-to-update-dto.pipe';
-import { ClrLoadingState } from '@clr/angular';
+import { ServiceOrderApiService } from '../../services/apis/service-order.api.service';
 
 @Component({
   templateUrl: './orders-detail.component.html',
-  styleUrls: ['./orders-detail.component.css'],
+  styleUrls: ['./orders-detail.component.scss'],
 })
 export class OrdersDetailComponent implements OnInit, OnDestroy {
   private _serviceOrder: ServiceOrderDetailResponse | undefined = undefined;

@@ -2,7 +2,7 @@ const host = 'vps-3107443-x.dattaweb.com';
 const PREFIX_PATH = 'api';
 
 const endpoints = {
-  serviceOrders: `http://${host}/${PREFIX_PATH}/service_orders/`,
+  serviceOrders: `http://${host}/${PREFIX_PATH}/tracking-so/orders`,
   employees: `http://${host}/${PREFIX_PATH}/tracking-so/employees`,
   customers: `http://${host}/${PREFIX_PATH}/tracking-so/customers`,
   masterData: `http://${host}/${PREFIX_PATH}/tracking-so/master-data`,

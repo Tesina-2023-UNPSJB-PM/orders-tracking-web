@@ -3,7 +3,7 @@ on: workflow_dispatch
 
 jobs:
   push-docker-image:
-    runs-on: [self-hosted Linux X64]
+    runs-on: self-hosted
     steps:
       -
         name: Set up Docker Buildx

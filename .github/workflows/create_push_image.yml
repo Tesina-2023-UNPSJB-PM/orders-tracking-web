@@ -18,7 +18,6 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: .
           push: true
           tags: jldevia/orders-tracking-backoffice:1.0.0
 

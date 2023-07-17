@@ -1,11 +1,9 @@
-
 name: Push image
-
 on: workflow_dispatch
 
 jobs:
-  docker:
-    runs-on: ubuntu-latest
+  push-docker-image:
+    runs-on: [self-hosted Linux X64]
     steps:
       -
         name: Set up Docker Buildx

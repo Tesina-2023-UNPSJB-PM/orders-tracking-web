@@ -1,16 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ReplaySubject, map, takeUntil } from 'rxjs';
+import { ClrDatagridStateInterface } from '@clr/angular';
+import { ReplaySubject, finalize, map, takeUntil } from 'rxjs';
 import { MasterDataCustomerDTO } from 'src/app/dtos/master-data/master-data-customer.dto';
 import { MasterDataEmployeeDTO } from 'src/app/dtos/master-data/master-data-employee.dto';
 import { MasterDataOrderStatusDTO } from 'src/app/dtos/master-data/master-data-order-status.dto';
 import { ServiceOrderItem as ServiceOrderItemDTO } from 'src/app/dtos/service-order-item.dto';
 import { ServiceOrderApiService } from 'src/app/orders-management/services/apis/service-order.api.service';
+import { Order } from 'src/app/shared/pagination/constants/order.constant';
+import { PageOptionsDto } from 'src/app/shared/pagination/page-options.dto';
+import { PageDto } from 'src/app/shared/pagination/page.dto';
+import { NotifierService } from 'src/app/shared/services/notifier.service';
 import { ORDERS_MANAGEMENT_ROUTES } from '../../constants/routes.constant';
 import { ServiceOrderFilters } from '../../interfaces/service-order-filters.interface';
 import { GetAllServiceOrderQueryParams } from '../../services/apis/query-params/service-order.query-params';
-import { NotifierService } from 'src/app/shared/services/notifier.service';
 
 @Component({
   templateUrl: './orders-list.component.html',
@@ -18,7 +22,13 @@ import { NotifierService } from 'src/app/shared/services/notifier.service';
 })
 export class OrdersListComponent implements OnInit, OnDestroy {
   private readonly _destroy: ReplaySubject<boolean> = new ReplaySubject();
-  public serviceOrders: ServiceOrderItemDTO[] = [];
+  private _paginationOptions: PageOptionsDto = {
+    page: 1,
+    take: 10,
+    order: Order.ASC,
+  };
+  private _currentPage: PageDto<ServiceOrderItemDTO> | undefined;
+  public loading = false;
   public filtersFormGroup: FormGroup<{
     employee: FormControl<MasterDataEmployeeDTO | null>;
     customer: FormControl<MasterDataCustomerDTO | null>;
@@ -40,7 +50,9 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       state: new FormControl<MasterDataOrderStatusDTO | null>(null),
       creationDate: new FormControl<Date | null>(null),
     });
+  }
 
+  ngOnInit(): void {
     this.filtersFormGroup.valueChanges
       .pipe(
         takeUntil(this._destroy),
@@ -57,8 +69,16 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit(): void {
-    this.findServiceOrders();
+  protected get pageSize(): number {
+    return this._paginationOptions.take ?? 10;
+  }
+
+  protected get serviceOrders(): ServiceOrderItemDTO[] {
+    return this._currentPage?.data ?? [];
+  }
+
+  protected get total(): number {
+    return this._currentPage?.meta.itemCount ?? 0;
   }
 
   public async onCreateServiceOrder(): Promise<void> {
@@ -72,8 +92,6 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
     const { id } = serviceOrder;
 
-
-
     await this.router.navigate([ORDERS_DETAIL], {
       queryParams: { id },
     });
@@ -86,14 +104,13 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
   public deleteOrderSelected(): void {
     if (this.selectedOrder) {
-        this.serviceOrderApiSrv.delete(this.selectedOrder)
-        .subscribe( {
-            next: () => {
-                this.notifierService.pushSuccess('Orden de Servicio eliminada.');
-                this.findServiceOrders();
-            },
-            error: (err) => this.notifierService.pushError(err.message),
-        });
+      this.serviceOrderApiSrv.delete(this.selectedOrder).subscribe({
+        next: () => {
+          this.notifierService.pushSuccess('Orden de Servicio eliminada.');
+          this.findServiceOrders();
+        },
+        error: (err) => this.notifierService.pushError(err.message),
+      });
     }
     this.openModalDelete = false;
   }
@@ -110,14 +127,23 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   private findServiceOrders(
     serviceOrderFilters?: GetAllServiceOrderQueryParams
   ): void {
+    this.loading = true;
     this.serviceOrderApiSrv
-      .getAll(serviceOrderFilters)
-      .pipe(takeUntil(this._destroy))
+      .getPage(this._paginationOptions, serviceOrderFilters)
+      .pipe(
+        takeUntil(this._destroy),
+        finalize(() => (this.loading = false))
+      )
       .subscribe({
-        next: (serviceOrders: ServiceOrderItemDTO[]) =>
-          (this.serviceOrders = serviceOrders),
+        next: (page: PageDto<ServiceOrderItemDTO>) =>
+          (this._currentPage = page),
         error: (error) => this.notifierService.pushError(error.message),
       });
+  }
+
+  protected onRefresh({ page }: ClrDatagridStateInterface): void {
+    this._paginationOptions.page = page?.current ?? 1;
+    this.findServiceOrders();
   }
 
   ngOnDestroy(): void {

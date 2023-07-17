@@ -10,6 +10,8 @@ import { GetAllServiceOrderQueryParams } from './query-params/service-order.quer
 import { ServiceOrderDetailResponse } from 'src/app/dtos/service-order-detail.dto';
 import { CreateServiceOrderDTO } from 'src/app/dtos/service-order.dto';
 import { ServiceOrderUpdateRequestDTO } from 'src/app/dtos/service-order-update.dto';
+import { PageDto } from 'src/app/shared/pagination/page.dto';
+import { PageOptionsDto } from 'src/app/shared/pagination/page-options.dto';
 @Injectable({
   providedIn: 'root',
 })
@@ -20,20 +22,24 @@ export class ServiceOrderApiService implements CommonApi<ServiceOrderItem> {
     this.uriServiceOrders = environment.endpoints.serviceOrders;
   }
 
-  public getAll(
+  public getPage(
+    pageOptionsDto: PageOptionsDto,
     serviceOrderFilters: GetAllServiceOrderQueryParams = {}
-  ): Observable<ServiceOrderItem[]> {
-    const fromObject: any = serviceOrderFilters;
+  ): Observable<PageDto<ServiceOrderItem>> {
+    const fromObject: any = {...pageOptionsDto,...serviceOrderFilters};
 
     Object.keys(serviceOrderFilters).forEach(
       (key) => fromObject[key] === undefined && delete fromObject[key]
     );
 
+    console.log("🚀 ~ file: service-order.api.service.ts:30 ~ ServiceOrderApiService ~ fromObject:", fromObject)
+
+
     const params = new HttpParams({
       fromObject,
     });
 
-    return this._httpClient.get<ServiceOrderItem[]>(this.uriServiceOrders, {
+    return this._httpClient.get<PageDto<ServiceOrderItem>>(this.uriServiceOrders, {
       params,
     });
   }

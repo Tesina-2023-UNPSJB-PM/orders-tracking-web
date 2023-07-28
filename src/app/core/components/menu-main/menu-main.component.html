@@ -2,7 +2,23 @@
   <div class="branding">
     <a href="..." class="nav-link">
       <cds-icon shape="map-marker"></cds-icon>
-      <span class="title">  Sistema de seguimiento de Ordenes de Servicios</span>
+      <span class="title"> Sistema de seguimiento de Ordenes de Servicios</span>
     </a>
+  </div>
+  <div class="header-actions">
+    <clr-dropdown>
+      <button
+        class="nav-text"
+        clrDropdownTrigger
+        aria-label="open user profile"
+      >
+        jldevia
+        <cds-icon shape="angle" direction="down"></cds-icon>
+      </button>
+      <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+        <a href="..." clrDropdownItem>Preferencias</a>
+        <a href="..." clrDropdownItem>Salir</a>
+      </clr-dropdown-menu>
+    </clr-dropdown>
   </div>
 </header>

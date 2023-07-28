@@ -17,6 +17,7 @@ import { reducers } from './store/reducers/_reducers';
 import { SharedModule } from './shared/shared.module';
 import { OrdersTrackingModule } from './orders-tracking/orders-tracking.module';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { AuthModule } from './auth/auth.module';
 
 const useFactory = (init: InitializeAppService) => {
   return () => init.initializeApp();
@@ -30,6 +31,7 @@ const useFactory = (init: InitializeAppService) => {
     AppRoutingModule,
     OrdersManagementModule,
     OrdersTrackingModule,
+    AuthModule,
     SharedModule,
     ClarityModule,
     CoreModule,

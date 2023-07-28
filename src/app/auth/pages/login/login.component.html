@@ -1,0 +1,42 @@
+<div class="login-wrapper">
+  <form class="login" [formGroup]="formLogin">
+    <section class="title">
+      <h3 class="welcome">Bienvenido a</h3>
+      Orders Tracking System
+      <h5 class="hint">Use su ID de empresa para iniciar sesión o solicite uno al administrador del sistema</h5>
+    </section>
+    <div class="login-group">
+      <!-- <clr-select-container>
+        <label>User Role</label>
+        <select clrSelect name="type">
+          <option value="local">Local Users</option>
+          <option value="admin">Administrator</option>
+        </select>
+      </clr-select-container> -->
+      <clr-input-container>
+        <label class="clr-sr-only">Username</label>
+        <input
+          type="text"
+          autocomplete="username"
+          clrInput
+          placeholder="Username"
+          formControlName="username"
+        />
+      </clr-input-container>
+      <clr-password-container>
+        <label class="clr-sr-only">Password</label>
+        <input
+          type="password"
+          autocomplete="current-password"
+          name="password"
+          clrPassword
+          placeholder="Password"
+          formControlName="password"
+        />
+      </clr-password-container>
+      <div class="error active" *ngIf="showMessageError">{{messageError}}</div>
+      <button type="button" class="btn btn-primary" (click)="onSignIn()"
+      [disabled]="formLogin.invalid">Ingresar</button>
+    </div>
+  </form>
+</div>

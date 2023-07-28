@@ -4,6 +4,10 @@ import { MAIN_ROUTES } from './constants/routes.constant';
 
 const routes: Routes = [
   { path: '', redirectTo: MAIN_ROUTES.ORDERS_MANAGEMENT, pathMatch: 'full' },
+  /*{
+    path: MAIN_ROUTES.LOGIN,
+    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+  },*/
   {
     path: MAIN_ROUTES.ORDERS_MANAGEMENT,
     loadChildren: () =>

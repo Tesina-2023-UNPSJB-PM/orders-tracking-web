@@ -2,10 +2,11 @@ const host = 'localhost';
 const PREFIX_PATH = 'api';
 
 const endpoints = {
-  serviceOrders: `http://${host}:8080/${PREFIX_PATH}/tracking-so/orders`,
-  employees: `http://${host}:8080/${PREFIX_PATH}/tracking-so/employees`,
-  customers: `http://${host}:8080/${PREFIX_PATH}/tracking-so/customers`,
-  masterData: `http://${host}:8080/${PREFIX_PATH}/tracking-so/master-data`,
+  serviceOrders: `http://${host}/${PREFIX_PATH}/tracking-so/orders`,
+  employees: `http://${host}/${PREFIX_PATH}/tracking-so/employees`,
+  customers: `http://${host}/${PREFIX_PATH}/tracking-so/customers`,
+  masterData: `http://${host}/${PREFIX_PATH}/tracking-so/master-data`,
+  login: `http://${host}/${PREFIX_PATH}/tracking-so/auth/login`,
 };
 export const environment = {
   production: false,

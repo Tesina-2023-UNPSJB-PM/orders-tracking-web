@@ -8,4 +8,8 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'orders-tracking-web';
   authenticatedUser = false;
+
+  onAuthenticatedUser(event: any) {
+    this.authenticatedUser = true;
+  }
 }

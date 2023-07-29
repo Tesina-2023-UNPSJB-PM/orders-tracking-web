@@ -1,5 +1,5 @@
 <div>
-  <login *ngIf="!authenticatedUser" (onLogin)="authenticatedUser=true"></login>
+  <login *ngIf="!authenticatedUser" (onLogin)="onAuthenticatedUser($event)"></login>
   <div class="main-container" *ngIf="authenticatedUser">
     <menu-main></menu-main>
     <div class="content-container">

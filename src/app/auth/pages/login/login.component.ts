@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -7,16 +7,19 @@ import {
 } from '@angular/forms';
 import { SignInService } from '../../services/sign-in.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ReplaySubject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: [],
 })
-export class LoginComponent {
+export class LoginComponent implements OnDestroy {
   @Output() onLogin = new EventEmitter<boolean>();
   showMessageError = false;
   messageError = '';
+
+  private readonly _$destroy: ReplaySubject<boolean> = new ReplaySubject();
 
   formLogin: FormGroup<{
     username: FormControl<string | null>;
@@ -41,6 +44,11 @@ export class LoginComponent {
     });
   }
 
+  ngOnDestroy(): void {
+    this._$destroy.next(true);
+    this._$destroy.unsubscribe();
+  }
+
   onSignIn() {
     const valuesForm = this.formLogin.getRawValue();
     this.signInService
@@ -48,11 +56,10 @@ export class LoginComponent {
         username: valuesForm.username ?? '',
         password: valuesForm.password ?? '',
       })
+      .pipe(takeUntil(this._$destroy))
       .subscribe({
         next: (resp) => this.onLogin.emit(true),
-        error: (err) => {
-          this.handleError(err);
-        },
+        error: (err) => this.handleError(err),
       });
   }
 

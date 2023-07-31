@@ -12,12 +12,12 @@
         clrDropdownTrigger
         aria-label="open user profile"
       >
-        jldevia
+        {{ userProfile?.username }}
         <cds-icon shape="angle" direction="down"></cds-icon>
       </button>
       <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-        <a href="..." clrDropdownItem>Preferencias</a>
-        <a href="..." clrDropdownItem>Salir</a>
+        <a href="#" clrDropdownItem clrDisabled>Preferencias</a>
+        <a href="" clrDropdownItem>Salir</a>
       </clr-dropdown-menu>
     </clr-dropdown>
   </div>

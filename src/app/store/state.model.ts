@@ -11,5 +11,5 @@ export interface AppState {
   readonly serviceOrderPriorities: MasterDataOrderPriorityDTO[];
   readonly customers: MasterDataCustomerDTO[];
   readonly employees: MasterDataEmployeeDTO[];
-  /*readonly authenticatedUser: SignInResponse;*/
+  readonly authenticatedUser: SignInResponse;
 }

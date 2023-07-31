@@ -3,7 +3,7 @@ export interface SignInRequest {
   password: string;
 }
 
-interface UserProfile {
+export interface UserProfile {
   firstName: string,
   lastName: string,
   email: string,
@@ -11,6 +11,6 @@ interface UserProfile {
 }
 
 export interface SignInResponse {
-  access_token: string;
-  userProfile: UserProfile;
+  access_token: string | null;
+  userProfile: UserProfile | null;
 }

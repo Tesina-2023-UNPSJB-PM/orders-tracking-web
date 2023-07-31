@@ -8,6 +8,10 @@ import {
 import { SignInService } from '../../services/sign-in.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ReplaySubject, takeUntil } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { LoginAction } from 'src/app/store/actions/login.action';
+import { Router } from '@angular/router';
+import { MAIN_ROUTES } from 'src/app/constants/routes.constant';
 
 @Component({
   selector: 'login',
@@ -15,11 +19,10 @@ import { ReplaySubject, takeUntil } from 'rxjs';
   styleUrls: [],
 })
 export class LoginComponent implements OnDestroy {
-  @Output() onLogin = new EventEmitter<boolean>();
   showMessageError = false;
   messageError = '';
 
-  private readonly _$destroy: ReplaySubject<boolean> = new ReplaySubject();
+  private readonly _destroy$: ReplaySubject<boolean> = new ReplaySubject();
 
   formLogin: FormGroup<{
     username: FormControl<string | null>;
@@ -28,6 +31,8 @@ export class LoginComponent implements OnDestroy {
 
   constructor(
     private formBuilder: FormBuilder,
+    private store: Store,
+    private router: Router,
     private signInService: SignInService
   ) {
     this.formLogin = formBuilder.group({
@@ -45,8 +50,8 @@ export class LoginComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._$destroy.next(true);
-    this._$destroy.unsubscribe();
+    this._destroy$.next(true);
+    this._destroy$.unsubscribe();
   }
 
   onSignIn() {
@@ -56,9 +61,12 @@ export class LoginComponent implements OnDestroy {
         username: valuesForm.username ?? '',
         password: valuesForm.password ?? '',
       })
-      .pipe(takeUntil(this._$destroy))
+      .pipe(takeUntil(this._destroy$))
       .subscribe({
-        next: (resp) => this.onLogin.emit(true),
+        next: (resp) => {
+          this.store.dispatch(new LoginAction(resp));
+          this.router.navigate([MAIN_ROUTES.DASHBOARD])
+        },
         error: (err) => this.handleError(err),
       });
   }
@@ -74,7 +82,7 @@ export class LoginComponent implements OnDestroy {
         this.messageError = userOrPasswordInvalid;
         break;
       default:
-        this.messageError = `Error inesperado: contactese con el administrador del sistema`
+        this.messageError = `Error inesperado: contactese con el administrador del sistema`;
     }
 
     this.showMessageError = true;

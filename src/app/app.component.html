@@ -1,15 +1,3 @@
-<div>
-  <login *ngIf="!authenticatedUser" (onLogin)="onAuthenticatedUser($event)"></login>
-  <div class="main-container" *ngIf="authenticatedUser">
-    <menu-main></menu-main>
-    <div class="content-container">
-      <side-nav></side-nav>
-      <div class="content-area">
-        <shd-notifier></shd-notifier>
-        <router-outlet></router-outlet>
-      </div>
-    </div>
-  </div>
-</div>
+<router-outlet></router-outlet>
 
 

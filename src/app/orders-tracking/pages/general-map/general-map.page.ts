@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
-import { filter } from 'rxjs';
+import { map } from 'rxjs';
 import { CheckboxConfig } from 'src/app/shared/components/atoms/checkbox/checkbox.component';
 import {
   EMPLOYEES_MARKERS,
@@ -9,6 +9,13 @@ import {
 } from 'src/assets/mocks/service-order/employees-tracking.mock';
 import { OrdersTrackingService } from '../../services/orders-tracking.service';
 import { CHANNEL } from '../../constants/tracking.constants';
+import {
+  APP_MAP_INITIAL_REGION,
+  APP_MAP_OPTIONS,
+} from '../../constants/map.constants';
+import { EmployeeMarkerPipe } from '../../pipes/employee-marker.pipe';
+import { EmployeeTrackingDTO } from '../../dtos/employee-tracking.dto';
+import { EmployeeMarker } from '../../interfaces/employee-marker.interface';
 
 @Component({
   templateUrl: './general-map.page.html',
@@ -20,38 +27,10 @@ export class GeneralMapPage implements OnInit {
   @ViewChild(MapInfoWindow, { static: false }) info: MapInfoWindow | undefined;
 
   private readonly channedId = CHANNEL;
-  private myStyles = [
-    {
-      featureType: 'poi',
-      elementType: 'labels',
-      stylers: [{ visibility: 'off' }],
-    },
-  ];
 
-  public zoom = 16;
+  public options: google.maps.MapOptions = APP_MAP_OPTIONS;
 
-  public center: google.maps.LatLngLiteral = {
-    lat: -42.7692,
-    lng: -65.03851,
-  };
-
-  public options: google.maps.MapOptions = {
-    disableDefaultUI: true,
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-    zoomControl: true,
-    scrollwheel: false,
-    disableDoubleClickZoom: true,
-    mapTypeControl: false,
-    streetViewControl: false,
-    fullscreenControl: false,
-    maxZoom: 15,
-    minZoom: 8,
-    styles: this.myStyles,
-  };
-
-  private _markers = EMPLOYEES_MARKERS;
-
-  private _ordersMarkers = [];
+  private _markers: EmployeeMarker[] = [];
 
   public infoContent = '';
 
@@ -61,42 +40,53 @@ export class GeneralMapPage implements OnInit {
     { label: 'OS Pendientes', value: 'pending', selected: false },
   ]);
 
-  constructor(private readonly ordersTrackingService: OrdersTrackingService) {}
+  constructor(
+    private readonly ordersTrackingService: OrdersTrackingService,
+    private readonly employeeMarkerMap: EmployeeMarkerPipe
+  ) {}
 
   ngOnInit(): void {
     this.ordersTrackingService
       .subscribeToChannel(this.channedId)
-      .subscribe(({ currentLocation }) => {
-        const { latitude: lat, longitude: lng } = currentLocation;
-        
-        const firstEmployee = this.markers[0];
-
-        firstEmployee.position = {
-          lat,
-          lng,
-        };
-
-        const markers = [firstEmployee, ...this.markers.slice(1)];
-        this.markers = markers;
+      .pipe(
+        map((employeeTracking: EmployeeTrackingDTO) =>
+          this.employeeMarkerMap.transform(employeeTracking)
+        )
+      )
+      .subscribe((employeeMarker: EmployeeMarker) => {
+        console.log('EMPLOYEE_MARKER', employeeMarker);
+        this.addMarker(employeeMarker);
       });
 
     this.selectedEmployeeFormControl.valueChanges.subscribe((value) => {
-      if (!value) this.markers = EMPLOYEES_MARKERS;
-      else if (this.selectedOrdersPendingCheckbox)
-        this.markers = [EMPLOYEES_MARKERS[0], ...this.ordersMarkers];
-      else this.markers = [EMPLOYEES_MARKERS[0]];
+      // if (!value) this.markers = EMPLOYEES_MARKERS;
+      // else if (this.selectedOrdersPendingCheckbox)
+      //   this.markers = [EMPLOYEES_MARKERS[0], ...this.ordersMarkers];
+      // else this.markers = [EMPLOYEES_MARKERS[0]];
     });
 
     this.checkboxFormControl.valueChanges.subscribe(() => {
-      if (this.selectedOrdersPendingCheckbox)
-        this.markers = [...this.markers, ...ORDERS_MARKERS];
-      else this.markers = [EMPLOYEES_MARKERS[0]];
+      // if (this.selectedOrdersPendingCheckbox)
+      //   this.markers = [...this.markers, ...ORDERS_MARKERS];
+      // else this.markers = [EMPLOYEES_MARKERS[0]];
     });
   }
 
   ngAfterViewInit() {
     const bounds = this.getBounds(this.markers);
     this.map?.googleMap?.fitBounds(bounds);
+  }
+
+  private addMarker(employeeMarker: EmployeeMarker): void {
+    const { title } = employeeMarker;
+    const index = this._markers.findIndex(
+      ({ title: _title }) => _title === title
+    );
+    if (index < 0) {
+      this._markers = [...this._markers, employeeMarker];
+    } else {
+      this._markers[index] = employeeMarker;
+    }
   }
 
   public get selectedEmployee(): string {
@@ -107,17 +97,13 @@ export class GeneralMapPage implements OnInit {
     return this._markers;
   }
 
-  public set markers(markers: any[]) {
+  public set markers(markers: EmployeeMarker[]) {
     this._markers = markers;
   }
 
   public get ordersMarkers() {
     return this.selectedOrdersPendingCheckbox ? ORDERS_MARKERS : [];
   }
-
-  // public set ordersMarkers(ordersMarkers) {
-  //   this._ordersMarkers = ordersMarkers;
-  // }
 
   public get selectedOrdersPendingCheckbox(): boolean {
     const { value } = this.checkboxFormControl;
@@ -132,8 +118,17 @@ export class GeneralMapPage implements OnInit {
     this.info?.open(marker);
   }
 
-  private getBounds(markers: any[]) {
+  private getBounds(markers: any[]): google.maps.LatLngBounds {
     let bounds = new google.maps.LatLngBounds();
+
+    if (markers.length === 0) {
+      return bounds.extend(
+        new google.maps.LatLng(
+          APP_MAP_INITIAL_REGION.lat,
+          APP_MAP_INITIAL_REGION.lng
+        )
+      );
+    }
 
     markers.forEach((marker: any) => {
       bounds.extend(

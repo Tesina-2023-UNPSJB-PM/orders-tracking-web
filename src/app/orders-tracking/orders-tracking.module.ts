@@ -9,9 +9,10 @@ import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrdersTrackingService } from './services/orders-tracking.service';
 import { OrdersTrackingPubnubService } from './services/implementations/orders-tracking-pubnub.service';
+import { EmployeeMarkerPipe } from './pipes/employee-marker.pipe';
 
 @NgModule({
-  declarations: [GeneralMapPage],
+  declarations: [GeneralMapPage, EmployeeMarkerPipe],
   imports: [
     CommonModule,
     OrdersTrackingRoutingModule,
@@ -24,7 +25,7 @@ import { OrdersTrackingPubnubService } from './services/implementations/orders-t
     ReactiveFormsModule,
   ],
   providers: [
-    { provide: OrdersTrackingService, useClass: OrdersTrackingPubnubService },
+    { provide: OrdersTrackingService, useClass: OrdersTrackingPubnubService },EmployeeMarkerPipe,
   ],
 })
 export class OrdersTrackingModule {}

@@ -4,7 +4,7 @@ import { EmployeeAction, EmployeeActionType } from '../actions/employee.action';
 const initialState: MasterDataEmployeeDTO[] = [];
 
 
-export function EmployeeReducer(
+export function EmployeeReducer (
   state: MasterDataEmployeeDTO[] = initialState,
   action: EmployeeAction
 ) {

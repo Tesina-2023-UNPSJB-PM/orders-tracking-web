@@ -3,6 +3,7 @@ import { MasterDataEmployeeDTO } from '../dtos/master-data/master-data-employee.
 import { MasterDataOrderPriorityDTO } from '../dtos/master-data/master-data-order-priority.dto';
 import { MasterDataOrderStatusDTO } from '../dtos/master-data/master-data-order-status.dto';
 import { MasterDataOrderTypeDTO } from '../dtos/master-data/master-data-order-type.dto';
+import { SignInResponse } from '../dtos/signIn.dto';
 
 export interface AppState {
   readonly serviceOrderStates: MasterDataOrderStatusDTO[];
@@ -10,4 +11,5 @@ export interface AppState {
   readonly serviceOrderPriorities: MasterDataOrderPriorityDTO[];
   readonly customers: MasterDataCustomerDTO[];
   readonly employees: MasterDataEmployeeDTO[];
+  readonly authenticatedUser: SignInResponse;
 }

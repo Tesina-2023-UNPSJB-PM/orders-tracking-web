@@ -6,20 +6,20 @@ import { MasterDataEmployeeDTO } from 'src/app/dtos/master-data/master-data-empl
 import { MasterDataOrderStatusDTO } from 'src/app/dtos/master-data/master-data-order-status.dto';
 import { MasterDataOrderTypeDTO } from 'src/app/dtos/master-data/master-data-order-type.dto';
 
+import { AddressDTO } from 'src/app/dtos/address.dto';
+import { MasterDataOrderPriorityDTO } from 'src/app/dtos/master-data/master-data-order-priority.dto';
+import { SectorDTO } from 'src/app/dtos/sector.dto';
 import {
   CreateServiceOrderDTO,
   ServiceOrderDTO,
 } from 'src/app/dtos/service-order.dto';
-import { ORDERS_MANAGEMENT_ROUTES } from '../../constants/routes.constant';
-import { ServiceOrderApiService } from '../../services/apis/service-order.api.service';
 import { NotifierService } from 'src/app/shared/services/notifier.service';
-import { MasterDataOrderPriorityDTO } from 'src/app/dtos/master-data/master-data-order-priority.dto';
-import { SectorDTO } from 'src/app/dtos/sector.dto';
+import { ORDERS_MANAGEMENT_ROUTES } from '../../constants/routes.constant';
 import { CustomerApiService } from '../../services/apis/customer.api.service';
-import { AddressDTO } from 'src/app/dtos/address.dto';
+import { ServiceOrderApiService } from '../../services/apis/service-order.api.service';
 @Component({
   templateUrl: './orders-creation.component.html',
-  styleUrls: ['./orders-creation.component.css'],
+  styleUrls: ['./orders-creation.component.scss'],
 })
 export class OrdersCreationComponent {
   private _serviceOrder: ServiceOrderDTO | undefined = undefined;

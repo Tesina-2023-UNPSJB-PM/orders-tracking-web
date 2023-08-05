@@ -7,16 +7,20 @@ import { ClarityModule } from '@clr/angular';
 import '@cds/core/icon/register.js';
 import { ClarityIcons, mapMarkerIcon, organizationIcon, tasksIcon, usersIcon } from '@cds/core/icon';
 import { SideNavComponent } from './components/side-nav/side-nav.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
     MenuMainComponent,
-    SideNavComponent
+    SideNavComponent,
+    DashboardComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
-    ClarityModule
+    ClarityModule,
+    SharedModule
   ],
   exports: [MenuMainComponent, SideNavComponent]
 })

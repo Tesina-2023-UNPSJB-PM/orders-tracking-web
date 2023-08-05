@@ -19,9 +19,9 @@ export class EmployeeMarkerPipe implements PipeTransform {
     return {
       position: { lat, lng },
       label: {
-        text: fullName,
+        text: username,
       },
-      title: fullName,
+      title: username,
       info: `
       Num. Empleado: <b>1234</b></br>
       Estado: <b>En reparto</b></br>

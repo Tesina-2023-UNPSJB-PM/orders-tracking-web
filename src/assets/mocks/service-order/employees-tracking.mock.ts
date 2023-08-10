@@ -16,8 +16,8 @@ export const EMPLOYEES_MARKERS = [
     `,
     icon: {
       url: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-      anchor: new google.maps.Point(32, 80),
-      labelOrigin: new google.maps.Point(30, 30),
+     // anchor: new google.maps.Point(32, 80),
+    //  labelOrigin: new google.maps.Point(30, 30),
     },
   },
   {
@@ -37,8 +37,8 @@ export const EMPLOYEES_MARKERS = [
     `,
     icon: {
       url: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-      anchor: new google.maps.Point(32, 80),
-      labelOrigin: new google.maps.Point(30, 30),
+     // anchor: new google.maps.Point(32, 80),
+     // labelOrigin: new google.maps.Point(30, 30),
     },
   },
   {

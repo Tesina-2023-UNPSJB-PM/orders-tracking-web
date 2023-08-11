@@ -1,6 +1,6 @@
 import { IMarker } from "./marker.interface";
 
-export interface EmployeeMarker extends IMarker {
+export interface OrderMarker extends IMarker {
   position: {
     lat: number;
     lng: number;
@@ -13,5 +13,5 @@ export interface EmployeeMarker extends IMarker {
   icon: {
     url: string;
   };
-  employeeId: number;
+  serviceOrderId: number;
 }

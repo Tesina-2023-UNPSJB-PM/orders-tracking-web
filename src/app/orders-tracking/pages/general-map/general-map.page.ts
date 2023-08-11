@@ -1,21 +1,25 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
-import { map } from 'rxjs';
+import { GoogleMap, MapInfoWindow } from '@angular/google-maps';
+import { map, take } from 'rxjs';
+import { MasterDataEmployeeDTO } from 'src/app/dtos/master-data/master-data-employee.dto';
 import { CheckboxConfig } from 'src/app/shared/components/atoms/checkbox/checkbox.component';
 import {
-  EMPLOYEES_MARKERS,
-  ORDERS_MARKERS,
+  ORDERS_MARKERS
 } from 'src/assets/mocks/service-order/employees-tracking.mock';
-import { OrdersTrackingService } from '../../services/orders-tracking.service';
-import { CHANNEL } from '../../constants/tracking.constants';
 import {
   APP_MAP_INITIAL_REGION,
   APP_MAP_OPTIONS,
 } from '../../constants/map.constants';
-import { EmployeeMarkerPipe } from '../../pipes/employee-marker.pipe';
+import { CHANNEL } from '../../constants/tracking.constants';
 import { EmployeeTrackingDTO } from '../../dtos/employee-tracking.dto';
 import { EmployeeMarker } from '../../interfaces/employee-marker.interface';
+import { IMarker } from '../../interfaces/marker.interface';
+import { OrderMarker } from '../../interfaces/order-marker.interface';
+import { EmployeeMarkerPipe } from '../../pipes/employee-marker.pipe';
+import { OrderMarkerPipe } from '../../pipes/order-marker.pipe';
+import { EmployeeOrdersService } from '../../services/employee-orders.service';
+import { OrdersTrackingService } from '../../services/orders-tracking.service';
 
 @Component({
   templateUrl: './general-map.page.html',
@@ -30,11 +34,13 @@ export class GeneralMapPage implements OnInit {
 
   public options: google.maps.MapOptions = APP_MAP_OPTIONS;
 
-  private _markers: EmployeeMarker[] = [];
+  private _employeeMarkers: EmployeeMarker[] = [];
+  private _ordersMarkers: OrderMarker[] = [];
 
   public infoContent = '';
 
-  public selectedEmployeeFormControl = new FormControl('');
+  public selectedEmployeeFormControl =
+    new FormControl<MasterDataEmployeeDTO | null>(null);
 
   public checkboxFormControl = new FormControl<CheckboxConfig[]>([
     { label: 'OS Pendientes', value: 'pending', selected: false },
@@ -42,7 +48,9 @@ export class GeneralMapPage implements OnInit {
 
   constructor(
     private readonly ordersTrackingService: OrdersTrackingService,
-    private readonly employeeMarkerMap: EmployeeMarkerPipe
+    private readonly employeeMarkerPipe: EmployeeMarkerPipe,
+    private readonly employeeOrdersService: EmployeeOrdersService,
+    private readonly orderMarkerPipe: OrderMarkerPipe
   ) {}
 
   ngOnInit(): void {
@@ -50,25 +58,17 @@ export class GeneralMapPage implements OnInit {
       .subscribeToChannel(this.channedId)
       .pipe(
         map((employeeTracking: EmployeeTrackingDTO) =>
-          this.employeeMarkerMap.transform(employeeTracking)
+          this.employeeMarkerPipe.transform(employeeTracking)
         )
       )
-      .subscribe((employeeMarker: EmployeeMarker) => {
-        console.log('EMPLOYEE_MARKER', employeeMarker);
-        this.addMarker(employeeMarker);
-      });
+      .subscribe((employeeMarker: EmployeeMarker) =>
+        this.addMarker(employeeMarker)
+      );
 
-    this.selectedEmployeeFormControl.valueChanges.subscribe((value) => {
-      // if (!value) this.markers = EMPLOYEES_MARKERS;
-      // else if (this.selectedOrdersPendingCheckbox)
-      //   this.markers = [EMPLOYEES_MARKERS[0], ...this.ordersMarkers];
-      // else this.markers = [EMPLOYEES_MARKERS[0]];
-    });
-
-    this.checkboxFormControl.valueChanges.subscribe(() => {
-      // if (this.selectedOrdersPendingCheckbox)
-      //   this.markers = [...this.markers, ...ORDERS_MARKERS];
-      // else this.markers = [EMPLOYEES_MARKERS[0]];
+    this.checkboxFormControl.valueChanges.subscribe((value) => {
+      if (value) {
+        this.findEmployeeOrders();
+      }
     });
   }
 
@@ -77,28 +77,59 @@ export class GeneralMapPage implements OnInit {
     this.map?.googleMap?.fitBounds(bounds);
   }
 
+  onClearFilters() {
+    this.selectedEmployeeFormControl.setValue(null);
+    this.selectedEmployeeFormControl.updateValueAndValidity();
+
+    this.checkboxFormControl.setValue([
+      { label: 'OS Pendientes', value: 'pending', selected: false },
+    ]);
+    this.checkboxFormControl.updateValueAndValidity();
+  }
+
   private addMarker(employeeMarker: EmployeeMarker): void {
     const { title } = employeeMarker;
-    const index = this._markers.findIndex(
+    const index = this._employeeMarkers.findIndex(
       ({ title: _title }) => _title === title
     );
     if (index < 0) {
-      this._markers = [...this._markers, employeeMarker];
+      this._employeeMarkers = [...this._employeeMarkers, employeeMarker];
     } else {
-      this._markers[index] = employeeMarker;
+      this._employeeMarkers[index] = employeeMarker;
     }
   }
 
-  public get selectedEmployee(): string {
-    return this.selectedEmployeeFormControl.value ?? '';
+  private findEmployeeOrders(): void {
+    if (!this.selectedEmployee) return;
+    this.employeeOrdersService
+      .getAssignedOrders(this.selectedEmployee.id)
+      .pipe(
+        take(1),
+        map((items) => this.orderMarkerPipe.transform(items))
+      )
+      .subscribe((orders) => {
+        console.log("🚀 ~ file: general-map.page.ts:112 ~ GeneralMapPage ~ .subscribe ~ orders:", orders)
+        this._ordersMarkers = orders;
+      });
   }
 
-  public get markers() {
-    return this._markers;
+  public get selectedEmployee(): MasterDataEmployeeDTO | null {
+    return this.selectedEmployeeFormControl.value;
   }
 
-  public set markers(markers: EmployeeMarker[]) {
-    this._markers = markers;
+  public get markers(): IMarker[] {
+    const _employeeId = this.selectedEmployee?.id;
+
+    if (_employeeId) {
+      const employee = this._employeeMarkers.filter(
+        ({ employeeId }) => employeeId === _employeeId
+      );
+      return this.selectedOrdersPendingCheckbox
+        ? [...employee, ...this._ordersMarkers]
+        : employee;
+    } else {
+      return this._employeeMarkers;
+    }
   }
 
   public get ordersMarkers() {

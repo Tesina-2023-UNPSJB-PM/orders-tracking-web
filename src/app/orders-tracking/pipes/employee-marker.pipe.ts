@@ -12,7 +12,7 @@ export class EmployeeMarkerPipe implements PipeTransform {
     employeeStatus,
   }: EmployeeTrackingDTO): EmployeeMarker {
     const { latitude: lat, longitude: lng } = location;
-    const { username, firstName, lastName } = employee;
+    const { id, username, firstName, lastName } = employee;
     const fullName = `${firstName} ${lastName}`;
     const icon =
       employeeStatus === 'available' ? 'green-dot.png' : 'blue-dot.png';
@@ -31,6 +31,7 @@ export class EmployeeMarkerPipe implements PipeTransform {
       icon: {
         url: `http://maps.google.com/mapfiles/ms/icons/${icon}`,
       },
+      employeeId: id
     };
   }
 }

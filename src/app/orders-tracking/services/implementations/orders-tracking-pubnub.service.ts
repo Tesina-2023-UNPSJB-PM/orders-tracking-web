@@ -29,10 +29,10 @@ export class OrdersTrackingPubnubService extends OrdersTrackingService {
         message: (messageEvent: any) => {
           if (!messageEvent) return;
           const message = messageEvent?.message as EmployeeTrackingDTO;
-          console.log(
-            '🚀 ~ file: orders-tracking-pubnub.service.ts:36 ~ OrdersTrackingPubnubService ~ returnnewObservable ~ messageEvent:',
-            messageEvent
-          );
+          // console.log(
+          //   '🚀 ~ file: orders-tracking-pubnub.service.ts:36 ~ OrdersTrackingPubnubService ~ returnnewObservable ~ messageEvent:',
+          //   messageEvent
+          // );
           subscriber.next(message);
         },
       };

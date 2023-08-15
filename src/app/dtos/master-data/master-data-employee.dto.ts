@@ -1,5 +1,5 @@
 export interface MasterDataEmployeeDTO {
-  id?: number;
+  id: number;
 
   recordNumber: string;
 

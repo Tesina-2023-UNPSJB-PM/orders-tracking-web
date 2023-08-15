@@ -44,7 +44,8 @@ export interface Type {
 }
 
 export interface Status {
-  id: number;
+  id?: number;
+  code: string;
   name: string;
   description: string;
 }

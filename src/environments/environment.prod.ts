@@ -6,7 +6,7 @@ const endpoints = {
   employees: `http://${host}/${PREFIX_PATH}/tracking-so/employees`,
   customers: `http://${host}/${PREFIX_PATH}/tracking-so/customers`,
   masterData: `http://${host}/${PREFIX_PATH}/tracking-so/master-data`,
-  login: `http://${host}:8080/${PREFIX_PATH}/tracking-so/auth/login`
+  login: `http://${host}/${PREFIX_PATH}/tracking-so/auth/login`
 };
 export const environment = {
   production: false,

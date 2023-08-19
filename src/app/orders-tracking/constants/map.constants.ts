@@ -15,7 +15,7 @@ export const APP_MAP_OPTIONS = {
   mapTypeControl: false,
   streetViewControl: false,
   fullscreenControl: true,
-  maxZoom: 13,
+  maxZoom: 16,
   minZoom: 8,
   styles: APP_MAP_STYLES,
 };

@@ -49,3 +49,8 @@ export interface Status {
   name: string;
   description: string;
 }
+
+export interface SummaryOrdersDTO {
+  assignedServiceOrders: ServiceOrderItem[];
+  recentActivity: ServiceOrderItem[];
+}

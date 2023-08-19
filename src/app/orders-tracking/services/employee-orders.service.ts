@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { ServiceOrderItem } from 'src/app/dtos/service-order-item.dto';
-import { ASSIGNED_SERVICE_ORDERS } from '../constants/employee-orders.constants';
+import { Observable } from 'rxjs';
+import { ServiceOrderItem, SummaryOrdersDTO } from 'src/app/dtos/service-order-item.dto';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +10,9 @@ import { ASSIGNED_SERVICE_ORDERS } from '../constants/employee-orders.constants'
 export class EmployeeOrdersService {
   constructor(private readonly httpClient: HttpClient) {}
 
-  public getAssignedOrders(employeeId: number): Observable<ServiceOrderItem[]> {
-    /** @todo add endpoint invocation */
-    return of(ASSIGNED_SERVICE_ORDERS);
+  public getAssignedOrders(employeeId: number): Observable<SummaryOrdersDTO> {
+    const urlTarget = `${environment.endpoints.serviceOrders}/summary`;
+    const params = new HttpParams().append('employeeId', employeeId);
+    return this.httpClient.get<SummaryOrdersDTO>(urlTarget, { params });
   }
 }

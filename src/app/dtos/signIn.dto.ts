@@ -13,4 +13,5 @@ export interface UserProfile {
 export interface SignInResponse {
   access_token: string | null;
   userProfile: UserProfile | null;
+  employeeId: number;
 }

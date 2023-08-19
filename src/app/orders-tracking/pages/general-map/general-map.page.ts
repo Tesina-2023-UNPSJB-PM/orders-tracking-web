@@ -105,7 +105,7 @@ export class GeneralMapPage implements OnInit {
       .getAssignedOrders(this.selectedEmployee.id)
       .pipe(
         take(1),
-        map((items) => this.orderMarkerPipe.transform(items))
+        map((resp) => this.orderMarkerPipe.transform(resp.assignedServiceOrders))
       )
       .subscribe((orders) => {
         console.log("🚀 ~ file: general-map.page.ts:112 ~ GeneralMapPage ~ .subscribe ~ orders:", orders)

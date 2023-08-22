@@ -30,6 +30,10 @@ export class GeneralMapPage implements OnInit {
   @ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
   @ViewChild(MapInfoWindow, { static: false }) info: MapInfoWindow | undefined;
 
+  isOpenModalDialog = false;
+  titleModalDialog = '';
+  messageModalDialog = '';
+
   private readonly channedId = CHANNEL;
 
   public options: google.maps.MapOptions = APP_MAP_OPTIONS;
@@ -42,8 +46,9 @@ export class GeneralMapPage implements OnInit {
   public selectedEmployeeFormControl =
     new FormControl<MasterDataEmployeeDTO | null>(null);
 
-  public checkboxFormControl = new FormControl<CheckboxConfig[]>([
-    { label: 'OS Pendientes', value: 'pending', selected: false },
+  public chbxOrdersFormControl = new FormControl<CheckboxConfig[]>([
+    { label: 'Pendientes', value: 'pending', selected: false },
+    { label: 'Sin asignar', value: 'unassigned', selected: false },
   ]);
 
   constructor(
@@ -65,11 +70,6 @@ export class GeneralMapPage implements OnInit {
         this.addMarker(employeeMarker)
       );
 
-    this.checkboxFormControl.valueChanges.subscribe((value) => {
-      if (value) {
-        this.findEmployeeOrders();
-      }
-    });
   }
 
   ngAfterViewInit() {
@@ -81,10 +81,10 @@ export class GeneralMapPage implements OnInit {
     this.selectedEmployeeFormControl.setValue(null);
     this.selectedEmployeeFormControl.updateValueAndValidity();
 
-    this.checkboxFormControl.setValue([
-      { label: 'OS Pendientes', value: 'pending', selected: false },
+    this.chbxOrdersFormControl.setValue([
+      { label: 'Pendientes', value: 'pending', selected: false },
     ]);
-    this.checkboxFormControl.updateValueAndValidity();
+    this.chbxOrdersFormControl.updateValueAndValidity();
   }
 
   private addMarker(employeeMarker: EmployeeMarker): void {
@@ -99,22 +99,12 @@ export class GeneralMapPage implements OnInit {
     }
   }
 
-  private findEmployeeOrders(): void {
-    if (!this.selectedEmployee) return;
-    this.employeeOrdersService
-      .getAssignedOrders(this.selectedEmployee.id)
-      .pipe(
-        take(1),
-        map((resp) => this.orderMarkerPipe.transform(resp.assignedServiceOrders))
-      )
-      .subscribe((orders) => {
-        console.log("🚀 ~ file: general-map.page.ts:112 ~ GeneralMapPage ~ .subscribe ~ orders:", orders)
-        this._ordersMarkers = orders;
-      });
-  }
-
   public get selectedEmployee(): MasterDataEmployeeDTO | null {
     return this.selectedEmployeeFormControl.value;
+  }
+
+  public get isSelectedEmployee(): boolean {
+    return !!this.selectedEmployeeFormControl.value;
   }
 
   public get markers(): IMarker[] {
@@ -137,7 +127,7 @@ export class GeneralMapPage implements OnInit {
   }
 
   public get selectedOrdersPendingCheckbox(): boolean {
-    const { value } = this.checkboxFormControl;
+    const { value } = this.chbxOrdersFormControl;
     if (!value) return false;
     const [checkboxConfig] = value;
     const { selected = false } = checkboxConfig;
@@ -168,5 +158,66 @@ export class GeneralMapPage implements OnInit {
     });
 
     return bounds;
+  }
+
+  onSearchOrders(): void {
+    const optionsTypeOrders = this.chbxOrdersFormControl.value;
+
+    if (!optionsTypeOrders) return;
+
+    const showPending = optionsTypeOrders?.some(
+      (config) => config.value == 'pending' && config.selected
+    );
+    const showUnassigned = optionsTypeOrders?.some(
+      (config) => config.value == 'unassigned' && config.selected
+    );
+
+    const TITLE_DIALOG = 'Mostrar tipo de orden';
+    if (!showPending && !showUnassigned) {
+      this.openModalDialog(TITLE_DIALOG, 'Debe seleccionar una opción');
+    }
+
+    if (showPending && showUnassigned) {
+      this.openModalDialog(
+        TITLE_DIALOG,
+        'Debe seleccionar una sola opción'
+      );
+    }
+
+    if (showPending) {
+      this.fetchPendingOrders();
+    } else if (showUnassigned) {
+      this.fetchUnassignedOrders();
+    }
+  }
+
+  private fetchPendingOrders(): void {
+    if (!this.selectedEmployee) return;
+    this.employeeOrdersService
+      .getAssignedOrders(this.selectedEmployee.id)
+      .pipe(
+        take(1),
+        map((resp) => this.orderMarkerPipe.transform(resp.assignedServiceOrders))
+      )
+      .subscribe((orders) => {
+        //console.log("🚀 ~ file: general-map.page.ts:112 ~ GeneralMapPage ~ .subscribe ~ orders:", orders)
+        this._ordersMarkers = orders;
+      });
+  }
+
+  fetchUnassignedOrders() {
+    throw new Error('Method not implemented.');
+  }
+
+  openModalDialog(title: string, message: string): void {
+    this.titleModalDialog = title;
+    this.messageModalDialog = message;
+    this.isOpenModalDialog = true;
+  }
+
+  closeModalDialog(): void {
+    this.titleModalDialog = '';
+    this.messageModalDialog = '';
+    this.isOpenModalDialog = false;
   }
 }

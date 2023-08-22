@@ -1,4 +1,4 @@
-<clr-checkbox-container>
+<clr-checkbox-container clrInline="true">
   <label>{{label}}</label>
   <clr-checkbox-wrapper *ngFor="let checkbox of checkboxes">
     <input
@@ -9,6 +9,7 @@
       [value]="checkbox.value"
       [(ngModel)]="checkbox.selected"
       (ngModelChange)="onSelectionChange()"
+      [disabled]="isDisabled"
     />
     <label>{{checkbox.label}}</label>
   </clr-checkbox-wrapper>

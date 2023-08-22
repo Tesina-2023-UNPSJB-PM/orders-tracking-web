@@ -1,19 +1,28 @@
 <ng-container class="container">
   <div class="controls">
-
     <app-employee-datalist
       label="Operario"
       placeholder=""
       [formControl]="selectedEmployeeFormControl"
     ></app-employee-datalist>
-
     <shd-checkbox
-      [hidden]="!selectedEmployee"
       label="Mostrar"
-      [formControl]="checkboxFormControl"
+      [formControl]="chbxOrdersFormControl"
     ></shd-checkbox>
-
-    <button class="btn btn-primary" (click)="onClearFilters()">Limpiar Filtros</button>
+    <button type="button" class="btn btn-icon" aria-label="search" (click)="onSearchOrders()" title="Ejecutar busqueda">
+      <cds-icon shape="search" size="md" solid></cds-icon>
+    </button>
+    <button type="button" class="btn btn-icon" aria-label="eraser" (click)="onClearFilters()" title="Limpiar filtros">
+      <cds-icon shape="eraser" size="md" solid></cds-icon>
+    </button>
+    <span class="label">
+      Pendientes
+      <span class="badge badge-success">8</span>
+    </span>
+    <span class="label">
+      Sin asignar
+      <span class="badge badge-info">100</span>
+    </span>
   </div>
 
   <google-map width="100%" height="80%" [options]="options">
@@ -31,3 +40,12 @@
     <map-info-window [innerHTML]="infoContent"></map-info-window>
   </google-map>
 </ng-container>
+<clr-modal [(clrModalOpen)]="isOpenModalDialog">
+  <h3 class="modal-title">{{ titleModalDialog }}</h3>
+  <div class="modal-body">
+    <p>{{ messageModalDialog }}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="closeModalDialog()">Ok</button>
+  </div>
+</clr-modal>

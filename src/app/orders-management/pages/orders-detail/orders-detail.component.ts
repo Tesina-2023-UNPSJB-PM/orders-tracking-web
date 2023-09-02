@@ -11,6 +11,10 @@ import { ServiceOrderTypeDTO } from 'src/app/dtos/service-order-type.dto';
 import { ServiceOrderUpdateRequestDTO } from 'src/app/dtos/service-order-update.dto';
 import { ServiceOrderDetailToUpdateDtoPipe } from '../../pipes/dtos/service-order-detail-to-update-dto.pipe';
 import { ServiceOrderApiService } from '../../services/apis/service-order.api.service';
+import { MasterDataOrderTypeDTO } from 'src/app/dtos/master-data/master-data-order-type.dto';
+import { MasterDataOrderStatusDTO } from 'src/app/dtos/master-data/master-data-order-status.dto';
+import { MasterDataOrderPriorityDTO } from 'src/app/dtos/master-data/master-data-order-priority.dto';
+import { SectorDTO } from 'src/app/dtos/sector.dto';
 
 @Component({
   templateUrl: './orders-detail.component.html',
@@ -22,13 +26,32 @@ export class OrdersDetailComponent implements OnInit, OnDestroy {
 
   protected submitBtnState: ClrLoadingState = ClrLoadingState.DEFAULT;
 
-  public serviceOrderEditionFormGroup: FormGroup<{
-    number: FormControl<string | null>;
-    description: FormControl<string | null>;
-    type: FormControl<ServiceOrderTypeDTO | null>;
-    state: FormControl<ServiceOrderStateDTO | null>;
-    employee: FormControl<MasterDataEmployeeDTO | null>;
-    customer: FormControl<MasterDataCustomerDTO | null>;
+  public formMain: FormGroup<{
+    formBasic: FormGroup<{
+      number: FormControl<string | null>;
+      description: FormControl<string | null>;
+      type: FormControl<MasterDataOrderTypeDTO | null>;
+      state: FormControl<MasterDataOrderStatusDTO | null>;
+      priority: FormControl<MasterDataOrderPriorityDTO | null>;
+      customer: FormControl<MasterDataCustomerDTO | null>;
+    }>;
+    formExecution: FormGroup<{
+      sector: FormControl<SectorDTO | null>;
+      employee: FormControl<MasterDataEmployeeDTO | null>;
+      estimatedResolutionDate: FormControl<Date | null>;
+      estimatedResolutionTime: FormControl<string | null>;
+      observationsExecution: FormControl<string | null>;
+    }>;
+    formLocation: FormGroup<{
+      descriptionAddress: FormControl<string | null>;
+      cityAddress: FormControl<string | null>;
+      zipCodeAddress: FormControl<string | null>;
+      stateAddress: FormControl<string | null>;
+      countryAddress: FormControl<string | null>;
+      latitudeAddress: FormControl<string | null>;
+      longitudeAddress: FormControl<string | null>;
+      referenceInfo: FormControl<string | null>;
+    }>;
   }>;
 
   constructor(
@@ -37,7 +60,7 @@ export class OrdersDetailComponent implements OnInit, OnDestroy {
     private readonly serviceOrderApiSrv: ServiceOrderApiService,
     private readonly serviceOrderDetailToUpdateDtoPipe: ServiceOrderDetailToUpdateDtoPipe
   ) {
-    this.serviceOrderEditionFormGroup = this.formBuilder.group({
+    this.formMain = this.formBuilder.group({
       number: new FormControl<string | null>({ value: '', disabled: true }),
       description: new FormControl<string | null>(''),
       type: new FormControl<ServiceOrderTypeDTO | null>(null),

@@ -6,6 +6,7 @@
       [formControl]="selectedEmployeeFormControl"
     ></app-employee-datalist>
     <shd-checkbox
+      [modeInline]="true"
       label="Mostrar"
       [formControl]="chbxOrdersFormControl"
     ></shd-checkbox>
@@ -17,11 +18,11 @@
     </button>
     <span class="label">
       Pendientes
-      <span class="badge badge-success">8</span>
+      <span class="badge badge-success">{{ countPendingOrders }}</span>
     </span>
     <span class="label">
       Sin asignar
-      <span class="badge badge-info">100</span>
+      <span class="badge badge-info">{{ countUnasiggnedOrders }}</span>
     </span>
   </div>
 

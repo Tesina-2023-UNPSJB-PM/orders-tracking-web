@@ -20,14 +20,15 @@ export class OrderMarkerPipe implements PipeTransform {
           label: {
             text: `#${number}`,
           },
-          title: `#${number}`,
+          title: `${number}`,
           info: `
-        Num. Orden: <b>${number}</b></br>
-        Tipo: <b>${type.name}</b></br>
-        Estado: <b>${name}</b></br>
-        Dir: <b>${addressDescription}</b></br>
-        Descripción: <b>${description}</b></br>
-        Tel.: <b>-</b></br>
+          <div>Num. Orden: <b>${number}</b></br>
+          Tipo: <b>${type.name}</b></br>
+          Estado: <b>${name}</b></br>
+          Dir: <b>${addressDescription}</b></br>
+          Descripción: <b>${description}</b></br>
+          Tel.: <b>-</b></br>
+          <a href="orders-detail?id=${id}">Editar</a></div>
     `,
           icon: {
             url: 'http://maps.google.com/mapfiles/ms/icons/homegardenbusiness.png',

@@ -8,7 +8,7 @@ import { CommonApi } from 'src/app/interfaces/common-api.interface';
 import { environment } from 'src/environments/environment';
 import { GetAllServiceOrderQueryParams } from './query-params/service-order.query-params';
 import { ServiceOrderDetailResponse } from 'src/app/dtos/service-order-detail.dto';
-import { CreateServiceOrderDTO } from 'src/app/dtos/service-order.dto';
+import { CreateServiceOrderDTO, ServiceOrderDTO } from 'src/app/dtos/service-order.dto';
 import { ServiceOrderUpdateRequestDTO } from 'src/app/dtos/service-order-update.dto';
 import { PageDto } from 'src/app/shared/pagination/page.dto';
 import { PageOptionsDto } from 'src/app/shared/pagination/page-options.dto';

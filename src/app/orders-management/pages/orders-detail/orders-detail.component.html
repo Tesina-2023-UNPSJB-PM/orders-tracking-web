@@ -1,5 +1,5 @@
 <div class="content">
-  <h2>Edición de Orden de Servicio</h2>
+  <h2>Edici&oacute;n de Orden de Servicio</h2>
 
   <form
     clrForm
@@ -16,9 +16,9 @@
       <clr-step-content *clrIfExpanded>
         <shd-input
           label="Número de orden"
-          [disabled]="true"
           formControlName="number"
           name="number"
+          [disabled]="true"
         ></shd-input>
         <shd-textarea
           label="Descripción"
@@ -34,7 +34,6 @@
           label="Estado"
           placeholder=""
           formControlName="state"
-          [disabled]="true"
         ></app-status-datalist>
         <app-priority-datalist
           label="Prioridad"
@@ -148,7 +147,7 @@
         ></shd-input>
         <div class="btn-group" style="margin-top: 30px">
           <button clrStepButton="submit" [disabled]="formMain.invalid">
-            Crear
+            Guardar
           </button>
           <button
             type="button"

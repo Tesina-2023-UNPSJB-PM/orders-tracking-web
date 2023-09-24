@@ -17,30 +17,36 @@ import { NotifierService } from 'src/app/shared/services/notifier.service';
 import { ORDERS_MANAGEMENT_ROUTES } from '../../constants/routes.constant';
 import { CustomerApiService } from '../../services/apis/customer.api.service';
 import { ServiceOrderApiService } from '../../services/apis/service-order.api.service';
+import { MAIN_ROUTES } from 'src/app/constants/routes.constant';
+
 @Component({
   templateUrl: './orders-creation.component.html',
   styleUrls: ['./orders-creation.component.scss'],
 })
 export class OrdersCreationComponent {
   private _serviceOrder: ServiceOrderDTO | undefined = undefined;
-  private readonly valueStatusDefault = { code: 'PENDING', name: 'Pendiente' };
+  private readonly valueStatusDefault = { "code": "UNASSIGNED", "name": "Sin asignar" };
 
   public formMain: FormGroup<{
     formBasic: FormGroup<{
       number: FormControl<string | null>;
       description: FormControl<string | null>;
       type: FormControl<MasterDataOrderTypeDTO | null>;
-      state: FormControl<MasterDataOrderStatusDTO | null>;
+      status: FormControl<MasterDataOrderStatusDTO | null>;
       priority: FormControl<MasterDataOrderPriorityDTO | null>;
       customer: FormControl<MasterDataCustomerDTO | null>;
     }>;
     formExecution: FormGroup<{
       sector: FormControl<SectorDTO | null>;
       employee: FormControl<MasterDataEmployeeDTO | null>;
-      estimatedResolutionDate: FormControl<Date | null>;
-      estimatedResolutionTime: FormControl<string | null>;
+      estimatedResolutionDateTime: FormControl<Date | null>;
       observationsExecution: FormControl<string | null>;
     }>;
+    formInfoAditional: FormGroup<{
+      meterNumber: FormControl<string | null>,
+      supplyNumber: FormControl<string | null>,
+      transformerNumber: FormControl<string | null>
+    }>
     formLocation: FormGroup<{
       descriptionAddress: FormControl<string | null>;
       cityAddress: FormControl<string | null>;
@@ -65,7 +71,7 @@ export class OrdersCreationComponent {
         number: new FormControl<string | null>(''),
         description: new FormControl<string | null>(''),
         type: new FormControl<MasterDataOrderTypeDTO | null>(null),
-        state: new FormControl<MasterDataOrderStatusDTO | null>(
+        status: new FormControl<MasterDataOrderStatusDTO | null>(
           this.valueStatusDefault
         ),
         priority: new FormControl<MasterDataOrderPriorityDTO | null>(null),
@@ -74,9 +80,13 @@ export class OrdersCreationComponent {
       formExecution: this.formBuilder.group({
         sector: new FormControl<SectorDTO | null > (null),
         employee: new FormControl<MasterDataEmployeeDTO | null>(null),
-        estimatedResolutionDate: new FormControl<Date | null>(null),
-        estimatedResolutionTime: new FormControl<string | null>('12:00'),
+        estimatedResolutionDateTime: new FormControl<Date | null>(null),
         observationsExecution: new FormControl<string | null>(null),
+      }),
+      formInfoAditional: this.formBuilder.group({
+        meterNumber: new FormControl<string | null>(null),
+        supplyNumber: new FormControl<string | null>(null),
+        transformerNumber: new FormControl<string | null>(null),
       }),
       formLocation: this.formBuilder.group({
         descriptionAddress: new FormControl<string | null> ({ value: null, disabled: true }),
@@ -89,49 +99,26 @@ export class OrdersCreationComponent {
         referenceInfo: new FormControl<string | null>(null),
       }),
     });
+
+    this.updateStatusOnEmployeeChanged();
   }
 
-  protected get number(): string {
-    return this._serviceOrder?.number ?? '';
+  private updateStatusOnEmployeeChanged() {
+    const employeeControl = this.employeeFormControl;
+    employeeControl?.valueChanges.subscribe(value => {
+      if (value?.firstName) {
+        const statusControl = this.statusFormControl;
+        statusControl?.setValue({ "code": "PENDING", "name": "Pendiente" });
+      }
+    });
   }
 
-  protected get description(): string {
-    return this._serviceOrder?.description ?? '';
+  get employeeFormControl() {
+    return this.formMain.get('formExecution')?.get('employee');
   }
 
-  protected get observations(): string {
-    return this._serviceOrder?.observations ?? '';
-  }
-
-  protected set number(number: string) {
-    if (!this._serviceOrder) return;
-    this._serviceOrder.number = number;
-  }
-
-  protected set description(description: string) {
-    if (!this._serviceOrder) return;
-    this._serviceOrder.description = description;
-  }
-
-  protected set observations(observations: string) {
-    if (!this._serviceOrder) return;
-    this._serviceOrder.observations = observations;
-  }
-
-  protected get employee(): MasterDataEmployeeDTO {
-    return { firstName: 'Fake', lastName: 'Fake' } as MasterDataEmployeeDTO;
-  }
-
-  protected get customer(): MasterDataCustomerDTO {
-    return { firstName: 'Fake', lastName: 'Fake' } as MasterDataCustomerDTO;
-  }
-
-  protected get state(): MasterDataOrderStatusDTO {
-    return this._serviceOrder?.status as MasterDataOrderStatusDTO;
-  }
-
-  protected get type(): MasterDataOrderTypeDTO {
-    return this._serviceOrder?.type as MasterDataOrderTypeDTO;
+  get statusFormControl() {
+    return this.formMain.get('formBasic')?.get('status');
   }
 
   protected onCreateServiceOrder(): void {
@@ -143,7 +130,8 @@ export class OrdersCreationComponent {
         this.goBack();
       },
       error: (err) => {
-        this.notifier.pushError(err.message);
+        const messageError = err.error.message ?? err.message;
+        this.notifier.pushError(messageError);
       },
     });
   }
@@ -179,9 +167,9 @@ export class OrdersCreationComponent {
   }
 
   private goBack(): void {
-    const { ORDERS_LIST } = ORDERS_MANAGEMENT_ROUTES;
+    const URL_ORDERS_LIST  = `${MAIN_ROUTES.DASHBOARD}/${MAIN_ROUTES.ORDERS_MANAGEMENT}/${ORDERS_MANAGEMENT_ROUTES.ORDERS_LIST}`;
 
-    this.router.navigate([ORDERS_LIST]);
+    this.router.navigate([URL_ORDERS_LIST]);
   }
 
   private getCreateRequest(): CreateServiceOrderDTO {
@@ -191,7 +179,7 @@ export class OrdersCreationComponent {
       number: data.formBasic.number ?? undefined,
       description: data.formBasic.description ?? undefined,
       priority: data.formBasic.priority ? data.formBasic.priority.code : undefined,
-      status: data.formBasic.state ? data.formBasic.state.code : undefined,
+      status: data.formBasic.status ? data.formBasic.status.code : undefined,
       typeId: data.formBasic.type ? data.formBasic.type.id : undefined,
       customerId: data.formBasic.customer ? data.formBasic.customer.id : undefined,
       destination: {
@@ -201,21 +189,14 @@ export class OrdersCreationComponent {
       execution: {
         assignedSectorId: data.formExecution.sector?.id,
         executorEmployeId: data.formExecution.employee ? data.formExecution.employee.id : undefined,
-        estimatedResolutionTime:
-          this.getEstimatedResolutionDatetime(data.formExecution.estimatedResolutionDate ?? undefined,
-                                              data.formExecution.estimatedResolutionTime ?? undefined),
+        estimatedResolutionTime: data.formExecution.estimatedResolutionDateTime ?? undefined,
         observations: data.formExecution.observationsExecution ?? undefined,
       },
-      detail: undefined,
+      detail: {
+        numero_medidor: data.formInfoAditional.meterNumber,
+        numero_suministro: data.formInfoAditional.supplyNumber,
+        numero_transformador: data.formInfoAditional.transformerNumber,
+      },
     };
-  }
-
-  private getEstimatedResolutionDatetime(date?: Date, time?: string): Date {
-    if (!date) {
-      return new Date();
-    }
-    const theTime = time ? `${time}:00` : '00:00:00'
-    const theDate = `${date.getFullYear()}-${date.getMonth() + 1 }-${date.getDate()}`;
-    return new Date(`${theDate} ${theTime}`);
   }
 }

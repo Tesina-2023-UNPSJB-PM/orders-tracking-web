@@ -1,16 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ClrLoadingState } from '@clr/angular';
 import { ReplaySubject, switchMap } from 'rxjs';
-import { MasterDataCustomerDTO } from 'src/app/dtos/master-data/master-data-customer.dto';
-import { MasterDataEmployeeDTO } from 'src/app/dtos/master-data/master-data-employee.dto';
 import { ServiceOrderDetailResponse } from 'src/app/dtos/service-order-detail.dto';
-import { ServiceOrderStateDTO } from 'src/app/dtos/service-order-state.dto';
-import { ServiceOrderTypeDTO } from 'src/app/dtos/service-order-type.dto';
-import { ServiceOrderUpdateRequestDTO } from 'src/app/dtos/service-order-update.dto';
 import { ServiceOrderDetailToUpdateDtoPipe } from '../../pipes/dtos/service-order-detail-to-update-dto.pipe';
 import { ServiceOrderApiService } from '../../services/apis/service-order.api.service';
+import { OrderDetailFormType, createOrderDetailForm, initializeFormData } from './order-detail-form-util';
+
 
 @Component({
   templateUrl: './orders-detail.component.html',
@@ -22,14 +19,7 @@ export class OrdersDetailComponent implements OnInit, OnDestroy {
 
   protected submitBtnState: ClrLoadingState = ClrLoadingState.DEFAULT;
 
-  public serviceOrderEditionFormGroup: FormGroup<{
-    number: FormControl<string | null>;
-    description: FormControl<string | null>;
-    type: FormControl<ServiceOrderTypeDTO | null>;
-    state: FormControl<ServiceOrderStateDTO | null>;
-    employee: FormControl<MasterDataEmployeeDTO | null>;
-    customer: FormControl<MasterDataCustomerDTO | null>;
-  }>;
+  formMain: OrderDetailFormType;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -37,14 +27,7 @@ export class OrdersDetailComponent implements OnInit, OnDestroy {
     private readonly serviceOrderApiSrv: ServiceOrderApiService,
     private readonly serviceOrderDetailToUpdateDtoPipe: ServiceOrderDetailToUpdateDtoPipe
   ) {
-    this.serviceOrderEditionFormGroup = this.formBuilder.group({
-      number: new FormControl<string | null>({ value: '', disabled: true }),
-      description: new FormControl<string | null>(''),
-      type: new FormControl<ServiceOrderTypeDTO | null>(null),
-      state: new FormControl<ServiceOrderStateDTO | null>(null),
-      employee: new FormControl<MasterDataEmployeeDTO | null>(null),
-      customer: new FormControl<MasterDataCustomerDTO | null>(null),
-    });
+    this.formMain = createOrderDetailForm(formBuilder);
   }
 
   ngOnInit(): void {
@@ -53,62 +36,25 @@ export class OrdersDetailComponent implements OnInit, OnDestroy {
       .subscribe((serviceOrderDetail) => this.initialize(serviceOrderDetail));
   }
 
+  ngOnDestroy(): void {
+    this._destroy$.next(true);
+    this._destroy$.unsubscribe();
+  }
+
   private async initialize(serviceOrderDetail: ServiceOrderDetailResponse) {
     this._serviceOrder = serviceOrderDetail;
-    this.initializeFormData();
-  }
+    console.log(serviceOrderDetail);
 
-  protected get number(): string {
-    return this._serviceOrder?.number ?? '';
-  }
-
-  protected get description(): string {
-    return this._serviceOrder?.description ?? '';
-  }
-
-  protected get observations(): string {
-    return ''; //this._serviceOrder?.observations ?? '';
-  }
-
-  protected set number(number: string) {
-    if (!this._serviceOrder) return;
-    this._serviceOrder.number = number;
-  }
-
-  protected set description(description: string) {
-    if (!this._serviceOrder) return;
-    this._serviceOrder.description = description;
-  }
-
-  protected set observations(observations: string) {
-    if (!this._serviceOrder) return;
-    //this._serviceOrder.observations = observations;
-  }
-
-  protected get employee(): MasterDataEmployeeDTO {
-    return this._serviceOrder?.execution
-      ?.executorEmployee as MasterDataEmployeeDTO;
-  }
-
-  protected get customer(): MasterDataCustomerDTO {
-    return this._serviceOrder?.customer as MasterDataCustomerDTO;
-  }
-
-  protected get state(): ServiceOrderStateDTO {
-    return this._serviceOrder?.status as ServiceOrderStateDTO;
-  }
-
-  protected get type(): ServiceOrderTypeDTO | null {
-    return this._serviceOrder?.type ?? null; //this._serviceOrder?.type as ServiceOrderTypeDTO;
+    initializeFormData(this.formMain, serviceOrderDetail);
   }
 
   protected onUpdateServiceOrder(): void {
-    if (!this._serviceOrder) return;
+    /*if (!this._serviceOrder) return;
 
     this.submitBtnState = ClrLoadingState.LOADING;
 
     const { description, customer, state, employee, type } =
-      this.serviceOrderEditionFormGroup.value;
+      this.formMain.value;
 
     this._serviceOrder.execution.executorEmployee = employee;
 
@@ -126,22 +72,13 @@ export class OrdersDetailComponent implements OnInit, OnDestroy {
     this.serviceOrderApiSrv.updateById(updateBody).subscribe({
       next: () => (this.submitBtnState = ClrLoadingState.SUCCESS),
       error: () => (this.submitBtnState = ClrLoadingState.ERROR),
-    });
+    });*/
   }
 
-  private initializeFormData(): void {
-    this.serviceOrderEditionFormGroup.setValue({
-      number: this.number,
-      description: this.description,
-      customer: this.customer,
-      state: this.state,
-      employee: this.employee,
-      type: this.type,
-    });
+  onCancel() {
+    throw new Error('Method not implemented.');
   }
-
-  ngOnDestroy(): void {
-    this._destroy$.next(true);
-    this._destroy$.unsubscribe();
+  onModelChanged($event: any) {
+    throw new Error('Method not implemented.');
   }
 }

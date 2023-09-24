@@ -20,6 +20,8 @@ import { EmployeeMarkerPipe } from '../../pipes/employee-marker.pipe';
 import { OrderMarkerPipe } from '../../pipes/order-marker.pipe';
 import { EmployeeOrdersService } from '../../services/employee-orders.service';
 import { OrdersTrackingService } from '../../services/orders-tracking.service';
+import { ServiceOrderApiService } from 'src/app/orders-management/services/apis/service-order.api.service';
+import { Order } from 'src/app/shared/pagination/constants/order.constant';
 
 @Component({
   templateUrl: './general-map.page.html',
@@ -30,24 +32,36 @@ export class GeneralMapPage implements OnInit {
   @ViewChild(GoogleMap, { static: false }) map!: GoogleMap;
   @ViewChild(MapInfoWindow, { static: false }) info: MapInfoWindow | undefined;
 
+  isOpenModalDialog = false;
+  titleModalDialog = '';
+  messageModalDialog = '';
+  countPendingOrders = 0;
+  countUnasiggnedOrders = 0;
+
   private readonly channedId = CHANNEL;
+  private readonly TITLE_DIALOG_CHOOSE_TYPE_ORDER = 'Seleccionando tipo de orden';
 
   public options: google.maps.MapOptions = APP_MAP_OPTIONS;
 
   private _employeeMarkers: EmployeeMarker[] = [];
-  private _ordersMarkers: OrderMarker[] = [];
+  private _pendingOrdersMarkers: OrderMarker[] = [];
+  private _unasiggnedOrdersMarkers: OrderMarker[] = [];
 
   public infoContent = '';
 
   public selectedEmployeeFormControl =
     new FormControl<MasterDataEmployeeDTO | null>(null);
 
-  public checkboxFormControl = new FormControl<CheckboxConfig[]>([
-    { label: 'OS Pendientes', value: 'pending', selected: false },
-  ]);
+  private readonly chbxOrdersvaluesDefault = [
+    { label: 'Pendientes', value: 'pending', selected: false },
+    { label: 'Sin asignar', value: 'unassigned', selected: false },
+  ];
+
+  public chbxOrdersFormControl = new FormControl<CheckboxConfig[]>(this.chbxOrdersvaluesDefault);
 
   constructor(
     private readonly ordersTrackingService: OrdersTrackingService,
+    private readonly ordersService: ServiceOrderApiService,
     private readonly employeeMarkerPipe: EmployeeMarkerPipe,
     private readonly employeeOrdersService: EmployeeOrdersService,
     private readonly orderMarkerPipe: OrderMarkerPipe
@@ -62,14 +76,9 @@ export class GeneralMapPage implements OnInit {
         )
       )
       .subscribe((employeeMarker: EmployeeMarker) =>
-        this.addMarker(employeeMarker)
+        this.addEmployeeMarker(employeeMarker)
       );
 
-    this.checkboxFormControl.valueChanges.subscribe((value) => {
-      if (value) {
-        this.findEmployeeOrders();
-      }
-    });
   }
 
   ngAfterViewInit() {
@@ -81,13 +90,16 @@ export class GeneralMapPage implements OnInit {
     this.selectedEmployeeFormControl.setValue(null);
     this.selectedEmployeeFormControl.updateValueAndValidity();
 
-    this.checkboxFormControl.setValue([
-      { label: 'OS Pendientes', value: 'pending', selected: false },
-    ]);
-    this.checkboxFormControl.updateValueAndValidity();
+    this.chbxOrdersFormControl.setValue(this.chbxOrdersvaluesDefault);
+    this.chbxOrdersFormControl.updateValueAndValidity();
+
+    this._pendingOrdersMarkers = [];
+    this._unasiggnedOrdersMarkers = [];
+
+    this.countPendingOrders = this.countUnasiggnedOrders = 0;
   }
 
-  private addMarker(employeeMarker: EmployeeMarker): void {
+  private addEmployeeMarker(employeeMarker: EmployeeMarker): void {
     const { title } = employeeMarker;
     const index = this._employeeMarkers.findIndex(
       ({ title: _title }) => _title === title
@@ -99,37 +111,28 @@ export class GeneralMapPage implements OnInit {
     }
   }
 
-  private findEmployeeOrders(): void {
-    if (!this.selectedEmployee) return;
-    this.employeeOrdersService
-      .getAssignedOrders(this.selectedEmployee.id)
-      .pipe(
-        take(1),
-        map((resp) => this.orderMarkerPipe.transform(resp.assignedServiceOrders))
-      )
-      .subscribe((orders) => {
-        console.log("🚀 ~ file: general-map.page.ts:112 ~ GeneralMapPage ~ .subscribe ~ orders:", orders)
-        this._ordersMarkers = orders;
-      });
-  }
-
   public get selectedEmployee(): MasterDataEmployeeDTO | null {
     return this.selectedEmployeeFormControl.value;
   }
 
-  public get markers(): IMarker[] {
-    const _employeeId = this.selectedEmployee?.id;
+  public get isSelectedEmployee(): boolean {
+    return !!this.selectedEmployeeFormControl.value;
+  }
 
+  public get markers(): IMarker[] {
+    const result: IMarker[] = [];
+    const _employeeId = this.selectedEmployee?.id;
     if (_employeeId) {
-      const employee = this._employeeMarkers.filter(
+      const employeeMarker = this._employeeMarkers.filter(
         ({ employeeId }) => employeeId === _employeeId
       );
-      return this.selectedOrdersPendingCheckbox
-        ? [...employee, ...this._ordersMarkers]
-        : employee;
+      result.push(... employeeMarker);
     } else {
-      return this._employeeMarkers;
+      result.push(... this._employeeMarkers);
     }
+    result.push(... this._pendingOrdersMarkers);
+    result.push(... this._unasiggnedOrdersMarkers);
+    return result;
   }
 
   public get ordersMarkers() {
@@ -137,7 +140,7 @@ export class GeneralMapPage implements OnInit {
   }
 
   public get selectedOrdersPendingCheckbox(): boolean {
-    const { value } = this.checkboxFormControl;
+    const { value } = this.chbxOrdersFormControl;
     if (!value) return false;
     const [checkboxConfig] = value;
     const { selected = false } = checkboxConfig;
@@ -168,5 +171,82 @@ export class GeneralMapPage implements OnInit {
     });
 
     return bounds;
+  }
+
+  onSearchOrders(): void {
+    this._pendingOrdersMarkers = [];
+    this._unasiggnedOrdersMarkers = [];
+
+    const optionsTypeOrders = this.chbxOrdersFormControl.value;
+
+    if (!optionsTypeOrders) return;
+
+    const showPending = optionsTypeOrders?.some(
+      (config) => config.value == 'pending' && config.selected
+    );
+    const showUnassigned = optionsTypeOrders?.some(
+      (config) => config.value == 'unassigned' && config.selected
+    );
+
+    if (!showPending && !showUnassigned) {
+      this.openModalDialog(this.TITLE_DIALOG_CHOOSE_TYPE_ORDER, 'Debe seleccionar una opción');
+    }
+
+    if (showPending && showUnassigned) {
+      this.openModalDialog(
+        this.TITLE_DIALOG_CHOOSE_TYPE_ORDER,
+        'Debe seleccionar una sola opción'
+      );
+    }
+
+    if (showPending) {
+      this.fetchPendingOrders();
+    } else if (showUnassigned) {
+      this.fetchUnassignedOrders();
+    }
+  }
+
+  private fetchPendingOrders(): void {
+    if (!this.selectedEmployee) {
+      this.openModalDialog(this.TITLE_DIALOG_CHOOSE_TYPE_ORDER, 'Debe seleccionar un empleado');
+      return
+    };
+
+    this.employeeOrdersService
+      .getAssignedOrders(this.selectedEmployee.id)
+      .pipe(
+        take(1),
+        map((resp) => this.orderMarkerPipe.transform(resp.assignedServiceOrders))
+      )
+      .subscribe((orders) => {
+        //console.log("🚀 ~ file: general-map.page.ts:112 ~ GeneralMapPage ~ .subscribe ~ orders:", orders)
+        this._pendingOrdersMarkers = orders;
+        this.countPendingOrders = orders.length;
+      });
+  }
+
+  private fetchUnassignedOrders() {
+    this.ordersService.getPage({ order: Order.ASC, page: 1, take: 50 } ,
+      { statusCode: 'UNASSIGNED' })
+      .pipe(
+        take(1),
+        map( (resp) => this.orderMarkerPipe.transform(resp.data))
+      )
+      .subscribe( (orders) => {
+        this._unasiggnedOrdersMarkers = orders;
+        this.countUnasiggnedOrders = orders.length
+      });
+  }
+
+  openModalDialog(title: string, message: string): void {
+    this.titleModalDialog = title;
+    this.messageModalDialog = message;
+    this.isOpenModalDialog = true;
+  }
+
+  closeModalDialog(): void {
+    this.titleModalDialog = '';
+    this.messageModalDialog = '';
+    this.isOpenModalDialog = false;
   }
 }

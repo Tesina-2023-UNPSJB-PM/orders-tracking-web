@@ -1,6 +1,14 @@
 .controls {
     display: flex;
     justify-content: flex-start;
-    gap: 8vw;
-    padding-bottom: 4vh;
+    gap: 2vw;
+    padding-bottom: 2vh;
+}
+
+.controls > button {
+  margin-top: auto;
+}
+
+.controls > span.label {
+  margin-top: auto;
 }

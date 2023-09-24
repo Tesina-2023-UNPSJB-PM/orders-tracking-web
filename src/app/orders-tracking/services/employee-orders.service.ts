@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ServiceOrderItem, SummaryOrdersDTO } from 'src/app/dtos/service-order-item.dto';
+import { SummaryOrdersDTO } from 'src/app/dtos/service-order-item.dto';
 import { environment } from '../../../environments/environment';
 
 @Injectable({

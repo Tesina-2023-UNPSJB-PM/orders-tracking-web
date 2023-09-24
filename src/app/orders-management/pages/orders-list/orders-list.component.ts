@@ -137,7 +137,10 @@ export class OrdersListComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (page: PageDto<ServiceOrderItemDTO>) =>
           (this._currentPage = page),
-        error: (error) => this.notifierService.pushError(error.message),
+        error: (error) => {
+         const messageError =  error.error.message ?? error.message;
+         this.notifierService.pushError(messageError);
+        },
       });
   }
 

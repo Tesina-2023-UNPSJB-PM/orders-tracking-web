@@ -46,4 +46,8 @@ export class PriorityDatalistComponent
       (priority: MasterDataOrderPriorityDTO) => priority.code === dataListItem.id
     );
   }
+
+  public override writeValue(state: MasterDataOrderPriorityDTO): void {
+    if (state) this.inputValue = state?.name ?? '';
+  }
 }

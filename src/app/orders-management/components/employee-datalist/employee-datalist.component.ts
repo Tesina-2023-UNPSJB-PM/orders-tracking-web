@@ -38,7 +38,9 @@ export class EmployeeDatalistComponent
   ngOnInit(): void {
     this.employee$
       .pipe(takeUntil(this.$destroy))
-      .subscribe((employees) => (this.employees = employees));
+      .subscribe((employees) => {
+        this.employees = employees; }
+      );
   }
 
   protected override getEntityValue(
@@ -51,6 +53,7 @@ export class EmployeeDatalistComponent
 
   public override writeValue(employee: MasterDataEmployeeDTO): void {
     if (employee)
-      this.inputValue = `${employee?.firstName} ${employee?.lastName}` ?? '';
+      this.inputValue = `${employee?.firstName} ${employee?.lastName}`;
+
   }
 }

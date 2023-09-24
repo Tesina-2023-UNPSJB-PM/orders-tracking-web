@@ -1,37 +1,38 @@
 import { MasterDataCustomerDTO } from "./master-data/master-data-customer.dto";
+import { MasterDataEmployeeDTO } from "./master-data/master-data-employee.dto";
+import { SectorDTO } from "./sector.dto";
 import { ServiceOrderStateDTO } from "./service-order-state.dto";
 import { ServiceOrderTypeDTO } from "./service-order-type.dto";
-import { Destination } from "./service-order.dto";
 
 
 export class ServiceOrderDetailResponse {
-  
+
   id?: number;
-  
+
   number?: string;
-  
+
   description?: string;
-  
-  type?: ServiceOrderTypeDTO;
-  
-  status?: ServiceOrderStateDTO;
-  
-  priority?: string;
-  
-  execution?: any;
-  
-  customer?: MasterDataCustomerDTO;
-  
-  destination?: OrderLocationDTO;
-  
+
   creationTime?: Date;
-  
+
+  priority?: string;
+
+  status?: ServiceOrderStateDTO;
+
+  type?: ServiceOrderTypeDTO;
+
+  customer?: MasterDataCustomerDTO;
+
+  destination?: OrderLocationDTO;
+
+  execution?: OrderExecutionDTO;
+
   detail?: any;
 }
 
 interface OrderLocationDTO {
   id?: number;
-  address?: AddressDTO;   
+  address?: AddressDTO;
   referenceInfo?: string;
 }
 
@@ -49,8 +50,8 @@ interface AddressDTO {
 interface OrderExecutionDTO {
   id?: number;
   observations?: string;
-  executorEmployeId?: number;
-  assignedSectorId?: number;
+  executorEmployee?: MasterDataEmployeeDTO;
+  assignedSector?: SectorDTO;
   assignedTime?: Date;
   estimatedResolutionTime?: Date;
   resolutionTime?: Date;

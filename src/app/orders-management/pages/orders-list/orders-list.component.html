@@ -51,6 +51,9 @@
       <clr-dg-cell>{{ serviceOrder.description }}</clr-dg-cell>
       <clr-dg-cell>{{ serviceOrder.status.name }}</clr-dg-cell>
       <clr-dg-cell>N/A</clr-dg-cell>
+
+      <execution-order-history-detail *clrIfExpanded [serviceOrder]="serviceOrder"
+        ngProjectAs="clr-dg-row-detail"></execution-order-history-detail>
     </clr-dg-row>
 
     <clr-dg-footer>

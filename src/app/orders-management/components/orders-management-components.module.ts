@@ -8,6 +8,7 @@ import { ServiceOrderTypesDatalistComponent } from './service-order-types-datali
 import { StatusDatalistComponent } from './status-datalist/status-datalist.component';
 import { PriorityDatalistComponent } from './service-order-priority-datalist/priority-datalist.component';
 import { SectorDatalistComponent } from './sector-datalist/sector-datalist.component';
+import { ExecutionOrderHistoryDetailComponent } from './execution-order-history-detail/execution-order-history-detail.component';
 
 const COMPONENTS = [
   EmployeeDatalistComponent,
@@ -16,10 +17,11 @@ const COMPONENTS = [
   ServiceOrderTypesDatalistComponent,
   PriorityDatalistComponent,
   SectorDatalistComponent,
+  ExecutionOrderHistoryDetailComponent
 ];
 
 @NgModule({
-  declarations: [...COMPONENTS, PriorityDatalistComponent, SectorDatalistComponent],
+  declarations: [...COMPONENTS],
   exports: [...COMPONENTS],
   imports: [CommonModule, SharedComponentsModule, OrdersManagementPipesModule],
 })

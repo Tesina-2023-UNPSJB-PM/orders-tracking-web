@@ -13,6 +13,7 @@ export interface ServiceOrderItem {
 }
 
 export interface Execution {
+  id?: number,
   executorEmployeId: number;
   assignedSectorId: number;
   observations: string;

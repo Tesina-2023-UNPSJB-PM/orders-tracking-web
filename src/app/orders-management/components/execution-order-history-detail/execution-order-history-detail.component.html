@@ -1,0 +1,22 @@
+<div clrLoading="loading">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Estado</th>
+        <th>Fecha</th>
+        <th>Raz&oacute;n</th>
+        <th>Observaci&oacute;n</th>
+        <th>Adjunto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>{{item.status}}</td>
+        <td>{{item.registrationDate | date:"dd-MM-yyyy" }}</td>
+        <td>{{item.reason.name}}</td>
+        <td>{{item.observations}}</td>
+        <td>archivo</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

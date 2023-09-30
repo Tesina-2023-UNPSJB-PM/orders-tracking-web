@@ -15,8 +15,22 @@
         <td>{{item.registrationDate | date:"dd-MM-yyyy" }}</td>
         <td>{{item.reason.name}}</td>
         <td>{{item.observations}}</td>
-        <td>archivo</td>
+        <td>
+          <button type="button" class="btn btn-icon" aria-label=""
+          [disabled]="!item.attachments" (click)="showModalAttachment(item.attachments)">
+            <cds-icon shape="image" badge="success"></cds-icon>
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
 </div>
+<clr-modal [(clrModalOpen)]="openModalShowAttachment">
+  <h3 class="modal-title">Adjunto</h3>
+  <div class="modal-body">
+    <img [src]="imageSource" alt="">
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="openModalShowAttachment = false">Ok</button>
+  </div>
+</clr-modal>

@@ -9,6 +9,9 @@ import { StatusDatalistComponent } from './status-datalist/status-datalist.compo
 import { PriorityDatalistComponent } from './service-order-priority-datalist/priority-datalist.component';
 import { SectorDatalistComponent } from './sector-datalist/sector-datalist.component';
 import { ExecutionOrderHistoryDetailComponent } from './execution-order-history-detail/execution-order-history-detail.component';
+import '@cds/core/icon/register.js';
+import { ClarityIcons, imageIcon } from '@cds/core/icon';
+import { ClarityModule } from '@clr/angular';
 
 const COMPONENTS = [
   EmployeeDatalistComponent,
@@ -23,6 +26,10 @@ const COMPONENTS = [
 @NgModule({
   declarations: [...COMPONENTS],
   exports: [...COMPONENTS],
-  imports: [CommonModule, SharedComponentsModule, OrdersManagementPipesModule],
+  imports: [CommonModule, ClarityModule, SharedComponentsModule, OrdersManagementPipesModule],
 })
-export class OrdersManagementComponentsModule {}
+export class OrdersManagementComponentsModule {
+  constructor() {
+    ClarityIcons.addIcons(imageIcon);
+  }
+}

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ClrDatagridStateInterface } from '@clr/angular';
-import { Observable, ReplaySubject, finalize, map, takeUntil } from 'rxjs';
+import { ReplaySubject, finalize, map, takeUntil } from 'rxjs';
 import { MasterDataCustomerDTO } from 'src/app/dtos/master-data/master-data-customer.dto';
 import { MasterDataEmployeeDTO } from 'src/app/dtos/master-data/master-data-employee.dto';
 import { MasterDataOrderStatusDTO } from 'src/app/dtos/master-data/master-data-order-status.dto';
@@ -15,8 +15,7 @@ import { NotifierService } from 'src/app/shared/services/notifier.service';
 import { ORDERS_MANAGEMENT_ROUTES } from '../../constants/routes.constant';
 import { ServiceOrderFilters } from '../../interfaces/service-order-filters.interface';
 import { GetAllServiceOrderQueryParams } from '../../services/apis/query-params/service-order.query-params';
-import { ExecutionHistoryService } from '../../services/apis/execution-history.service';
-import { ExecutionHistoryResponseDto } from 'src/app/dtos/executionHistoryResponse.dto';
+
 
 @Component({
   templateUrl: './orders-list.component.html',

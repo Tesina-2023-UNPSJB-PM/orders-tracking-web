@@ -154,4 +154,12 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     this._destroy.next(true);
     this._destroy.unsubscribe();
   }
+
+  isDisabledAssignedButton(serviceOrder: ServiceOrderItemDTO): boolean {
+    return serviceOrder.status.code !== 'UNASSIGNED';
+  }
+
+  isDisabledCancelButton(serviceOrder: ServiceOrderItemDTO): boolean {
+    return serviceOrder.status.code === 'CANCELED' || serviceOrder.status.code === 'DONE';
+  }
 }

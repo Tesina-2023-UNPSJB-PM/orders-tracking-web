@@ -43,6 +43,8 @@
         <button class="action-item" (click)="onDelete(serviceOrder)">
             Eliminar
         </button>
+        <button class="action-item" [disabled]="isDisabledAssignedButton(serviceOrder)">Asignar</button>
+        <button class="action-item" [disabled]="isDisabledCancelButton(serviceOrder)">Cancelar</button>
       </clr-dg-action-overflow>
 
       <clr-dg-cell>{{ serviceOrder.number }}</clr-dg-cell>

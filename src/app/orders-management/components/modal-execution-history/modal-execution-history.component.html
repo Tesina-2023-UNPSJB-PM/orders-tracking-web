@@ -1,0 +1,17 @@
+<clr-modal [(clrModalOpen)]="openModal">
+  <h3 class="modal-title">{{title}}</h3>
+  <div class="modal-body">
+    <form clrForm [formGroup]="form" clrLayout="vertical">
+      <app-status-datalist label="Estado" placeholder="" formControlName="status"
+          [disabled]="true"></app-status-datalist>
+      <app-employee-datalist label="Operario asignado" placeholder=""
+        formControlName="employee"></app-employee-datalist>
+      <reason-datalist label="Razón"></reason-datalist>
+      <shd-textarea label="Observaciones" formControlName="observations" name="observations"></shd-textarea>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="close()">Cancelar</button>
+    <button type="button" class="btn btn-primary" (click)="createExecutionHistory()">Ok</button>
+  </div>
+</clr-modal>

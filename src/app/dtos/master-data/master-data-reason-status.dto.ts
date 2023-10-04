@@ -1,5 +1,5 @@
-export interface MasterDataReasonStatusDto {
-  id?: number;
+export interface MasterDataReasonStatusDTO {
+  id: number;
   name: string;
   description?: string;
 }

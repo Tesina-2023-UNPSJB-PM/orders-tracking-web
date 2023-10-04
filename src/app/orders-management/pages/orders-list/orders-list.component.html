@@ -1,27 +1,12 @@
 <div class="content">
   <form class="filters-container" [formGroup]="filtersFormGroup">
-    <app-employee-datalist
-      label="Operario"
-      placeholder=""
-      formControlName="employee"
-    ></app-employee-datalist>
+    <app-employee-datalist label="Operario" placeholder="" formControlName="employee"></app-employee-datalist>
 
-    <app-customer-datalist
-      label="Cliente"
-      placeholder=""
-      formControlName="customer"
-    ></app-customer-datalist>
+    <app-customer-datalist label="Cliente" placeholder="" formControlName="customer"></app-customer-datalist>
 
-    <app-status-datalist
-      label="Estado"
-      placeholder=""
-      formControlName="state"
-    ></app-status-datalist>
+    <app-status-datalist label="Estado" placeholder="" formControlName="state"></app-status-datalist>
 
-    <shd-datepicker
-      label="Fecha de creación"
-      formControlName="creationDate"
-    ></shd-datepicker>
+    <shd-datepicker label="Fecha de creación" formControlName="creationDate"></shd-datepicker>
 
     <button class="btn btn-primary" (click)="onClearFilters()">Limpiar Filtros</button>
 
@@ -41,10 +26,12 @@
           Editar
         </button>
         <button class="action-item" (click)="onDelete(serviceOrder)">
-            Eliminar
+          Eliminar
         </button>
-        <button class="action-item" [disabled]="isDisabledAssignedButton(serviceOrder)">Asignar</button>
-        <button class="action-item" [disabled]="isDisabledCancelButton(serviceOrder)">Cancelar</button>
+        <button class="action-item" [disabled]="isDisabledAssignedButton(serviceOrder)"
+          (click)="openAssignOrderModal(serviceOrder)">Asignar</button>
+        <button class="action-item" [disabled]="isDisabledCancelButton(serviceOrder)"
+          (click)="openCancelOrderModal(serviceOrder)">Cancelar</button>
       </clr-dg-action-overflow>
 
       <clr-dg-cell>{{ serviceOrder.number }}</clr-dg-cell>
@@ -62,13 +49,15 @@
       {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
       of {{total}} users
       <clr-dg-pagination #pagination [clrDgPageSize]="pageSize" [clrDgTotalItems]="total"></clr-dg-pagination>
-  </clr-dg-footer>
+    </clr-dg-footer>
   </clr-datagrid>
 
   <button class="btn btn-primary" (click)="onCreateServiceOrder()">Crear Orden</button>
 </div>
+<modal-execution-history [(openModal)]="isOpenExecutionHistoryModal"
+ [serviceOrder]="selectedOrder" [operation]="executionHistoryOperation"></modal-execution-history>
 <clr-modal [(clrModalOpen)]="openModalDelete">
-    <h3 class="modal-title">Eliminando Orden de Servicio</h3>
+  <h3 class="modal-title">Eliminando Orden de Servicio</h3>
   <div class="modal-body">
     <p>¿ Desea realmente eliminar la orden de servicio <strong>{{selectedOrder?.number}}</strong> ?</p>
   </div>
@@ -77,3 +66,4 @@
     <button type="button" class="btn btn-primary" (click)="deleteOrderSelected()">Ok</button>
   </div>
 </clr-modal>
+

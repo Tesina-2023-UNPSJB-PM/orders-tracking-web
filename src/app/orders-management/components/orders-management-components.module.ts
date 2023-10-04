@@ -12,6 +12,9 @@ import { ExecutionOrderHistoryDetailComponent } from './execution-order-history-
 import '@cds/core/icon/register.js';
 import { ClarityIcons, imageIcon } from '@cds/core/icon';
 import { ClarityModule } from '@clr/angular';
+import { ModalExecutionHistoryComponent } from './modal-execution-history/modal-execution-history.component';
+import { ReasonDatalistComponent } from './reason-datalist/reason-datalist.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const COMPONENTS = [
   EmployeeDatalistComponent,
@@ -20,13 +23,21 @@ const COMPONENTS = [
   ServiceOrderTypesDatalistComponent,
   PriorityDatalistComponent,
   SectorDatalistComponent,
-  ExecutionOrderHistoryDetailComponent
+  ReasonDatalistComponent,
+  ExecutionOrderHistoryDetailComponent,
+  ModalExecutionHistoryComponent,
 ];
 
 @NgModule({
   declarations: [...COMPONENTS],
   exports: [...COMPONENTS],
-  imports: [CommonModule, ClarityModule, SharedComponentsModule, OrdersManagementPipesModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ClarityModule,
+    SharedComponentsModule,
+    OrdersManagementPipesModule,
+  ],
 })
 export class OrdersManagementComponentsModule {
   constructor() {

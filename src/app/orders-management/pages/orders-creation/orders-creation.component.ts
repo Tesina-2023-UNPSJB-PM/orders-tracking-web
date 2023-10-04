@@ -179,7 +179,7 @@ export class OrdersCreationComponent {
         .getById(value.id)
         .pipe(
           tap((value) => {
-            //this.setValuesAddressFormControls(value.address)
+            this.setValuesAddressFormControls(value.address);
           })
         )
         .subscribe();

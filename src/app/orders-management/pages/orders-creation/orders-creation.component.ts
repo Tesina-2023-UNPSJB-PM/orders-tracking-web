@@ -184,6 +184,8 @@ export class OrdersCreationComponent {
   private setValuesAddressFormControls(address?: AddressDTO): void {
     if (!address) return;
 
+    const { latitude, longitude } = address;
+
     const formLocation = this.formMain.get('formLocation');
     formLocation?.patchValue({
       descriptionAddress: address.description ?? null,
@@ -191,10 +193,15 @@ export class OrdersCreationComponent {
       countryAddress: address.country ?? null,
       stateAddress: address.state ?? null,
       zipCodeAddress: address.zipCode ?? null,
-      latitudeAddress: null,
-      longitudeAddress: null,
+      latitudeAddress: `${latitude}` ?? null,
+      longitudeAddress: `${longitude}` ?? null,
       referenceInfo: '',
     });
+
+    if (latitude && longitude) {
+      this.selectedLocation = new google.maps.LatLng(latitude, longitude);
+      this.region = new google.maps.LatLng(latitude, longitude);
+    }
   }
 
   protected onCancel(): void {

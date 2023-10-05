@@ -6,25 +6,24 @@ import { MasterDataEmployeeDTO } from 'src/app/dtos/master-data/master-data-empl
 import { MasterDataOrderStatusDTO } from 'src/app/dtos/master-data/master-data-order-status.dto';
 import { MasterDataOrderTypeDTO } from 'src/app/dtos/master-data/master-data-order-type.dto';
 
-import { AddressDTO } from 'src/app/dtos/address.dto';
+import { GoogleMap, MapInfoWindow } from '@angular/google-maps';
+import { firstValueFrom, tap } from 'rxjs';
+import { MAIN_ROUTES } from 'src/app/constants/routes.constant';
 import { MasterDataOrderPriorityDTO } from 'src/app/dtos/master-data/master-data-order-priority.dto';
 import { SectorDTO } from 'src/app/dtos/sector.dto';
 import {
-  CreateServiceOrderDTO,
-  ServiceOrderDTO,
+  AddressDTO,
+  CreateServiceOrderDTO
 } from 'src/app/dtos/service-order.dto';
-import { NotifierService } from 'src/app/shared/services/notifier.service';
-import { ORDERS_MANAGEMENT_ROUTES } from '../../constants/routes.constant';
-import { CustomerApiService } from '../../services/apis/customer.api.service';
-import { ServiceOrderApiService } from '../../services/apis/service-order.api.service';
-import { MAIN_ROUTES } from 'src/app/constants/routes.constant';
 import {
   APP_MAP_INITIAL_REGION,
   APP_MAP_OPTIONS,
 } from 'src/app/orders-tracking/constants/map.constants';
-import { GoogleMap, MapInfoWindow } from '@angular/google-maps';
+import { NotifierService } from 'src/app/shared/services/notifier.service';
+import { ORDERS_MANAGEMENT_ROUTES } from '../../constants/routes.constant';
+import { CustomerApiService } from '../../services/apis/customer.api.service';
+import { ServiceOrderApiService } from '../../services/apis/service-order.api.service';
 import { GeocodingService } from '../../services/geocoder.service';
-import { firstValueFrom, tap } from 'rxjs';
 
 @Component({
   templateUrl: './orders-creation.component.html',
@@ -179,7 +178,7 @@ export class OrdersCreationComponent {
         .getById(value.id)
         .pipe(
           tap((value) => {
-            this.setValuesAddressFormControls(value.address);
+            //this.setValuesAddressFormControls(value.address);
           })
         )
         .subscribe();
@@ -190,18 +189,15 @@ export class OrdersCreationComponent {
     if (!address) return;
 
     const formLocation = this.formMain.get('formLocation');
-    const { lat, lng } = this.selectedLocation?.toJSON() ?? {
-      lat: '',
-      lng: '',
-    };
+    // this.selectedLocation?.
     formLocation?.patchValue({
       descriptionAddress: address.description ?? null,
       cityAddress: address.city ?? null,
       countryAddress: address.country ?? null,
       stateAddress: address.state ?? null,
       zipCodeAddress: address.zipCode ?? null,
-      latitudeAddress: `${lat}` ?? null,
-      longitudeAddress: `${lng}` ?? null,
+      latitudeAddress: null,
+      longitudeAddress: null,
       referenceInfo: '',
     });
   }
@@ -216,9 +212,31 @@ export class OrdersCreationComponent {
     this.router.navigate([URL_ORDERS_LIST]);
   }
 
+  private get address(): AddressDTO | undefined | null {
+    const { formLocation } = this.formMain.getRawValue();
+    if (!formLocation || !this.selectedLocation) return undefined;
+    const lat = this.selectedLocation.lat as any as number;
+    const lng = this.selectedLocation.lng as any as number;
+    const {
+      cityAddress = '',
+      countryAddress = '',
+      descriptionAddress = '',
+      stateAddress = '',
+      zipCodeAddress = '',
+    } = formLocation;
+    return {
+      city: cityAddress ?? '',
+      country: countryAddress ?? '',
+      description: descriptionAddress ?? '',
+      latitude: lat ?? undefined,
+      longitude: lng ?? undefined,
+      state: stateAddress ?? '',
+      zipCode: zipCodeAddress ?? '',
+    };
+  }
+
   private getCreateRequest(): CreateServiceOrderDTO {
     const data = this.formMain.getRawValue();
-
     return {
       number: data.formBasic.number ?? undefined,
       description: data.formBasic.description ?? undefined,
@@ -231,7 +249,7 @@ export class OrdersCreationComponent {
         ? data.formBasic.customer.id
         : undefined,
       destination: {
-        address: null,
+        address: this.address ?? null,
         referenceInfo: data.formLocation?.referenceInfo ?? undefined,
       },
       execution: {

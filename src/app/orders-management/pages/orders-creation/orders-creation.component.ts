@@ -13,7 +13,7 @@ import { MasterDataOrderPriorityDTO } from 'src/app/dtos/master-data/master-data
 import { SectorDTO } from 'src/app/dtos/sector.dto';
 import {
   AddressDTO,
-  CreateServiceOrderDTO
+  CreateServiceOrderDTO,
 } from 'src/app/dtos/service-order.dto';
 import {
   APP_MAP_INITIAL_REGION,
@@ -176,11 +176,7 @@ export class OrdersCreationComponent {
     if (value?.id) {
       this.customerApi
         .getById(value.id)
-        .pipe(
-          tap((value) => {
-            //this.setValuesAddressFormControls(value.address);
-          })
-        )
+        .pipe(tap((value) => this.setValuesAddressFormControls(value.address)))
         .subscribe();
     }
   }
@@ -189,7 +185,6 @@ export class OrdersCreationComponent {
     if (!address) return;
 
     const formLocation = this.formMain.get('formLocation');
-    // this.selectedLocation?.
     formLocation?.patchValue({
       descriptionAddress: address.description ?? null,
       cityAddress: address.city ?? null,

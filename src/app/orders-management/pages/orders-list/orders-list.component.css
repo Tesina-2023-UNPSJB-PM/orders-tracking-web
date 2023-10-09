@@ -1,3 +1,7 @@
 .filters-container {
   display: flex;
 }
+
+cds-icon .clock {
+  --color:yellow ;
+}

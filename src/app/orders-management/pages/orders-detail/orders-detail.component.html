@@ -34,6 +34,7 @@
           label="Estado"
           placeholder=""
           formControlName="state"
+          [disabled]="true"
         ></app-status-datalist>
         <app-priority-datalist
           label="Prioridad"
@@ -47,7 +48,6 @@
           (ngModelChange)="onModelChanged($event)"
         ></app-customer-datalist>
         <div class="btn-group" style="margin-top: 30px">
-          <button clrStepButton="next">next</button>
           <button
             type="button"
             class="clr-step-button btn"
@@ -55,6 +55,7 @@
           >
             Cancelar
           </button>
+          <button clrStepButton="next">Siguiente</button>
         </div>
       </clr-step-content>
     </clr-stepper-panel>
@@ -94,7 +95,6 @@
         >
         </shd-textarea>
         <div class="btn-group" style="margin-top: 30px">
-          <button clrStepButton="next">next</button>
           <button
             type="button"
             class="clr-step-button btn"
@@ -102,6 +102,7 @@
           >
             Cancelar
           </button>
+          <button clrStepButton="next">Siguiente</button>
         </div>
       </clr-step-content>
     </clr-stepper-panel>
@@ -111,51 +112,76 @@
         >Datos sobre ubicación de la orden</clr-step-description
       >
       <clr-step-content>
-        <shd-input
-          label="Descripción (Calle, altura, etc.)"
-          formControlName="descriptionAddress"
-        >
-        </shd-input>
-        <shd-input
-          label="Ciudad"
-          formControlName="cityAddress"
-        >
-        </shd-input>
-        <shd-input
-          label="Código Postal"
-          formControlName="zipCodeAddress"
-        ></shd-input>
-        <shd-input
-          label="Provincia"
-          formControlName="stateAddress"
-        ></shd-input>
-        <shd-input
-          label="Pais"
-          formControlName="countryAddress"
-        ></shd-input>
-        <shd-input
-          label="Latitude (Coordenada)"
-          formControlName="latitudeAddress"
-        ></shd-input>
-        <shd-input
-          label="Longitud (Coordenada)"
-          formControlName="longitudeAddress"
-        ></shd-input>
-        <shd-input
-          label="Información de referencia"
-          formControlName="referenceInfo"
-        ></shd-input>
-        <div class="btn-group" style="margin-top: 30px">
-          <button clrStepButton="submit" [disabled]="formMain.invalid">
-            Guardar
-          </button>
-          <button
-            type="button"
-            class="clr-step-button btn"
-            (click)="onCancel()"
-          >
-            Cancelar
-          </button>
+        <div class="clr-row">
+          <div class="clr-col-6">
+            <shd-input
+              label="Descripción (Calle, altura, etc.)"
+              formControlName="descriptionAddress"
+            >
+            </shd-input>
+            <shd-input label="Ciudad" formControlName="cityAddress">
+            </shd-input>
+            <shd-input
+              label="Código Postal"
+              formControlName="zipCodeAddress"
+            ></shd-input>
+            <shd-input
+              label="Provincia"
+              formControlName="stateAddress"
+            ></shd-input>
+            <shd-input
+              label="Pais"
+              formControlName="countryAddress"
+            ></shd-input>
+            <shd-input
+              label="Latitude (Coordenada)"
+              formControlName="latitudeAddress"
+              [hidden]="true"
+            ></shd-input>
+            <shd-input
+              label="Longitud (Coordenada)"
+              formControlName="longitudeAddress"
+              [hidden]="true"
+            ></shd-input>
+            <shd-input
+              label="Información de referencia"
+              formControlName="referenceInfo"
+            ></shd-input>
+            <div class="btn-group" style="margin-top: 30px">
+              <button
+                type="button"
+                class="clr-step-button btn"
+                (click)="onCancel()"
+              >
+                Cancelar
+              </button>
+              <button
+                clrStepButton="submit"
+                [disabled]="formMain.invalid"
+                (click)="onUpdateServiceOrder()"
+              >
+                Guardar
+              </button>
+            </div>
+          </div>
+          <div class="clr-col-6">
+            <google-map
+              width="100%"
+              height="100%"
+              [options]="options"
+              [center]="region"
+              [zoom]="13"
+            >
+              <map-marker
+                *ngIf="selectedLocation"
+                #somemarker="mapMarker"
+                [position]="selectedLocation"
+              >
+              </map-marker>
+
+              <map-info-window [innerHTML]="infoContent"></map-info-window>
+            </google-map>
+          </div>
         </div>
       </clr-step-content>
     </clr-stepper-panel>

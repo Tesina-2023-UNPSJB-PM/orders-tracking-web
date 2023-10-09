@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { ClarityModule } from '@clr/angular';
 import '@cds/core/icon/register.js';
-import { ClarityIcons, mapMarkerIcon, organizationIcon, tasksIcon, usersIcon, eraserIcon, searchIcon } from '@cds/core/icon';
+import { ClarityIcons, mapMarkerIcon, organizationIcon, tasksIcon, usersIcon, eraserIcon, searchIcon, checkCircleIcon, clockIcon, checkIcon } from '@cds/core/icon';
 import { SideNavComponent } from './components/side-nav/side-nav.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { SharedModule } from '../shared/shared.module';

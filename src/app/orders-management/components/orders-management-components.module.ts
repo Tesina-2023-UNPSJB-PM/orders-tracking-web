@@ -8,6 +8,13 @@ import { ServiceOrderTypesDatalistComponent } from './service-order-types-datali
 import { StatusDatalistComponent } from './status-datalist/status-datalist.component';
 import { PriorityDatalistComponent } from './service-order-priority-datalist/priority-datalist.component';
 import { SectorDatalistComponent } from './sector-datalist/sector-datalist.component';
+import { ExecutionOrderHistoryDetailComponent } from './execution-order-history-detail/execution-order-history-detail.component';
+import '@cds/core/icon/register.js';
+import { ClarityIcons, imageIcon } from '@cds/core/icon';
+import { ClarityModule } from '@clr/angular';
+import { ModalExecutionHistoryComponent } from './modal-execution-history/modal-execution-history.component';
+import { ReasonDatalistComponent } from './reason-datalist/reason-datalist.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const COMPONENTS = [
   EmployeeDatalistComponent,
@@ -16,11 +23,24 @@ const COMPONENTS = [
   ServiceOrderTypesDatalistComponent,
   PriorityDatalistComponent,
   SectorDatalistComponent,
+  ReasonDatalistComponent,
+  ExecutionOrderHistoryDetailComponent,
+  ModalExecutionHistoryComponent,
 ];
 
 @NgModule({
-  declarations: [...COMPONENTS, PriorityDatalistComponent, SectorDatalistComponent],
+  declarations: [...COMPONENTS],
   exports: [...COMPONENTS],
-  imports: [CommonModule, SharedComponentsModule, OrdersManagementPipesModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    ClarityModule,
+    SharedComponentsModule,
+    OrdersManagementPipesModule,
+  ],
 })
-export class OrdersManagementComponentsModule {}
+export class OrdersManagementComponentsModule {
+  constructor() {
+    ClarityIcons.addIcons(imageIcon);
+  }
+}

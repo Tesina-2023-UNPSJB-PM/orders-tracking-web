@@ -15,6 +15,9 @@ import { NotifierService } from 'src/app/shared/services/notifier.service';
 import { ORDERS_MANAGEMENT_ROUTES } from '../../constants/routes.constant';
 import { ServiceOrderFilters } from '../../interfaces/service-order-filters.interface';
 import { GetAllServiceOrderQueryParams } from '../../services/apis/query-params/service-order.query-params';
+import { SERVICE_ORDER_STATUS } from 'src/app/dtos/service-order.dto';
+import { EXECUTION_HISTORY_OPERATIONS } from '../../components/modal-execution-history/modal-execution-history.component';
+
 import { MAIN_ROUTES } from 'src/app/constants/routes.constant';
 
 @Component({
@@ -37,7 +40,9 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     creationDate: FormControl<Date | null>;
   }>;
   openModalDelete = false;
+  isOpenExecutionHistoryModal = false;
   selectedOrder?: ServiceOrderItemDTO;
+  executionHistoryOperation?: EXECUTION_HISTORY_OPERATIONS;
 
   constructor(
     private readonly serviceOrderApiSrv: ServiceOrderApiService,
@@ -172,5 +177,28 @@ export class OrdersListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._destroy.next(true);
     this._destroy.unsubscribe();
+  }
+
+  isDisabledAssignedButton(serviceOrder: ServiceOrderItemDTO): boolean {
+    return serviceOrder.status.code !== SERVICE_ORDER_STATUS.UNASSIGNED.code;
+  }
+
+  isDisabledCancelButton(serviceOrder: ServiceOrderItemDTO): boolean {
+    return serviceOrder.status.code === SERVICE_ORDER_STATUS.CANCELED.code
+    || serviceOrder.status.code === SERVICE_ORDER_STATUS.DONE.code;
+  }
+
+  openAssignOrderModal(serviceOrder: ServiceOrderItemDTO): void {
+    this.openExecutionHistoryModal(serviceOrder, 'assign');
+  }
+
+  openCancelOrderModal(serviceOrder: ServiceOrderItemDTO ): void {
+    this.openExecutionHistoryModal(serviceOrder, 'cancel');
+  }
+
+  private openExecutionHistoryModal(serviceOrder: ServiceOrderItemDTO, oper: EXECUTION_HISTORY_OPERATIONS) {
+    this.selectedOrder = serviceOrder;
+    this.executionHistoryOperation = oper;
+    this.isOpenExecutionHistoryModal = true;
   }
 }

@@ -40,14 +40,10 @@ export class DatalistComponent<T> implements OnDestroy, ControlValueAccessor {
 
   protected onInputValueChanges(dataListItem: DatalistItem): void {
     const entityValue = this.getEntityValue?.(dataListItem);
-    console.log(`onInputValueChanges ${entityValue}`);
-
     this.onChange(entityValue);
   }
 
   protected onValueSelected(dataListItemValue: string) {
-    console.log('onValueSelected ...' + dataListItemValue);
-
     const dataListItem = this.items.find(
       (item) => item.value === dataListItemValue
     );

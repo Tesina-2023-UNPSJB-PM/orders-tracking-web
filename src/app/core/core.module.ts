@@ -5,7 +5,9 @@ import { RouterModule } from '@angular/router';
 
 import { ClarityModule } from '@clr/angular';
 import '@cds/core/icon/register.js';
-import { ClarityIcons, mapMarkerIcon, organizationIcon, tasksIcon, usersIcon, eraserIcon, searchIcon, checkCircleIcon, clockIcon, checkIcon } from '@cds/core/icon';
+
+import { ClarityIcons, mapMarkerIcon, mapIcon, tasksIcon, usersIcon, eraserIcon, searchIcon, checkCircleIcon, clockIcon, checkIcon } from '@cds/core/icon';
+
 import { SideNavComponent } from './components/side-nav/side-nav.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { SharedModule } from '../shared/shared.module';
@@ -26,6 +28,6 @@ import { SharedModule } from '../shared/shared.module';
 })
 export class CoreModule {
   constructor() {
-    ClarityIcons.addIcons(mapMarkerIcon, organizationIcon, tasksIcon, usersIcon, eraserIcon, searchIcon);
+    ClarityIcons.addIcons(mapMarkerIcon, mapIcon, tasksIcon, usersIcon, eraserIcon, searchIcon, checkCircleIcon, clockIcon, checkIcon);
   }
 }

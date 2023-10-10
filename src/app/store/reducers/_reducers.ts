@@ -6,6 +6,7 @@ import { CustomerReducer } from './customer.reducer';
 import { EmployeeReducer } from './employee.reducer';
 import { ServiceOrderPriorityReducer } from './service-order-priority.reducer';
 import { LoginReducer } from './login.reducer';
+import { ReasonStatusReducer } from './reasons.reducer';
 
 export const reducers: ActionReducerMap<AppState, any> = {
   serviceOrderStates: ServiceOrderStateReducer,
@@ -13,5 +14,6 @@ export const reducers: ActionReducerMap<AppState, any> = {
   serviceOrderPriorities: ServiceOrderPriorityReducer,
   customers: CustomerReducer,
   employees: EmployeeReducer,
+  reasons: ReasonStatusReducer,
   authenticatedUser: LoginReducer,
 };

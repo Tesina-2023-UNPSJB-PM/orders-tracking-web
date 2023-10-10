@@ -14,6 +14,7 @@ import {
 } from '../actions/master-data.action';
 import { LoadServiceOrderStateAction } from '../actions/service-order-state.action';
 import { LoadServiceOrderTypeAction } from '../actions/service-order-type.action';
+import { LoadReasonsStatusAction } from '../actions/reason.action';
 
 @Injectable({ providedIn: 'root' })
 export class MasterDataEffects {
@@ -31,7 +32,6 @@ export class MasterDataEffects {
           this.masterDataApiService.get().pipe(
             map((masterData) => {
               this.dispatchActions(masterData);
-
               return new LoadMasterDataAction(masterData);
             })
           )
@@ -45,6 +45,7 @@ export class MasterDataEffects {
     customers = [],
     serviceOrderStates = [],
     serviceOrderTypes = [],
+    reasons = [],
   }: MasterDataDTO): void {
     this.store$.dispatch(new LoadEmployeeAction(employees));
 
@@ -53,5 +54,7 @@ export class MasterDataEffects {
     this.store$.dispatch(new LoadServiceOrderTypeAction(serviceOrderTypes));
 
     this.store$.dispatch(new LoadServiceOrderStateAction(serviceOrderStates));
+
+    this.store$.dispatch(new LoadReasonsStatusAction(reasons));
   }
 }

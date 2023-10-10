@@ -1,27 +1,12 @@
 <div class="content">
   <form class="filters-container" [formGroup]="filtersFormGroup">
-    <app-employee-datalist
-      label="Operario"
-      placeholder=""
-      formControlName="employee"
-    ></app-employee-datalist>
+    <app-employee-datalist label="Operario" placeholder="" formControlName="employee"></app-employee-datalist>
 
-    <app-customer-datalist
-      label="Cliente"
-      placeholder=""
-      formControlName="customer"
-    ></app-customer-datalist>
+    <app-customer-datalist label="Cliente" placeholder="" formControlName="customer"></app-customer-datalist>
 
-    <app-status-datalist
-      label="Estado"
-      placeholder=""
-      formControlName="state"
-    ></app-status-datalist>
+    <app-status-datalist label="Estado" placeholder="" formControlName="state"></app-status-datalist>
 
-    <shd-datepicker
-      label="Fecha de creación"
-      formControlName="creationDate"
-    ></shd-datepicker>
+    <shd-datepicker label="Fecha de creación" formControlName="creationDate"></shd-datepicker>
 
     <button class="btn btn-primary" (click)="onClearFilters()">
       Limpiar Filtros
@@ -34,7 +19,6 @@
     <clr-dg-column>Fecha de Creación</clr-dg-column>
     <clr-dg-column>Descripción</clr-dg-column>
     <clr-dg-column>Estado</clr-dg-column>
-    <clr-dg-column>Sector*</clr-dg-column>
 
     <clr-dg-row *ngFor="let serviceOrder of serviceOrders">
       <clr-dg-action-overflow>
@@ -44,34 +28,39 @@
         <button class="action-item" (click)="onDelete(serviceOrder)">
           Eliminar
         </button>
+        <button class="action-item" [disabled]="isDisabledAssignedButton(serviceOrder)"
+          (click)="openAssignOrderModal(serviceOrder)">Asignar</button>
+        <button class="action-item" [disabled]="isDisabledCancelButton(serviceOrder)"
+          (click)="openCancelOrderModal(serviceOrder)">Cancelar</button>
       </clr-dg-action-overflow>
 
       <clr-dg-cell>{{ serviceOrder.number }}</clr-dg-cell>
       <clr-dg-cell>{{ serviceOrder?.type?.description }}</clr-dg-cell>
-      <clr-dg-cell>{{ serviceOrder.creationTime | date }}</clr-dg-cell>
+      <clr-dg-cell>{{ serviceOrder.creationTime | date:"dd-MM-yyyy" }}</clr-dg-cell>
       <clr-dg-cell>{{ serviceOrder.description }}</clr-dg-cell>
       <clr-dg-cell>
         <div class="clr-row ">
           <div class="clr-col-3 p-r@md:sm">{{ serviceOrder.status.name }}</div>
           <div class="clr-col-1"></div>
           <div class="clr-col-1">
-            <cds-icon *ngIf="serviceOrder.status.code === 'DONE'" status="success" shape="check" solid="true"></cds-icon>
-            <cds-icon *ngIf="serviceOrder.status.code === 'CANCELED'" status="danger" shape="times" solid="true"></cds-icon>
-            <cds-icon *ngIf="serviceOrder.status.code === 'PENDING'" status="warning" shape="clock" solid="true"></cds-icon>
+            <cds-icon *ngIf="serviceOrder.status.code === 'DONE'" status="success" shape="check"
+              solid="true"></cds-icon>
+            <cds-icon *ngIf="serviceOrder.status.code === 'CANCELED'" status="danger" shape="times"
+              solid="true"></cds-icon>
+            <cds-icon *ngIf="serviceOrder.status.code === 'PENDING'" status="warning" shape="clock"
+              solid="true"></cds-icon>
           </div>
         </div>
       </clr-dg-cell>
-      <clr-dg-cell>N/A</clr-dg-cell>
+
+      <execution-order-history-detail *clrIfExpanded [serviceOrder]="serviceOrder"
+        ngProjectAs="clr-dg-row-detail"></execution-order-history-detail>
     </clr-dg-row>
 
     <clr-dg-footer>
-      {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}} of {{total}}
-      users
-      <clr-dg-pagination
-        #pagination
-        [clrDgPageSize]="pageSize"
-        [clrDgTotalItems]="total"
-      ></clr-dg-pagination>
+      {{pagination.firstItem + 1}} - {{pagination.lastItem + 1}}
+      of {{total}} users
+      <clr-dg-pagination #pagination [clrDgPageSize]="pageSize" [clrDgTotalItems]="total"></clr-dg-pagination>
     </clr-dg-footer>
   </clr-datagrid>
 
@@ -79,6 +68,8 @@
     Crear Orden
   </button>
 </div>
+<modal-execution-history [(openModal)]="isOpenExecutionHistoryModal" [serviceOrder]="selectedOrder"
+  [operation]="executionHistoryOperation"></modal-execution-history>
 <clr-modal [(clrModalOpen)]="openModalDelete">
   <h3 class="modal-title">Eliminando Orden de Servicio</h3>
   <div class="modal-body">
@@ -88,18 +79,10 @@
     </p>
   </div>
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-outline"
-      (click)="openModalDelete = false"
-    >
+    <button type="button" class="btn btn-outline" (click)="openModalDelete = false">
       Cancelar
     </button>
-    <button
-      type="button"
-      class="btn btn-primary"
-      (click)="deleteOrderSelected()"
-    >
+    <button type="button" class="btn btn-primary" (click)="deleteOrderSelected()">
       Ok
     </button>
   </div>

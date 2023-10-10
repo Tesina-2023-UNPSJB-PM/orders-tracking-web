@@ -101,6 +101,12 @@ export interface CreateServiceOrderDTO {
 }
 
 export const SERVICE_ORDER_STATUS = {
+  UNASSIGNED: {
+    code: 'UNASSIGNED',
+    statusDescription: 'Sin asignar',
+    statusColor: '#61dafb',
+    statusIcon: 'check-circle-o',
+  },
   DONE: {
     code: 'DONE',
     statusDescription: 'Finalizado',

@@ -9,8 +9,14 @@ import { AppState } from 'src/app/store/state.model';
 
 @Component({
   selector: 'app-employee-datalist',
-  template:
-    '<shd-datalist [inputValue]="inputValue" [label]="label"  [placeholder]="placeholder" [items]="employees | employeeToDataListItem" (inputValueChange)="onInputValueChanges($event)"/>',
+  template: `<shd-datalist
+    [inputValue]="inputValue"
+    [label]="label"
+    [placeholder]="placeholder"
+    [items]="employees | employeeToDataListItem"
+    (inputValueChange)="onInputValueChanges($event)"
+    [disabled]="disabled"
+  />`,
   styleUrls: ['./employee-datalist.component.css'],
   providers: [
     {
@@ -36,11 +42,9 @@ export class EmployeeDatalistComponent
   }
 
   ngOnInit(): void {
-    this.employee$
-      .pipe(takeUntil(this.$destroy))
-      .subscribe((employees) => {
-        this.employees = employees; }
-      );
+    this.employee$.pipe(takeUntil(this.$destroy)).subscribe((employees) => {
+      this.employees = employees;
+    });
   }
 
   protected override getEntityValue(
@@ -54,6 +58,5 @@ export class EmployeeDatalistComponent
   public override writeValue(employee: MasterDataEmployeeDTO): void {
     if (employee)
       this.inputValue = `${employee?.firstName} ${employee?.lastName}`;
-
   }
 }

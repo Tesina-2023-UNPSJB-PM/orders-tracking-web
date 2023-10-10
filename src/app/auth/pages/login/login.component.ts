@@ -12,6 +12,7 @@ import { Store } from '@ngrx/store';
 import { LoginAction } from 'src/app/store/actions/login.action';
 import { Router } from '@angular/router';
 import { MAIN_ROUTES } from 'src/app/constants/routes.constant';
+import { ORDERS_MANAGEMENT_ROUTES } from 'src/app/orders-management/constants/routes.constant';
 
 @Component({
   selector: 'login',
@@ -65,7 +66,11 @@ export class LoginComponent implements OnDestroy {
       .subscribe({
         next: (resp) => {
           this.store.dispatch(new LoginAction(resp));
-          this.router.navigate([MAIN_ROUTES.DASHBOARD])
+          this.router.navigate([
+            MAIN_ROUTES.DASHBOARD,
+            MAIN_ROUTES.ORDERS_MANAGEMENT,
+            ORDERS_MANAGEMENT_ROUTES.ORDERS_LIST,
+          ]);
         },
         error: (err) => this.handleError(err),
       });

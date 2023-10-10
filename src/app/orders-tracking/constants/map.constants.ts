@@ -22,5 +22,5 @@ export const APP_MAP_OPTIONS = {
 
 export const APP_MAP_INITIAL_REGION = {
   lat: -42.7667,
-  lng: -65.0333,
+  lng: -65.05,
 };

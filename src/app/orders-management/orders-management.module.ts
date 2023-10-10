@@ -16,9 +16,15 @@ import { OrdersDetailComponent } from './pages/orders-detail/orders-detail.compo
 import { OrdersListComponent } from './pages/orders-list/orders-list.component';
 import { OrdersManagementPipesModule } from './pipes/orders-management.pipes.module';
 import { OrdersCreationComponent } from './pages/orders-creation/orders-creation.component';
+import { GoogleMapsModule } from '@angular/google-maps';
+import { ClarityIcons, checkCircleIcon, checkIcon, clockIcon, powerIcon, timesIcon } from '@cds/core/icon';
 
 @NgModule({
-  declarations: [OrdersListComponent, OrdersDetailComponent, OrdersCreationComponent],
+  declarations: [
+    OrdersListComponent,
+    OrdersDetailComponent,
+    OrdersCreationComponent,
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -32,7 +38,13 @@ import { OrdersCreationComponent } from './pages/orders-creation/orders-creation
     OrdersManagementComponentsModule,
     SharedComponentsModule,
     OrdersManagementPipesModule,
+    GoogleMapsModule,
+
   ],
-  providers: [AsyncPipe]
+  providers: [AsyncPipe],
 })
-export class OrdersManagementModule {}
+export class OrdersManagementModule {
+  constructor() {
+    ClarityIcons.addIcons(checkIcon, clockIcon, timesIcon);
+  }
+}

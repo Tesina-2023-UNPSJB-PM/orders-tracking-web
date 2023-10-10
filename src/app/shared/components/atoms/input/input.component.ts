@@ -1,5 +1,6 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { Component, Input, Output, forwardRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'shd-input',
@@ -19,6 +20,7 @@ export class InputComponent implements ControlValueAccessor {
   @Input() placeholder: string = '';
   @Input() value: string = '';
   @Input() disabled: boolean = false;
+  @Output() keyup: BehaviorSubject<any> = new BehaviorSubject(null);
 
   onChange = (value: string) => {};
   onTouched?: () => void;
@@ -34,6 +36,10 @@ export class InputComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean): void {
-      this.disabled = isDisabled;
+    this.disabled = isDisabled;
+  }
+
+  protected keyUp(event: any) {
+    this.keyup.next(event);
   }
 }

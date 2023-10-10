@@ -219,7 +219,6 @@ export class GeneralMapPage implements OnInit {
         map((resp) => this.orderMarkerPipe.transform(resp.assignedServiceOrders))
       )
       .subscribe((orders) => {
-        //console.log("🚀 ~ file: general-map.page.ts:112 ~ GeneralMapPage ~ .subscribe ~ orders:", orders)
         this._pendingOrdersMarkers = orders;
         this.countPendingOrders = orders.length;
       });

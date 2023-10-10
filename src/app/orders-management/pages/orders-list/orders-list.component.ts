@@ -18,6 +18,7 @@ import { GetAllServiceOrderQueryParams } from '../../services/apis/query-params/
 import { SERVICE_ORDER_STATUS } from 'src/app/dtos/service-order.dto';
 import { EXECUTION_HISTORY_OPERATIONS } from '../../components/modal-execution-history/modal-execution-history.component';
 
+import { MAIN_ROUTES } from 'src/app/constants/routes.constant';
 
 @Component({
   templateUrl: './orders-list.component.html',
@@ -86,10 +87,26 @@ export class OrdersListComponent implements OnInit, OnDestroy {
     return this._currentPage?.meta.itemCount ?? 0;
   }
 
+  protected icon(status: string): string {
+    switch (status) {
+      case 'DONE':
+        return 'check';
+      case 'PENDING':
+        return 'power';
+      case 'CANCELED':
+        return 'times';
+      default:
+        return '';
+    }
+  }
+
   public async onCreateServiceOrder(): Promise<void> {
     const { ORDERS_CREATION } = ORDERS_MANAGEMENT_ROUTES;
-
-    await this.router.navigate([ORDERS_CREATION]);
+    await this.router.navigate([
+      MAIN_ROUTES.DASHBOARD,
+      MAIN_ROUTES.ORDERS_MANAGEMENT,
+      ORDERS_CREATION,
+    ]);
   }
 
   public async onViewDetail(serviceOrder: ServiceOrderItemDTO): Promise<void> {
@@ -97,9 +114,12 @@ export class OrdersListComponent implements OnInit, OnDestroy {
 
     const { id } = serviceOrder;
 
-    await this.router.navigate([ORDERS_DETAIL], {
-      queryParams: { id },
-    });
+    await this.router.navigate(
+      [MAIN_ROUTES.DASHBOARD, MAIN_ROUTES.ORDERS_MANAGEMENT, ORDERS_DETAIL],
+      {
+        queryParams: { id },
+      }
+    );
   }
 
   public onDelete(serviceOrder: ServiceOrderItemDTO): void {
@@ -143,8 +163,8 @@ export class OrdersListComponent implements OnInit, OnDestroy {
         next: (page: PageDto<ServiceOrderItemDTO>) =>
           (this._currentPage = page),
         error: (error) => {
-         const messageError =  error.error.message ?? error.message;
-         this.notifierService.pushError(messageError);
+          const messageError = error.error.message ?? error.message;
+          this.notifierService.pushError(messageError);
         },
       });
   }

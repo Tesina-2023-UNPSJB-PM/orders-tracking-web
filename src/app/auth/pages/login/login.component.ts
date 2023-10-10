@@ -35,7 +35,7 @@ export class LoginComponent implements OnDestroy {
     private router: Router,
     private signInService: SignInService
   ) {
-    this.formLogin = formBuilder.group({
+    this.formLogin = this.formBuilder.group({
       username: new FormControl<string>('', [
         Validators.required,
         Validators.minLength(3),

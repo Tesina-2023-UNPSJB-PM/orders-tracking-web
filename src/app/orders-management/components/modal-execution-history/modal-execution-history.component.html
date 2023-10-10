@@ -5,13 +5,14 @@
       <app-status-datalist label="Estado" placeholder="" formControlName="status"
           [disabled]="true"></app-status-datalist>
       <app-employee-datalist label="Operario asignado" placeholder=""
-        formControlName="employee"></app-employee-datalist>
-      <reason-datalist label="Razón"></reason-datalist>
+        formControlName="employee" [disabled]="disabledEmployeeControl"></app-employee-datalist>
+      <reason-datalist label="Razón" formControlName="reason"></reason-datalist>
       <shd-textarea label="Observaciones" formControlName="observations" name="observations"></shd-textarea>
     </form>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline" (click)="close()">Cancelar</button>
-    <button type="button" class="btn btn-primary" (click)="createExecutionHistory()">Ok</button>
+    <button type="button" class="btn btn-primary" (click)="createExecutionHistory()"
+      [disabled]="isFormInvalid()">Ok</button>
   </div>
 </clr-modal>

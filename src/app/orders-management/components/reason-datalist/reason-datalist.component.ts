@@ -49,6 +49,7 @@ export class ReasonDatalistComponent
   protected override getEntityValue(
     dataListItem: DatalistItem
   ): MasterDataReasonStatusDTO | undefined {
+
     return this.reasons?.find(
       (reason: MasterDataReasonStatusDTO) => reason.id === +dataListItem.id
     );

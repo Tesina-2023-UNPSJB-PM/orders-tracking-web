@@ -18,7 +18,6 @@
     <clr-dg-column>Fecha de Creación</clr-dg-column>
     <clr-dg-column>Descripción</clr-dg-column>
     <clr-dg-column>Estado</clr-dg-column>
-    <clr-dg-column>Sector*</clr-dg-column>
 
     <clr-dg-row *ngFor="let serviceOrder of serviceOrders">
       <clr-dg-action-overflow>
@@ -36,10 +35,9 @@
 
       <clr-dg-cell>{{ serviceOrder.number }}</clr-dg-cell>
       <clr-dg-cell>{{ serviceOrder?.type?.description }}</clr-dg-cell>
-      <clr-dg-cell>{{ serviceOrder.creationTime | date }}</clr-dg-cell>
+      <clr-dg-cell>{{ serviceOrder.creationTime | date:"dd-MM-yyyy" }}</clr-dg-cell>
       <clr-dg-cell>{{ serviceOrder.description }}</clr-dg-cell>
       <clr-dg-cell>{{ serviceOrder.status.name }}</clr-dg-cell>
-      <clr-dg-cell>N/A</clr-dg-cell>
 
       <execution-order-history-detail *clrIfExpanded [serviceOrder]="serviceOrder"
         ngProjectAs="clr-dg-row-detail"></execution-order-history-detail>

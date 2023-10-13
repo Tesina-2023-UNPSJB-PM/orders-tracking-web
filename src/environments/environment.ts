@@ -1,4 +1,4 @@
-const host = 'vps-3107443-x.dattaweb.com';
+const host = 'localhost';
 const PREFIX_PATH = 'api';
 const googleApiKey = 'AIzaSyCkNjP-5v8Up7aq7cmSV03pUvpCYGSmJps'
 const endpoints = {

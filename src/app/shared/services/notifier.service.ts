@@ -64,9 +64,11 @@ export class NotifierService {
       const listener = {
         message: (messageEvent: any) => {
           if (!messageEvent) return;
-          const { type, body, title } =
-            messageEvent?.message as NotificationDTO;
+
+        const { type, body, title } =
+            messageEvent?.message.pn_gcm?.notification as NotificationDTO;
           const label = `${title}: ${body}`;
+
           switch (type) {
             case 'success':
               this.success$.next(label);

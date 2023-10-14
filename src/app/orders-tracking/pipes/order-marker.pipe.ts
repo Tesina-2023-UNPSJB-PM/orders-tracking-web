@@ -30,7 +30,6 @@ export class OrderMarkerPipe implements PipeTransform {
           Dir: <b>${addressDescription}</b></br>
           Descripción: <b>${description}</b></br>
           Tel.: <b>-</b></br>
-          <a href="${MAIN_ROUTES.DASHBOARD}/${MAIN_ROUTES.ORDERS_MANAGEMENT}/${ORDERS_MANAGEMENT_ROUTES.ORDERS_DETAIL}?id=${id}">Editar</a></div>
     `,
           icon: {
             url: 'http://maps.google.com/mapfiles/ms/icons/homegardenbusiness.png',
